@@ -22,7 +22,7 @@ respectivly
 
 ### Taking the water meter image
 
-I have good results with a Raspberry Pi Zero and a cheap camera. In fact the worse the image quality, the easier it is for the OCR to read the digits in my experience. Night vision cameras does not provide good results, as it's close to impossible to identify the analog gauges with a greyscale image. Instead, I'm using a white led before taking the shots:
+I have good results with a Raspberry Pi Zero and a cheap camera. In fact the worse the image quality, the easier it is for the OCR to read the digits in my experience. Night vision cameras do not provide good results, as it's close to impossible to identify the analog gauges with a greyscale image. Instead, I'm using a white led before taking the shots:
 
 ```python
 from gpiozero import LED
