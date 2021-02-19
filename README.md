@@ -10,7 +10,7 @@ Reads analog water meters and provides a web service that returns the read value
 
 After executing
 
-    docker run -p 127.0.0.1:3000:80 nohn/watermeter:latest
+    docker run -p 127.0.0.1:3000:3000 nohn/watermeter:main
 
 You can access a demo on
 
@@ -83,7 +83,7 @@ In your ```configuration.yaml``` add
 sensor:
   - platform: rest
     name: Water
-    resource: "http://watermeter/"
+    resource: "http://watermeter:3000/"
     scan_interval: 60
     unit_of_measurement: 'm³'
 ```
@@ -94,6 +94,10 @@ You can contribute to this project by:
 
 * Opening an [Issue](https://github.com/nohn/watermeter/issues) if you found a bug or wish to propose a new feature
 * Placing a [Pull Request](https://github.com/nohn/watermeter/pulls) with bugfixes, new features etc.
+
+## You like this?
+
+Consider a [gift](https://www.amazon.de/hz/wishlist/genericItemsPage/3HYH6NR8ZI0WI).
 
 ## License
 
