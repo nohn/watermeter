@@ -4,9 +4,7 @@ Reads analog water meters and provides a web service that returns the read value
 
 ![CI](https://github.com/nohn/watermeter/workflows/CI/badge.svg)
 
-## Usage
-
-### Running in demo mode
+## Demo
 
 After executing
 
@@ -19,6 +17,8 @@ You can access a demo on
 respectivly
 
     http://127.0.0.1:3000/
+
+## Usage
 
 ### Taking the water meter image
 
