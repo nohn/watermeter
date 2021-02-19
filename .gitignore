@@ -1,0 +1,7 @@
+composer.phar
+/vendor/
+composer.lock
+/.idea/
+/src/error/*
+/src/debug/*
+/src/log/*

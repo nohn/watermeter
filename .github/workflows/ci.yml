@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          extensions: imagick
+      - name: Install composer dependencies
+        run: composer update --no-ansi --no-interaction --no-progress
+      - name: Docker build
+        run: docker build . -t nohn/watermeter
+      - name: Run Container
+        run: docker run nohn/watermeter:latest php /usr/src/watermeter/src/index.php | grep 819.7797

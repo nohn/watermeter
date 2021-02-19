@@ -1,0 +1,13 @@
+{
+  "name": "nohn/watermeter",
+  "description": "Read water meters and return read value for further processing",
+  "version": "0.0.1",
+  "type": "project",
+  "license": "AGPL-3.0-or-later",
+  "require": {
+    "thiagoalessio/tesseract_ocr": "^2.11",
+    "nohn/analogmeterreader": "^1.0",
+    "php": ">=7.4",
+    "ext-imagick": "^3.4.4"
+  }
+}
