@@ -66,13 +66,13 @@ Unless you want to run in demo mode, you need to provide the initival value in `
 version: "3.5"
 services:
   wasserzaehler:
-    image: nohn/watermeter:latest
+    image: nohn/watermeter:main
     container_name: watermeter
     restart: always
     volumes:
       - ./watermeter/config:/usr/src/watermeter/src/config
     ports:
-      - "80:80"
+      - "3000:3000"
 ```
 
 #### Integration in Home Assistant

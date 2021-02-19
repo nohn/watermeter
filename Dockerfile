@@ -5,5 +5,5 @@ RUN apt-get update \
     && docker-php-ext-enable imagick
 COPY . /usr/src/watermeter
 WORKDIR /usr/src/watermeter/src
-CMD [ "php", "-S", "0.0.0.0:80" ]
+CMD [ "php", "-S", "0.0.0.0:3000" ]
 
