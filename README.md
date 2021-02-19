@@ -65,7 +65,7 @@ Unless you want to run in demo mode, you need to provide the initival value in `
 ```yaml
 version: "3.5"
 services:
-  wasserzaehler:
+  watermeter:
     image: nohn/watermeter:main
     container_name: watermeter
     restart: always
