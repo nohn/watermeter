@@ -2,7 +2,9 @@
 
 Reads analog water meters and provides a web service that returns the read value as decimal.
 
-![CI](https://github.com/nohn/watermeter/workflows/CI/badge.svg)
+Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![Grafana Screenshot](doc/grafana.png).
+
+![CI](https://github.com/nohn/watermeter/workflows/CI/badge.svg) ![Docker Hub Pulls](https://img.shields.io/docker/pulls/nohn/watermeter?label=docker%20hub%20pulls)
 
 ## Demo
 
