@@ -56,11 +56,11 @@ for equalizing the results and improving contrast.
 
 #### Configuration
 
-Unless you want to run in demo mode, you need to provide a ```config/config.php```. An example is provided in [config/config.php](src/config/config.php)
+Unless you want to run in demo mode, you need to provide a ```config/config.php```. An example is provided in [config/config.php](src/config/config.php). A config GUI is available at http://watermeter:3000/configure.php.
 
 #### Initial value
 
-Unless you want to run in demo mode, you need to provide the initival value in ```config/lastValue.txt```. An example is provided in [config/lastValue.txt](src/config/lastValue.txt)
+Unless you want to run in demo mode, you need to provide the initival value in ```config/lastValue.txt```. An example is provided in [config/lastValue.txt](src/config/lastValue.txt).  A config GUI is available at http://watermeter:3000/configure.php.
 
 #### docker-compose.yaml
 
