@@ -10,7 +10,7 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 After executing
 
-    docker run -p 127.0.0.1:3000:3000 nohn/watermeter:main
+    docker run -p 127.0.0.1:3000:3000 nohn/watermeter:latest
 
 You can access a demo on
 
@@ -74,7 +74,7 @@ A config GUI is available at http://watermeter:3000/configure.php.
 version: "3.5"
 services:
   watermeter:
-    image: nohn/watermeter:main
+    image: nohn/watermeter:latest
     container_name: watermeter
     restart: always
     volumes:
