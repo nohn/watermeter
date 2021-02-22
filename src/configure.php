@@ -51,11 +51,27 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
             text-align: right;
         }
     </style>
+    <script type="text/javascript">
+        function removeElement(prefix) {
+            allElements = document.querySelectorAll("fieldset[id^="+prefix+"]");
+            return document.getElementById(prefix+"_"+allElements.length).remove();
+        }
+        function addElement(prefix) {
+            numberElements = document.querySelectorAll("fieldset[id^="+prefix+"]").length;
+            var form=document.getElementById('config');
+            var input = document.createElement('input');
+            input.setAttribute('name', prefix+'['+(numberElements+1)+']');
+            input.setAttribute('value', '0');
+            input.setAttribute('type', 'hidden')
+            form.appendChild(input);
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <?php switch ($_GET['action']): ?>
 <?php default: ?>
-<form method="post" style="float: left;">
+<form method="post" id="config" style="float: left;">
     <fieldset class="base">
         <legend>Base Settings</legend>
         <legend for="sourceImage">Source Image</legend>
@@ -73,7 +89,7 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
     $targetImage = new Imagick();
     echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';
     foreach ($config['digitalDigits'] as $key => $digit) {
-        echo '<fieldset><legend>' . $key . '</legend>';
+        echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
         foreach ($fields as $field) {
             echo '<legend for="digit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="digit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . $digit[$field] . '">';
         }
@@ -86,11 +102,13 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
         $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
         $sourceImageDebug->drawImage($draw);
     }
+    echo '<button onclick="return removeElement(\'digit\')" />Remove a Digit</button>';
+    echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
     echo '</fieldset>';
 
     echo '<fieldset class="coordinates"><legend>Analog Digits</legend>';
     foreach ($config['analogGauges'] as $key => $gauge) {
-        echo '<fieldset><legend>' . $key . '</legend>';
+        echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
         foreach ($fields as $field) {
             echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . $gauge[$field] . '">';
         }
@@ -105,6 +123,8 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
         $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
         $sourceImageDebug->drawImage($draw);
     }
+    echo '<button onclick="return removeElement(\'gauge\')" />Remove a Gauge</button>';
+    echo '<button onclick="return addElement(\'gauge\')" />Add a Gauge</button>';
     echo '</fieldset>';
     $sourceImageDebug->writeImage('debug/input_debug.jpg');
     echo '<input type="submit" name="action" value="preview">';
