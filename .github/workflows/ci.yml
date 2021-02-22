@@ -29,3 +29,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: nohn/watermeter
           tag_with_ref: true
+          tags: nohn/watermeter:latest
