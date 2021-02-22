@@ -1,3 +1,7 @@
+# 2021-02-19 v0.0.1
+
+- Initial public release
+
 # 2021-02-22 v0.1.0
 
 - Fix #1 - Add configuration GUI.
