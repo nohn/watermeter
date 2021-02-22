@@ -6,3 +6,4 @@
 
 - Fix #3 - Allow to add or remove digits in configuration GUI
 - Fix #4 - Allow to add or remove gauges in configuration GUI
+- Fix #8 - Docker Hub tag for Git branch "main" should be "latest" (so it's nohn/watermeter:latest from now on, nohn/watermeter:main will not work anymore)
