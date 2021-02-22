@@ -5,11 +5,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "Docker" # See documentation for possible values
+  - package-ecosystem: "docker" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-  - package-ecosystem: "Composer" # See documentation for possible values
+  - package-ecosystem: "composer" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
