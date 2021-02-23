@@ -29,7 +29,7 @@ services:
 
 #### PHP
 
-Requires PHP >= 7.4 including Imagick and Tesseract OCR installed. Beware, official ext-Imagick releases currently fail to install with PHP 8, see Imagick/imagick#358.   
+Requires PHP >= 7.4 including Imagick and Tesseract OCR installed. Beware, official ext-Imagick releases currently fail to install with PHP 8, see [Imagick/imagick#358](https://github.com/Imagick/imagick/issues/358).   
 
 ```shell
 git pull https://github.com/nohn/watermeter.git
