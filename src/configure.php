@@ -14,6 +14,11 @@ if (isset($_POST['sourceImage'])) {
 if (isset($_POST['maxThreshold'])) {
     $config['maxThreshold'] = $_POST['maxThreshold'];
 }
+if (isset($_POST['logging']) && ($_POST['logging'] == 'on')) {
+    $config['logging'] = true;
+} else {
+    $config['logging'] = false;
+}
 if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
 }
@@ -53,14 +58,15 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
     </style>
     <script type="text/javascript">
         function removeElement(prefix) {
-            allElements = document.querySelectorAll("fieldset[id^="+prefix+"]");
-            return document.getElementById(prefix+"_"+allElements.length).remove();
+            allElements = document.querySelectorAll("fieldset[id^=" + prefix + "]");
+            return document.getElementById(prefix + "_" + allElements.length).remove();
         }
+
         function addElement(prefix) {
-            numberElements = document.querySelectorAll("fieldset[id^="+prefix+"]").length;
-            var form=document.getElementById('config');
+            numberElements = document.querySelectorAll("fieldset[id^=" + prefix + "]").length;
+            var form = document.getElementById('config');
             var input = document.createElement('input');
-            input.setAttribute('name', prefix+'['+(numberElements+1)+']');
+            input.setAttribute('name', prefix + '[' + (numberElements + 1) + ']');
             input.setAttribute('value', '0');
             input.setAttribute('type', 'hidden')
             form.appendChild(input);
@@ -80,6 +86,8 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
         <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo $config['maxThreshold']; ?>">
         <legend for="lastValue">Initial Value</legend>
         <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
+        <legend for="logging">Enable Logging</legend>
+        <input type="checkbox" name="logging" id="logging" <?php echo $config['logging'] == true ? 'checked' : ''; ?>>
     </fieldset>
     <?php
     $strokeColor = new ImagickPixel('white');

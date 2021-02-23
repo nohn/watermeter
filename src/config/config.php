@@ -1,5 +1,8 @@
 <?php
 $config = array(
+    // Enable logging in case data changes or an error occurs. If you'd like to access the logging data when running
+    // in docker(-compose), please mount /usr/src/watermeter/src/log/
+    'logging' => false,
     // Maximum volume change to accept between two updates.
     'maxThreshold' => 0.1,
     // Source image. Can either be a path to a file or an URL.
