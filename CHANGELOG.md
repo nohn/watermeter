@@ -12,7 +12,8 @@
 - Fix #4 - Allow to add or remove gauges in configuration GUI
 - Fix #8 - Docker Hub tag for Git branch "main" should be "latest" (so it's nohn/watermeter:latest from now on, nohn/watermeter:main will not work anymore)
 
-# 2021-02-XX vx.y.z
+# 2021-02-23 v1.0.0
 
+- Fix #5 - JSON output including more details
 - Fix #6 - Allow to enable/disable logging
 - Simplify setup
