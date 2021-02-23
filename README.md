@@ -84,7 +84,17 @@ Once you have found your way to take images of your water meter, you can access 
 
 ![Configuration GUI Screenshot](doc/configure.png)
 
+After configuration is done, you can access the current value at
 
+    http://127.0.0.1:3000/
+
+or
+
+    http://127.0.0.1:3000/?json
+
+or see debug information at
+
+    http://127.0.0.1:3000/?debug
 
 #### Integration in Home Assistant
 
