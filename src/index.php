@@ -108,7 +108,7 @@ try {
         $rawGaugeImage->setImagePage(0, 0, 0, 0);
         $amr = new AnalogMeter($rawGaugeImage, 'r');
         $decimalPlaces .= $amr->getValue();
-        if ($fullDebug || $logChanges) {
+        if ($fullDebug || ($logChanges && isset($config['logging']) && $config['logging'])) {
             echo $amr->getValue($fullDebug).'<br>';
             echo '<img src="debug/analog_' . $gaugeKey . '.png" /><br />';
             $debugData = $amr->getDebugData();
@@ -138,7 +138,7 @@ try {
     ) {
         $returnValue = $value;
         file_put_contents('config/lastValue.txt', $value);
-        if ($logChanges) {
+        if ($logChanges && isset($config['logging']) && $config['logging']) {
             $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
             for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
                 $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_' . $logRedSteps[$i]['x'] . '-' . $logRedSteps[$i]['y'] . '_input.jpg');
@@ -167,6 +167,8 @@ try {
     }
     echo $returnValue;
 } catch (Exception $e) {
-    file_put_contents('error/' . $now . '_exception.txt', $e->__toString());
+    if (isset($config['logging']) && $config['logging']) {
+        file_put_contents('error/' . $now . '_exception.txt', $e->__toString());
+    }
     echo $lastValue;
 }

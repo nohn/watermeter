@@ -6,21 +6,47 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 ![CI](https://github.com/nohn/watermeter/workflows/CI/badge.svg) ![Docker Hub Pulls](https://img.shields.io/docker/pulls/nohn/watermeter?label=docker%20hub%20pulls)
 
-## Demo
+## Getting Started
 
-After executing
+### Installation
+
+#### Docker
 
     docker run -p 127.0.0.1:3000:3000 nohn/watermeter:latest
 
-You can access a demo on
+#### Docker Compose
+
+```yaml
+version: "3.5"
+services:
+  watermeter:
+    image: nohn/watermeter:latest
+    container_name: watermeter
+    restart: always
+    ports:
+      - "127.0.0.1:3000:3000"
+```
+
+#### PHP
+
+Requires PHP >= 7.4 including Imagick and Tesseract OCR installed. Beware, official ext-Imagick releases currently fail to install with PHP 8, see Imagick/imagick#358.   
+
+```shell
+git pull https://github.com/nohn/watermeter.git
+composer install
+cd src/
+php -S 127.0.0.1:300
+```
+
+### Demo Access
+
+After installation, you can access a demo on
 
     http://127.0.0.1:3000/?debug
 
 respectivly
 
     http://127.0.0.1:3000/
-
-## Usage
 
 ### Taking the water meter image
 
@@ -32,7 +58,7 @@ from time import sleep
 from picamera import PiCamera
 
 led = LED(17) # Choose the correct pin number
-
+    
 camera = PiCamera()
 camera.resolution = (2592, 1944)
 camera.brightness = 60
@@ -52,36 +78,13 @@ Your mileage may vary, you have to play around a bit. I run
 
 for equalizing the results and improving contrast.
 
-### docker-compose
-
 #### Configuration
 
-Unless you want to run in demo mode, you need to provide a ```config/config.php```. An example is provided in [config/config.php](src/config/config.php). A configuration GUI is available, see below.
-
-#### Initial value
-
-Unless you want to run in demo mode, you need to provide the initival value in ```config/lastValue.txt```. An example is provided in [config/lastValue.txt](src/config/lastValue.txt). A configuration GUI is available, see below.
-
-#### Configuration GUI
-
-A config GUI is available at http://watermeter:3000/configure.php.
+Once you have found your way to take images of your water meter, you can access the configuration tool http://127.0.0.1:3000/configure.php. The interface should be self explanatory.
 
 ![Configuration GUI Screenshot](doc/configure.png)
 
-#### docker-compose.yaml
 
-```yaml
-version: "3.5"
-services:
-  watermeter:
-    image: nohn/watermeter:latest
-    container_name: watermeter
-    restart: always
-    volumes:
-      - ./watermeter/config:/usr/src/watermeter/src/config
-    ports:
-      - "3000:3000"
-```
 
 #### Integration in Home Assistant
 
