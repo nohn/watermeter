@@ -18,8 +18,7 @@ if (isset($_GET['log'])) {
     $logChanges = false;
 }
 
-$now = date('YmdHis');
-$lastValueTime = date('YmdHis', $lastValueTimestamp);
+$now = time();
 
 $strokeColor = new ImagickPixel('white');
 $strokeOpacity = 0.7;
@@ -159,7 +158,7 @@ try {
         $returnData['status'] = 'error';
         $returnData['errors'] = $errors;
         $returnData['exception'] = false;
-        $returnData['lastUpdated'] = $lastValueTime;
+        $returnData['lastUpdated'] = $lastValueTimestamp;
     } else {
         $returnData['value'] = $value;
         $returnData['status'] = 'error';
@@ -180,7 +179,6 @@ try {
         header("Content-Type: application/json");
         echo json_encode($returnData);
     } else {
-        header("Content-Type: text/plain");
         echo $returnData['value'];
     }
 } catch (Exception $e) {
@@ -192,13 +190,12 @@ try {
         'status' => 'exception',
         'errors' => false,
         'exception' => $e->__toString(),
-        'lastUpdated' => $lastValueTime
+        'lastUpdated' => $lastValueTimestamp,
     );
     if (isset($_GET['json'])) {
         header("Content-Type: application/json");
         echo json_encode($returnData);
     } else {
-        header("Content-Type: text/plain");
         echo $returnData['value'];
     }
 }
