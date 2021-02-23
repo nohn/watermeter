@@ -3,6 +3,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require 'config/config.php';
 
 $lastValue = trim(file_get_contents('config/lastValue.txt'));
+$lastValueTimestamp = filemtime('config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 
 if (isset($_GET['debug'])) {
@@ -18,6 +19,7 @@ if (isset($_GET['log'])) {
 }
 
 $now = date('YmdHis');
+$lastValueTime = date('YmdHis', $lastValueTimestamp);
 
 $strokeColor = new ImagickPixel('white');
 $strokeOpacity = 0.7;
@@ -74,7 +76,7 @@ try {
     } else {
         $preDecimalPlaces = $lastPreDecimalPlaces;
         if ($fullDebug) {
-            echo 'Choosing last value '.$lastPreDecimalPlaces.'<br>';
+            echo 'Choosing last value ' . $lastPreDecimalPlaces . '<br>';
         }
         $errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . $lastPreDecimalPlaces;
     }
@@ -109,11 +111,11 @@ try {
         $amr = new AnalogMeter($rawGaugeImage, 'r');
         $decimalPlaces .= $amr->getValue();
         if ($fullDebug || ($logChanges && isset($config['logging']) && $config['logging'])) {
-            echo $amr->getValue($fullDebug).'<br>';
+            echo $amr->getValue($fullDebug) . '<br>';
             echo '<img src="debug/analog_' . $gaugeKey . '.png" /><br />';
             $debugData = $amr->getDebugData();
-            foreach($debugData as $significance => $step) {
-                echo round($significance,4) . ': '.$step['xStep'].'x'.$step['yStep'].' => '.$step['number'].'<br>';
+            foreach ($debugData as $significance => $step) {
+                echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
             }
             $debugImage = $amr->getDebugImage();
             $debugImage->setImageFormat('png');
@@ -136,8 +138,6 @@ try {
         ($lastValue <= $value) &&
         (($value - $lastValue) < $config['maxThreshold'])
     ) {
-        $returnValue = $value;
-        file_put_contents('config/lastValue.txt', $value);
         if ($logChanges && isset($config['logging']) && $config['logging']) {
             $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
             for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
@@ -153,22 +153,52 @@ try {
         $errors[__LINE__][] = ($value - $lastValue);
         $hasErrors = true;
     }
+    $returnData = array();
     if ($hasErrors) {
-        $returnValue = $lastValue;
+        $returnData['value'] = $lastValue;
+        $returnData['status'] = 'error';
+        $returnData['errors'] = $errors;
+        $returnData['exception'] = false;
+        $returnData['lastUpdated'] = $lastValueTime;
+    } else {
+        $returnData['value'] = $value;
+        $returnData['status'] = 'error';
+        $returnData['errors'] = false;
+        $returnData['exception'] = false;
+        $returnData['lastUpdated'] = $now;
+        file_put_contents('config/lastValue.txt', $value);
     }
     if ($fullDebug) {
         echo "hasErrors: $hasErrors\n<br>";
-        echo '<pre>';
+        echo "<pre>";
         var_dump($errors);
-        echo '</pre>';
+        echo "</pre>";
         echo "lastValue: $lastValue\n<br>";
         echo "value: $value\n<br>";
-        echo "returnValue: $returnValue\n<br>";
     }
-    echo $returnValue;
+    if (isset($_GET['json'])) {
+        header("Content-Type: application/json");
+        echo json_encode($returnData);
+    } else {
+        header("Content-Type: text/plain");
+        echo $returnData['value'];
+    }
 } catch (Exception $e) {
     if (isset($config['logging']) && $config['logging']) {
         file_put_contents('error/' . $now . '_exception.txt', $e->__toString());
     }
-    echo $lastValue;
+    $returnData = array(
+        'value' => $lastValue,
+        'status' => 'exception',
+        'errors' => false,
+        'exception' => $e->__toString(),
+        'lastUpdated' => $lastValueTime
+    );
+    if (isset($_GET['json'])) {
+        header("Content-Type: application/json");
+        echo json_encode($returnData);
+    } else {
+        header("Content-Type: text/plain");
+        echo $returnData['value'];
+    }
 }
