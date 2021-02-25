@@ -10,10 +10,6 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 ### Installation
 
-#### Docker
-
-    docker run -p 127.0.0.1:3000:3000 nohn/watermeter:latest
-
 #### Docker Compose
 
 ```yaml
@@ -22,6 +18,8 @@ services:
   watermeter:
     image: nohn/watermeter:latest
     container_name: watermeter
+    volumes:
+      - ./watermeter/config:/usr/src/watermeter/src/config
     restart: always
     ports:
       - "127.0.0.1:3000:3000"
