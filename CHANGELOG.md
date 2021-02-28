@@ -1,6 +1,6 @@
-# 2020-02-XX v1.1.0
+# 2020-02-XX v1.2.0
 
-- Upgrade nohn/analogmeterreader to ^1.1 improving analog gauge recognition accuracy
+- Upgrade nohn/analogmeterreader to ^1.2 improving analog gauge recognition accuracy
 
 # 2021-02-23 v1.0.0
 
