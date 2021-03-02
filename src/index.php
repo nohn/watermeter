@@ -12,12 +12,6 @@ if (isset($_GET['debug'])) {
     $fullDebug = false;
 }
 
-if (isset($_GET['log'])) {
-    $logChanges = true;
-} else {
-    $logChanges = false;
-}
-
 $now = time();
 
 $strokeColor = new ImagickPixel('white');
@@ -107,9 +101,12 @@ try {
         $rawGaugeImage = new Imagick($config['sourceImage']);
         $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
         $rawGaugeImage->setImagePage(0, 0, 0, 0);
+        if (isset($config['logging']) && $config['logging']) {
+            $logGaugeImages[] = $rawGaugeImage;
+        }
         $amr = new AnalogMeter($rawGaugeImage, 'r');
         $decimalPlaces .= $amr->getValue();
-        if ($fullDebug || ($logChanges && isset($config['logging']) && $config['logging'])) {
+        if ($fullDebug) {
             echo $amr->getValue($fullDebug) . '<br>';
             echo '<img src="debug/analog_' . $gaugeKey . '.png" /><br />';
             $debugData = $amr->getDebugData();
@@ -132,17 +129,18 @@ try {
 
     $value = $preDecimalPlaces . '.' . $decimalPlaces;
 
+    if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
+        $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
+        for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
+            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.jpg');
+        }
+    }
+
     if (
         is_numeric($value) &&
         ($lastValue <= $value) &&
         (($value - $lastValue) < $config['maxThreshold'])
     ) {
-        if ($logChanges && isset($config['logging']) && $config['logging']) {
-            $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
-            for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
-                $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_' . $logRedSteps[$i]['x'] . '-' . $logRedSteps[$i]['y'] . '_input.jpg');
-            }
-        }
     } else {
         $errors[__LINE__] = is_numeric($value);
         $errors[__LINE__] = ($lastValue <= $value);
