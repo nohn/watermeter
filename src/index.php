@@ -130,7 +130,7 @@ try {
     $value = $preDecimalPlaces . '.' . $decimalPlaces;
 
     if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
-        $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
+        $numberDigitalImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
         for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
             $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.jpg');
         }
