@@ -129,17 +129,18 @@ try {
 
     $value = $preDecimalPlaces . '.' . $decimalPlaces;
 
+    if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
+        $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
+        for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
+            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.jpg');
+        }
+    }
+
     if (
         is_numeric($value) &&
         ($lastValue <= $value) &&
         (($value - $lastValue) < $config['maxThreshold'])
     ) {
-        if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
-            $digitalSourceImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
-            for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
-                $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.jpg');
-            }
-        }
     } else {
         $errors[__LINE__] = is_numeric($value);
         $errors[__LINE__] = ($lastValue <= $value);
