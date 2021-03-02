@@ -130,9 +130,11 @@ try {
     $value = $preDecimalPlaces . '.' . $decimalPlaces;
 
     if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
-        $numberDigitalImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.jpg');
+        $numberDigitalImage->setImageFormat('png')
+        $numberDigitalImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
         for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
-            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.jpg');
+            $logGaugeImages[$i]->setImageFormat('png');
+            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
         }
     }
 
