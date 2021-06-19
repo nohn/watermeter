@@ -8,7 +8,7 @@
     "thiagoalessio/tesseract_ocr": "^2.11",
     "nohn/analogmeterreader": "^1.2",
     "php": ">=7.4",
-    "ext-imagick": "^3.4.0",
+    "ext-imagick": "^3.4.4",
     "ext-json": ">=7.4"
   }
 }
