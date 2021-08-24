@@ -17,6 +17,8 @@ jobs:
           extensions: imagick
       - name: Install composer dependencies
         run: composer update --no-ansi --no-interaction --no-progress
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       - name: Docker build
         run: docker build . -t nohn/watermeter
       - name: Run Container
