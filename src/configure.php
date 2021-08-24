@@ -28,7 +28,7 @@ if (isset($_POST['digit'])) {
 if (isset($_POST['gauge'])) {
     $config['analogGauges'] = $_POST['gauge'];
 }
-if (isset($_POST) && ($_POST['action'] == 'save')) {
+if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     $newConfig = var_export($config, true);
     file_put_contents('config/config.php', "<?php\n\$config = " . $newConfig . ";");
     file_put_contents('config/lastValue.txt', $lastValue);
@@ -75,8 +75,6 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
     </script>
 </head>
 <body>
-<?php switch ($_GET['action']): ?>
-<?php default: ?>
 <form method="post" id="config" style="float: left;">
     <fieldset class="base">
         <legend>Base Settings</legend>
@@ -140,6 +138,5 @@ if (isset($_POST) && ($_POST['action'] == 'save')) {
     echo '</form>';
     echo '<img src="debug/input_debug.jpg" style="float: left;"/>';
     ?>
-    <?php endswitch; ?>
 </body>
 </html>
