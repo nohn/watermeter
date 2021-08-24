@@ -33,7 +33,7 @@ Requires PHP >= 7.4 including Imagick and Tesseract OCR installed.
 git pull https://github.com/nohn/watermeter.git
 composer install
 cd src/
-php -S 127.0.0.1:300
+php -S 127.0.0.1:3000
 ```
 
 ### Demo Access
