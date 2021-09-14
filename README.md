@@ -8,7 +8,7 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 ## Getting Started
 
-To get a benefit from using this software, you need at least three components. I strongly encourage to run each of these components in a different container or VM.
+To get a benefit from using this software, you need at least three components. It is strongly encouraged to run each of these components in a different container or VM.
 
 1. Something to take photos of your analog water meter. I use a Raspberry Pi Zero with a Raspberry Camera for that. Your image may need some post-processing. See the end of this README for some tips on that.
 2. *This tool* to process that image into a decimal value
