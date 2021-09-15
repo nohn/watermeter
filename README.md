@@ -35,7 +35,7 @@ services:
 
 #### Configuration
 
-Once you have found your way to take images of your water meter, you can access the configuration tool http://ip:3000/configure.php. The interface should be self explanatory.
+Once you have found your way to take images of your water meter, you can access the configuration tool http://ip:3000/configure.php. The interface should be self explanatory. Source Image can be either in local filesystem or any HTTP(S) resource.
 
 ![Configuration GUI Screenshot](doc/configure.png)
 
