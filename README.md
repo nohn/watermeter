@@ -10,8 +10,8 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 To get a benefit from using this software, you need at least three components. It is strongly encouraged to run each of these components in a different container or VM and the following documentation is assuming this.
 
-1. Something to take photos of your analog water meter. I use a Raspberry Pi Zero W with a Raspberry Camera for that. Your image may need some post-processing. See the end of this README for some tips on that.
-2. *This tool* to process that image into a decimal value
+1. Something to take photos of your analog water meter. I use a Raspberry Pi Zero W with a Raspberry Camera for that, but you could use any (non IR) camera. Your image may need some post-processing. See the end of this README for some tips on that.
+2. *This tool* to process that image into a decimal value.
 3. Something to process that value into whatever you like to do with it (charts, alerts, ...). I use [Home Assistant](https://home-assistant.io) for that.
 
 ### Installation
