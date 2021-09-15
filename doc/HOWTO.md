@@ -1,5 +1,15 @@
 # How to turn your analog water meter into a Home Assistant sensor
 
+## Overview
+
+The system contains of three components that communicate with HTTP:
+
+* Camera
+* watermeter
+* Home Assistant
+
+![demo image](overview.svg)
+
 ## Taking a photo of your water meter
 
 You can use any camera you like as long as it shoots color images. Night vision cameras do not provide good results, as it's close to impossible to identify the analog gauges with a greyscale image. Therefore I use a standard camera and a white LED for illumination when taking photos. 

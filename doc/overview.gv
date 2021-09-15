@@ -1,0 +1,3 @@
+digraph G {
+  Camera->watermeter->"Home Assistant" [label=HTTP]
+}
