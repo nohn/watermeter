@@ -29,21 +29,21 @@ services:
 
 ### Configuration
 
-You can access the configuration tool http://ip:3000/configure.php. The interface should be self explanatory. Source Image can be either in local filesystem or any HTTP(S) resource.
+You can access the configuration tool http://watermeter:3000/configure.php. The interface should be self explanatory. Source Image can be either in local filesystem or any HTTP(S) resource.
 
 ![Configuration GUI Screenshot](doc/configure.png)
 
 After configuration is done, you can access the current value at
 
-    http://ip:3000/
+    http://watermeter:3000/
 
 or
 
-    http://ip:3000/?json
+    http://watermeter:3000/?json
 
 or see debug information at
 
-    http://ip:3000/?debug
+    http://watermeter:3000/?debug
 
 ## How to contribute
 
