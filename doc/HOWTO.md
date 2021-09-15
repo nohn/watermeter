@@ -2,7 +2,7 @@
 
 ## Overview
 
-The system contains of three components that communicate with HTTP:
+The system contains of three components that communicate via HTTP:
 
 * Camera
 * watermeter
