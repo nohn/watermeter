@@ -128,3 +128,18 @@ And restart Home Assistant.
 After that you should have a new sensor call "Water".
 
 ![Home Assistant Dashboard](hass.png)
+
+## How to contribute
+
+You can contribute to this project by:
+
+* Opening an [Issue](https://github.com/nohn/watermeter/issues) if you found a bug or wish to propose a new feature
+* Placing a [Pull Request](https://github.com/nohn/watermeter/pulls) with bugfixes, new features etc.
+
+## You like this?
+
+Consider a [gift](https://www.amazon.de/hz/wishlist/genericItemsPage/3HYH6NR8ZI0WI).
+
+## License
+
+analogmeterreader is released under the [GNU Affero General Public License](LICENSE).
