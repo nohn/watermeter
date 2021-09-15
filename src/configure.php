@@ -2,7 +2,11 @@
 require __DIR__ . '/../vendor/autoload.php';
 require 'config/config.php';
 
-$lastValue = file_get_contents('config/lastValue.txt');
+if (file_exists('config/lastValue.txt')) {
+    $lastValue = file_get_contents('config/lastValue.txt');
+} else {
+    $lastValue = 0;
+}
 
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use nohn\AnalogMeterReader\AnalogMeter;
