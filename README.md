@@ -8,9 +8,9 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 ## Getting Started
 
-### Installation
+This is only a quick introduction to setting up and configuring watermeter. A more extensive documentation can be found in [the howto](doc/HOWTO.md).
 
-This only covers setting up watermeter. A more extensive documentation can be found in [the howto](doc/HOWTO.md).
+### Installation
 
 #### Using Docker Compose (recommended)
 
