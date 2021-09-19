@@ -33,7 +33,7 @@ convert -crop 906x906+759+1089 /run/shm/watermeter_last.jpg /run/shm/watermeter_
 convert -contrast -equalize /run/shm/watermeter_crop.jpg /run/shm/watermeter.jpg # play around with different filters to find the best results
 ```
 
-Aim of the image enhancement is to make the digits look as flat as possible and the gauges to look as red as possible.  Images are stored in /run/shm to not wear the SD card.
+Aim of the image enhancement is to make the digits look as flat as possible and the gauges to look as red as possible and to enhance overall contrast to the maximum possible. Images are stored in /run/shm to not wear the SD card.
 
 watermeter.py is taking care of driving the LED and the camera:
 
@@ -102,7 +102,9 @@ After watermeter has started, you can access the configuration UI at http://ip.o
 
 ![Configuration GUI Screenshot](configure.png)
 
-Replace "Source Image" with http://ip.of.camera.pi/watermeter.jpg and hit the "preview" button. Now, step by step enter the coordinates of your digits and gauges and verify with "preview". Once you are done, click the "save" button to save your configuration.
+Replace "Source Image" with http://ip.of.camera.pi/watermeter.jpg and hit the "preview" button. Now, step by step enter the coordinates of your digits and gauges and verify with "preview". You also need to change the value in "Initial Value" to whatever your meter currently reads.
+
+Once you are done, click the "save" button to save your configuration.
 
 Verify the results by accessing http://ip.of.docker.host:3000/?debug.
 
