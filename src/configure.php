@@ -95,7 +95,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
         <legend for="logging">Enable Logging</legend>
         <input type="checkbox" name="logging" id="logging" <?php echo $config['logging'] == true ? 'checked' : ''; ?>>
-        <legend for="postprocessing">Image Postprocessing</legend>
+        <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing" id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
     </fieldset>
     <?php
