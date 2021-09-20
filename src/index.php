@@ -41,8 +41,10 @@ try {
     }
     $targetImage->resetIterator();
     $numberDigitalImage = $targetImage->appendImages(false);
-    $numberDigitalImage->enhanceImage();
-    $numberDigitalImage->equalizeImage();
+    if (!isset($config['postprocessing']) || (isset($config['postprocessing']) && $config['postprocessing'])) {
+        $numberDigitalImage->enhanceImage();
+        $numberDigitalImage->equalizeImage();
+    }
     $numberDigitalImage->setImageFormat("png");
     $numberDigitalImage->borderImage('white', 10, 10);
 

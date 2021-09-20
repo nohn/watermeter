@@ -23,6 +23,11 @@ if (isset($_POST['logging']) && ($_POST['logging'] == 'on')) {
 } else {
     $config['logging'] = false;
 }
+if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on') || !isset($config['postprocessing'])) {
+    $config['postprocessing'] = true;
+} else {
+    $config['postprocessing'] = false;
+}
 if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
 }
@@ -90,9 +95,11 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
         <legend for="logging">Enable Logging</legend>
         <input type="checkbox" name="logging" id="logging" <?php echo $config['logging'] == true ? 'checked' : ''; ?>>
+        <legend for="postprocessing">Image Postprocessing</legend>
+        <input type="checkbox" name="postprocessing" id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
     </fieldset>
     <?php
-    $strokeColor = new ImagickPixel('white');
+    $strokeColor = new ImagickPixel('green');
     $strokeOpacity = 0.7;
 
     $sourceImageDebug = new Imagick($config['sourceImage']);
