@@ -108,7 +108,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     foreach ($config['digitalDigits'] as $key => $digit) {
         echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
         foreach ($fields as $field) {
-            echo '<legend for="digit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="digit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . $digit[$field] . '">';
+            echo '<legend for="digit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="digit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
         }
         echo '</fieldset>';
         $draw = new ImagickDraw();
@@ -116,7 +116,9 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         $draw->setStrokeOpacity($strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
+        if (isset($digit['x'])) {
+            $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
+        }
         $sourceImageDebug->drawImage($draw);
     }
     echo '<button onclick="return removeElement(\'digit\')" />Remove a Digit</button>';
@@ -127,7 +129,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     foreach ($config['analogGauges'] as $key => $gauge) {
         echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
         foreach ($fields as $field) {
-            echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . $gauge[$field] . '">';
+            echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . (isset($gauge[$field]) ? $gauge[$field] : '') . '">';
         }
         echo '</fieldset>';
         $draw = new ImagickDraw();
@@ -135,9 +137,11 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         $draw->setStrokeOpacity($strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
+        if (isset($gauge['x'])) {
+            $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
+            $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
+            $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
+        }
         $sourceImageDebug->drawImage($draw);
     }
     echo '<button onclick="return removeElement(\'gauge\')" />Remove a Gauge</button>';
