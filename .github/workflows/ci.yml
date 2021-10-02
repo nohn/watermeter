@@ -1,8 +1,10 @@
 name: CI
 
 on:
-  - push
-  - pull_request
+  push:
+    branches: [ main, v* ]
+    tags: [ v* ]
+  pull_request:
 
 jobs:
   docker-build:
