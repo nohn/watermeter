@@ -1,7 +1,10 @@
 name: CI
 
 on:
-  - push
+  - push:
+      branches:
+        - master
+        - v*
   - pull_request
 
 jobs:
