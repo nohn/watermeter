@@ -3,7 +3,9 @@ name: CI
 on:
   - push:
       branches:
-        - master
+        - main
+        - v*
+      tags:
         - v*
   - pull_request
 
