@@ -4,6 +4,13 @@
   "version": "1.2.7",
   "type": "project",
   "license": "AGPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Sebastian Nohn",
+      "email": "sebastian@nohn.net",
+      "role": "lead"
+    }
+  ],
   "require": {
     "thiagoalessio/tesseract_ocr": "^2.11",
     "nohn/analogmeterreader": "^1.2",
