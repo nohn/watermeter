@@ -1,9 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require 'config/config.php';
+require '../config/config.php';
 
-if (file_exists('config/lastValue.txt')) {
-    $lastValue = file_get_contents('config/lastValue.txt');
+if (file_exists('../config/lastValue.txt')) {
+    $lastValue = file_get_contents('../config/lastValue.txt');
 } else {
     $lastValue = 0;
 }
@@ -39,8 +39,8 @@ if (isset($_POST['gauge'])) {
 }
 if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     $newConfig = var_export($config, true);
-    file_put_contents('config/config.php', "<?php\n\$config = " . $newConfig . ";");
-    file_put_contents('config/lastValue.txt', $lastValue);
+    file_put_contents('../config/config.php', "<?php\n\$config = " . $newConfig . ";");
+    file_put_contents('../config/lastValue.txt', $lastValue);
 }
 ?>
 <html>

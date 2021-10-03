@@ -1,9 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require 'config/config.php';
+require '../config/config.php';
 
-$lastValue = trim(file_get_contents('config/lastValue.txt'));
-$lastValueTimestamp = filemtime('config/lastValue.txt');
+$lastValue = trim(file_get_contents('../config/lastValue.txt'));
+$lastValueTimestamp = filemtime('../config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 
 if (isset($_GET['debug'])) {
@@ -133,10 +133,10 @@ try {
 
     if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
         $numberDigitalImage->setImageFormat('png');
-        $numberDigitalImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
+        $numberDigitalImage->writeImage('../log/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
         for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
             $logGaugeImages[$i]->setImageFormat('png');
-            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
+            $logGaugeImages[$i]->writeImage('../log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
         }
     }
 
@@ -167,7 +167,7 @@ try {
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
-        file_put_contents('config/lastValue.txt', $value);
+        file_put_contents('../config/lastValue.txt', $value);
     }
     if ($fullDebug) {
         echo "hasErrors: $hasErrors\n<br>";
