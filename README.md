@@ -1,6 +1,6 @@
 # Read a water meter and returns value
 
-Reads analog water meters and provides a web service that returns the read value as decimal.
+Reads analog water meters and provides a web service that returns the read value as decimal. The needles of the analog gauges currently have to be red.
 
 Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![Grafana Screenshot](doc/grafana.png).
 
