@@ -7,6 +7,5 @@ COPY ./config /usr/src/watermeter/config
 COPY ./log    /usr/src/watermeter/log
 COPY ./public /usr/src/watermeter/public
 COPY ./vendor /usr/src/watermeter/vendor
-COPY ./src    /usr/src/watermeter/src
 WORKDIR /usr/src/watermeter/public
 CMD [ "php", "-S", "0.0.0.0:3000" ]
