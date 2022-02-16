@@ -1,9 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require 'config/config.php';
+require '../config/config.php';
 
-$lastValue = trim(file_get_contents('config/lastValue.txt'));
-$lastValueTimestamp = filemtime('config/lastValue.txt');
+$lastValue = trim(file_get_contents('../config/lastValue.txt'));
+$lastValueTimestamp = filemtime('../config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 
 if (isset($_GET['debug'])) {
@@ -60,10 +60,10 @@ try {
     $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
     // $numberDigital = '00815';
     if ($fullDebug) {
-        $numberDigitalImage->writeImage('debug/digital.jpg');
+        $numberDigitalImage->writeImage('tmp/digital.jpg');
         echo "Raw OCR: $numberOCR<br>";
         echo "Clean OCR: $numberDigital";
-        echo '<img alt="Digital Preview" src="debug/digital.jpg" /><br>';
+        echo '<img alt="Digital Preview" src="tmp/digital.jpg" /><br>';
     }
 
     if (is_numeric($numberDigital)) {
@@ -80,8 +80,8 @@ try {
         echo "Digital: $preDecimalPlaces<br>";
         echo '<table border="1"><tr>';
         echo '<td>';
-        $digitalSourceImage->writeImage('debug/input.jpg');
-        $numberDigitalImage->writeImage('debug/digital.png');
+        $digitalSourceImage->writeImage('tmp/input.jpg');
+        $numberDigitalImage->writeImage('tmp/digital.png');
         echo '</td>';
     }
 
@@ -110,21 +110,21 @@ try {
         $decimalPlaces .= $amr->getValue();
         if ($fullDebug) {
             echo $amr->getValue($fullDebug) . '<br>';
-            echo '<img src="debug/analog_' . $gaugeKey . '.png" /><br />';
+            echo '<img src="tmp/analog_' . $gaugeKey . '.png" /><br />';
             $debugData = $amr->getDebugData();
             foreach ($debugData as $significance => $step) {
                 echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
             }
             $debugImage = $amr->getDebugImage();
             $debugImage->setImageFormat('png');
-            $debugImage->writeImage('debug/analog_' . $gaugeKey . '.png');
+            $debugImage->writeImage('tmp/analog_' . $gaugeKey . '.png');
             echo '</td>';
         }
     }
     if ($fullDebug) {
         echo '<td>';
-        $sourceImageDebug->writeImage('debug/input_debug.jpg');
-        echo '<img src="debug/input_debug.jpg" />';
+        $sourceImageDebug->writeImage('tmp/input_debug.jpg');
+        echo '<img src="tmp/input_debug.jpg" />';
         echo '</td>';
         echo '</tr></table>';
     }
@@ -133,10 +133,10 @@ try {
 
     if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
         $numberDigitalImage->setImageFormat('png');
-        $numberDigitalImage->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
+        $numberDigitalImage->writeImage('tmp/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
         for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
             $logGaugeImages[$i]->setImageFormat('png');
-            $logGaugeImages[$i]->writeImage('log/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
+            $logGaugeImages[$i]->writeImage('tmp/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
         }
     }
 
@@ -167,7 +167,7 @@ try {
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
-        file_put_contents('config/lastValue.txt', $value);
+        file_put_contents('../config/lastValue.txt', $value);
     }
     if ($fullDebug) {
         echo "hasErrors: $hasErrors\n<br>";
@@ -185,7 +185,7 @@ try {
     }
 } catch (Exception $e) {
     if (isset($config['logging']) && $config['logging']) {
-        file_put_contents('error/' . $now . '_exception.txt', $e->__toString());
+        file_put_contents('../log/error/' . $now . '_exception.txt', $e->__toString());
     }
     $returnData = array(
         'value' => $lastValue,

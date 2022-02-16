@@ -17,5 +17,13 @@
     "php": ">=7.4",
     "ext-imagick": "^3.4.4",
     "ext-json": ">=7.4"
+  },
+  "support": {
+    "issues": "https://github.com/nohn/watermeter/issues"
+  },
+  "autoload": {
+    "psr-4": {
+      "nohn\\Watermeter\\": "src/"
+    }
   }
 }
