@@ -3,6 +3,7 @@ RUN apt-get update \
     && apt-get install -y libmagickwand-dev tesseract-ocr \
     && pecl install imagick \
     && docker-php-ext-enable imagick
+COPY ./classes     /usr/src/watermeter/classes
 COPY ./log        /usr/src/watermeter/log
 COPY ./public     /usr/src/watermeter/public
 COPY ./src        /usr/src/watermeter/src
