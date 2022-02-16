@@ -9,9 +9,10 @@ class Cache
 
     public function __construct()
     {
-        if (file_exists(__DIR__ . '/../src/config/lastValue.txt')) {
-            $this->value = trim(file_get_contents(__DIR__ . '/../src/config/lastValue.txt'));
-            $this->last_update = filemtime(__DIR__ . '/../src/config/lastValue.txt');
+        $cacheFile = __DIR__ . '/../src/config/lastValue.txt';
+        if (file_exists($cacheFile)) {
+            $this->value = trim(file_get_contents($cacheFile));
+            $this->last_update = filemtime($cacheFile);
         }
     }
 
