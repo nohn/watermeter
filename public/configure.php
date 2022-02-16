@@ -2,8 +2,6 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-use thiagoalessio\TesseractOCR\TesseractOCR;
-use nohn\AnalogMeterReader\AnalogMeter;
 use nohn\Watermeter\Watermeter;
 
 $watermeter = new Watermeter();
