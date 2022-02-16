@@ -2,7 +2,9 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-$lastValue = trim(file_get_contents('../src/config/lastValue.txt'));
+$watermeter = new \nohn\Watermeter\Watermeter();
+$lastValue = $watermeter->getCachedValue();
+
 $lastValueTimestamp = filemtime('../src/config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 

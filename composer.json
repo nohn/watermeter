@@ -18,12 +18,15 @@
     "ext-imagick": "^3.4.4",
     "ext-json": ">=7.4"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
   "support": {
     "issues": "https://github.com/nohn/watermeter/issues"
   },
   "autoload": {
     "psr-4": {
-      "nohn\\Watermeter\\": "src/"
+      "nohn\\Watermeter\\": "classes/"
     }
   }
 }

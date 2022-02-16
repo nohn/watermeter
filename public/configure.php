@@ -2,11 +2,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-if (file_exists('../src/config/lastValue.txt')) {
-    $lastValue = file_get_contents('../src/config/lastValue.txt');
-} else {
-    $lastValue = 0;
-}
+$watermeter = new \nohn\Watermeter\Watermeter();
+$lastValue = $watermeter->getCachedValue();
 
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use nohn\AnalogMeterReader\AnalogMeter;

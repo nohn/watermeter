@@ -17,8 +17,14 @@ jobs:
         with:
           php-version: 8.1
           extensions: imagick
+          coverage: xdebug
+          tools: phpstan
       - name: Install composer dependencies
         run: composer update --no-ansi --no-interaction --no-progress
+      - name: Run PHPStan
+        run: phpstan analyse src
+      - name: Run unit tests
+        run: vendor/bin/phpunit tests
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
