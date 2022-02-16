@@ -1,9 +1,9 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require '../config/config.php';
+require '../src/config/config.php';
 
-$lastValue = trim(file_get_contents('../config/lastValue.txt'));
-$lastValueTimestamp = filemtime('../config/lastValue.txt');
+$lastValue = trim(file_get_contents('../src/config/lastValue.txt'));
+$lastValueTimestamp = filemtime('../src/config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 
 if (isset($_GET['debug'])) {
@@ -167,7 +167,7 @@ try {
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
-        file_put_contents('../config/lastValue.txt', $value);
+        file_put_contents('../src/config/lastValue.txt', $value);
     }
     if ($fullDebug) {
         echo "hasErrors: $hasErrors\n<br>";
