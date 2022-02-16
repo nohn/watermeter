@@ -2,11 +2,12 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-$watermeter = new \nohn\Watermeter\Watermeter();
-$lastValue = $watermeter->getCachedValue();
-
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use nohn\AnalogMeterReader\AnalogMeter;
+use nohn\Watermeter\Watermeter;
+
+$watermeter = new Watermeter();
+$lastValue = $watermeter->getCachedValue();
 
 $fields = array('x', 'y', 'width', 'height');
 if (isset($_POST['sourceImage'])) {

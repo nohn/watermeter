@@ -2,7 +2,11 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-$watermeter = new \nohn\Watermeter\Watermeter();
+use thiagoalessio\TesseractOCR\TesseractOCR;
+use nohn\AnalogMeterReader\AnalogMeter;
+use nohn\Watermeter\Watermeter;
+
+$watermeter = new Watermeter();
 $lastValue = $watermeter->getCachedValue();
 
 $lastValueTimestamp = filemtime('../src/config/lastValue.txt');
@@ -18,9 +22,6 @@ $now = time();
 
 $strokeColor = new ImagickPixel('white');
 $strokeOpacity = 0.7;
-
-use thiagoalessio\TesseractOCR\TesseractOCR;
-use nohn\AnalogMeterReader\AnalogMeter;
 
 try {
     $digitalSourceImage = new Imagick($config['sourceImage']);
