@@ -2,10 +2,10 @@
 require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
-use nohn\Watermeter\Watermeter;
+use nohn\Watermeter\Cache;
 
-$watermeter = new Watermeter();
-$lastValue = $watermeter->getCachedValue();
+$watermeterCache = new Cache();
+$lastValue = $watermeterCache->getValue();
 
 $fields = array('x', 'y', 'width', 'height');
 if (isset($_POST['sourceImage'])) {

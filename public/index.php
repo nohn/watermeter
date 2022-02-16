@@ -4,12 +4,12 @@ require '../src/config/config.php';
 
 use thiagoalessio\TesseractOCR\TesseractOCR;
 use nohn\AnalogMeterReader\AnalogMeter;
-use nohn\Watermeter\Watermeter;
+use nohn\Watermeter\Cache;
 
-$watermeter = new Watermeter();
-$lastValue = $watermeter->getCachedValue();
+$watermeterCache = new Cache();
+$lastValue = $watermeterCache->getValue();
+$lastValueTimestamp = $watermeterCache->getLastUpdate();
 
-$lastValueTimestamp = filemtime('../src/config/lastValue.txt');
 $lastPreDecimalPlaces = (int)$lastValue;
 
 if (isset($_GET['debug'])) {
