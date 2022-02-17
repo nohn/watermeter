@@ -26,73 +26,10 @@ $strokeColor = new ImagickPixel('white');
 $strokeOpacity = 0.7;
 
 try {
-    $digitalSourceImage = new Imagick($config['sourceImage']);
-    $sourceImageDebug = clone $digitalSourceImage;
-    $targetImage = new Imagick();
 
-    foreach ($config['digitalDigits'] as $digit) {
-        $rawDigit = clone $digitalSourceImage;
-        $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
-        $targetImage->addImage($rawDigit);
-        if ($fullDebug) {
-            $draw = new ImagickDraw();
-            $draw->setStrokeColor($strokeColor);
-            $draw->setStrokeOpacity($strokeOpacity);
-            $draw->setStrokeWidth(1);
-            $draw->setFillOpacity(0);
-            $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
-            $sourceImageDebug->drawImage($draw);
-        }
-    }
-    $targetImage->resetIterator();
-    $numberDigitalImage = $targetImage->appendImages(false);
-    if (!isset($config['postprocessing']) || (isset($config['postprocessing']) && $config['postprocessing'])) {
-        $numberDigitalImage->enhanceImage();
-        $numberDigitalImage->equalizeImage();
-    }
-    $numberDigitalImage->setImageFormat("png");
-    $numberDigitalImage->borderImage('white', 10, 10);
-
-    $hasErrors = false;
-    $errors = array();
-
-    $ocr = new TesseractOCR();
-    $ocr->imageData($numberDigitalImage, sizeof($numberDigitalImage));
-    $ocr->allowlist(range('0', '9'));
-    $numberOCR = $ocr->run();
-    $numberDigital = preg_replace('/\s+/', '', $numberOCR);
-    // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completly ignore it. So we replace o with 0, I with 1 etc.
-    $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
-    // $numberDigital = '00815';
-    if ($fullDebug) {
-        $numberDigitalImage->writeImage('tmp/digital.jpg');
-        echo "Raw OCR: $numberOCR<br>";
-        echo "Clean OCR: $numberDigital";
-        echo '<img alt="Digital Preview" src="tmp/digital.jpg" /><br>';
-    }
-
-    if (is_numeric($numberDigital)) {
-        $preDecimalPlaces = (int)$numberDigital;
-    } else {
-        $preDecimalPlaces = $lastPreDecimalPlaces;
-        if ($fullDebug) {
-            echo 'Choosing last value ' . $lastPreDecimalPlaces . '<br>';
-        }
-        $errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . $lastPreDecimalPlaces;
-    }
-    $decimalPlaces = '';
-    if ($fullDebug) {
-        echo "Digital: $preDecimalPlaces<br>";
-        echo '<table border="1"><tr>';
-        echo '<td>';
-        $digitalSourceImage->writeImage('tmp/input.jpg');
-        $numberDigitalImage->writeImage('tmp/digital.png');
-        echo '</td>';
-    }
 
     $logGaugeImages = array();
 
-    $decimalPlaces = $watermeterReader->readAnalogGauges($fullDebug);
     if ($fullDebug) {
         echo '<td>';
         $sourceImageDebug->writeImage('tmp/input_debug.jpg');
@@ -100,8 +37,7 @@ try {
         echo '</td>';
         echo '</tr></table>';
     }
-
-    $value = $preDecimalPlaces . '.' . $decimalPlaces;
+    $value = $watermeterReader->read();
 
     if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
         $numberDigitalImage->setImageFormat('png');

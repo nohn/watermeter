@@ -17,10 +17,17 @@ class Watermeter
 
     protected $sourceImageDebug;
 
+    protected $lastValue;
+    protected $lastValueTimestamp;
+
     public function __construct()
     {
         $config = new Config();
         $this->config = $config->get();
+
+        $cache = new Cache();
+        $this->lastValue = $cache->getValue();
+        $this->lastValueTimestamp = $cache->getLastUpdate();
 
         $this->sourceImage = new Imagick($this->config['sourceImage']);
 
