@@ -4,3 +4,4 @@ composer.lock
 /.idea/
 /log/
 /public/tmp/
+.phpunit.cache/

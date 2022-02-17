@@ -4,38 +4,28 @@ namespace nohn\Watermeter;
 
 use nohn\AnalogMeterReader\AnalogMeter;
 use Imagick;
-use ImagickDraw;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class Reader extends Watermeter
 {
     private $hasErrors = false;
 
+    private $errors = array();
+
     public function readGauges($fullDebug = false)
     {
         $decimalPlaces = null;
         foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
             if ($fullDebug) {
-                echo '<td>';
-                $draw = new ImagickDraw();
-                $draw->setStrokeColor($this->strokeColor);
-                $draw->setStrokeOpacity($this->strokeOpacity);
-                $draw->setStrokeWidth(1);
-                $draw->setFillOpacity(0);
-                $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-                $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-                $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
-                $this->sourceImageDebug->drawImage($draw);
+                $this->drawDebugImageGauge($gauge);
             }
             $rawGaugeImage = clone $this->sourceImage;
             $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
-            if (isset($config['logging']) && $config['logging']) {
-                $logGaugeImages[] = $rawGaugeImage;
-            }
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
             if ($fullDebug) {
+                echo '<td>';
                 echo $amr->getValue($fullDebug) . '<br>';
                 echo '<img src="tmp/analog_' . $gaugeKey . '.png" /><br />';
                 $debugData = $amr->getDebugData();
@@ -61,13 +51,7 @@ class Reader extends Watermeter
             $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
             $targetImage->addImage($rawDigit);
             if ($fullDebug) {
-                $draw = new ImagickDraw();
-                $draw->setStrokeColor($this->strokeColor);
-                $draw->setStrokeOpacity($this->strokeOpacity);
-                $draw->setStrokeWidth(1);
-                $draw->setFillOpacity(0);
-                $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
-                $this->sourceImageDebug->drawImage($draw);
+                $this->drawDebugImageDigit($digit);
             }
         }
         $targetImage->resetIterator();
@@ -84,7 +68,7 @@ class Reader extends Watermeter
         $ocr->allowlist(range('0', '9'));
         $numberOCR = $ocr->run();
         $numberDigital = preg_replace('/\s+/', '', $numberOCR);
-        // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completly ignore it. So we replace o with 0, I with 1 etc.
+        // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
         if ($fullDebug) {
@@ -101,7 +85,8 @@ class Reader extends Watermeter
             if ($fullDebug) {
                 echo 'Choosing last value ' . $preDecimalPlaces . '<br>';
             }
-            $errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . $lastPreDecimalPlaces;
+            $this->errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . (int)$this->lastValue;
+            $this->hasErrors = true;
         }
         if ($fullDebug) {
             echo "Digital: $preDecimalPlaces<br>";
@@ -115,7 +100,29 @@ class Reader extends Watermeter
     }
 
     public function read($fullDebug = false) {
-        $value = $this->readDigits() . '.' . $this->readGauges();
+        $value = $this->readDigits($fullDebug) . '.' . $this->readGauges($fullDebug);
+        if (
+            is_numeric($value) &&
+            ($this->lastValue <= $value) &&
+            (($value - $this->lastValue) < $this->config['maxThreshold'])
+        ) {
+        } else {
+            $this->errors[__LINE__] = is_numeric($value);
+            $this->errors[__LINE__] = ($this->lastValue <= $value);
+            $this->errors[__LINE__][] = ($value - $this->lastValue < 1);
+            $this->errors[__LINE__][] = $value;
+            $this->errors[__LINE__][] = $this->lastValue;
+            $this->errors[__LINE__][] = ($value - $this->lastValue);
+            $this->hasErrors = true;
+        }
         return $value;
+    }
+
+    public function hasErrors() {
+        return $this->hasErrors;
+    }
+
+    public function getErrors() {
+        return $this->errors;
     }
 }

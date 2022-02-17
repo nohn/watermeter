@@ -22,51 +22,25 @@ if (isset($_GET['debug'])) {
 
 $now = time();
 
-$strokeColor = new ImagickPixel('white');
-$strokeOpacity = 0.7;
-
 try {
 
 
     $logGaugeImages = array();
+    $value = $watermeterReader->read($fullDebug);
 
     if ($fullDebug) {
         echo '<td>';
-        $sourceImageDebug->writeImage('tmp/input_debug.jpg');
+        $watermeterReader->writeDebugImage(__DIR__ . '/../public/tmp/input_debug.jpg');
         echo '<img src="tmp/input_debug.jpg" />';
         echo '</td>';
         echo '</tr></table>';
     }
-    $value = $watermeterReader->read();
 
-    if (isset($config['logging']) && $config['logging'] && ($lastValue != $value)) {
-        $numberDigitalImage->setImageFormat('png');
-        $numberDigitalImage->writeImage('tmp/' . $now . '_' . $lastValue . '-' . $value . '_digital.png');
-        for ($i = 0; $i < sizeof($logGaugeImages); $i++) {
-            $logGaugeImages[$i]->setImageFormat('png');
-            $logGaugeImages[$i]->writeImage('tmp/' . $now . '_' . $lastValue . '-' . $value . '_analog_' . ($i + 1) . '_input.png');
-        }
-    }
-
-    if (
-        is_numeric($value) &&
-        ($lastValue <= $value) &&
-        (($value - $lastValue) < $config['maxThreshold'])
-    ) {
-    } else {
-        $errors[__LINE__] = is_numeric($value);
-        $errors[__LINE__] = ($lastValue <= $value);
-        $errors[__LINE__][] = ($value - $lastValue < 1);
-        $errors[__LINE__][] = $value;
-        $errors[__LINE__][] = $lastValue;
-        $errors[__LINE__][] = ($value - $lastValue);
-        $hasErrors = true;
-    }
     $returnData = array();
-    if ($hasErrors) {
+    if ($watermeterReader->hasErrors()) {
         $returnData['value'] = $lastValue;
         $returnData['status'] = 'error';
-        $returnData['errors'] = $errors;
+        $returnData['errors'] = $watermeterReader->getErrors();
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $lastValueTimestamp;
     } else {
@@ -78,9 +52,9 @@ try {
         file_put_contents('../src/config/lastValue.txt', $value);
     }
     if ($fullDebug) {
-        echo "hasErrors: $hasErrors\n<br>";
+        echo "hasErrors: ".$watermeterReader->hasErrors()."\n<br>";
         echo "<pre>";
-        var_dump($errors);
+        var_dump($watermeterReader->getErrors());
         echo "</pre>";
         echo "lastValue: $lastValue\n<br>";
         echo "value: $value\n<br>";
@@ -92,9 +66,6 @@ try {
         echo $returnData['value'];
     }
 } catch (Exception $e) {
-    if (isset($config['logging']) && $config['logging']) {
-        file_put_contents('../log/error/' . $now . '_exception.txt', $e->__toString());
-    }
     $returnData = array(
         'value' => $lastValue,
         'status' => 'exception',

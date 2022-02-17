@@ -3,6 +3,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require '../src/config/config.php';
 
 use nohn\Watermeter\Cache;
+use nohn\Watermeter\Reader;
 
 $watermeterCache = new Cache();
 $lastValue = $watermeterCache->getValue();
@@ -13,11 +14,6 @@ if (isset($_POST['sourceImage'])) {
 }
 if (isset($_POST['maxThreshold'])) {
     $config['maxThreshold'] = $_POST['maxThreshold'];
-}
-if (isset($_POST['logging']) && ($_POST['logging'] == 'on')) {
-    $config['logging'] = true;
-} else {
-    $config['logging'] = false;
 }
 if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on') || !isset($config['postprocessing'])) {
     $config['postprocessing'] = true;
@@ -89,17 +85,12 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo $config['maxThreshold']; ?>">
         <legend for="lastValue">Initial Value</legend>
         <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
-        <legend for="logging">Enable Logging</legend>
-        <input type="checkbox" name="logging" id="logging" <?php echo $config['logging'] == true ? 'checked' : ''; ?>>
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing" id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
     </fieldset>
     <?php
-    $strokeColor = new ImagickPixel('green');
-    $strokeOpacity = 0.7;
 
-    $sourceImageDebug = new Imagick($config['sourceImage']);
-    $targetImage = new Imagick();
+
     echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';
     foreach ($config['digitalDigits'] as $key => $digit) {
         echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
@@ -107,15 +98,6 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
             echo '<legend for="digit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="digit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
         }
         echo '</fieldset>';
-        $draw = new ImagickDraw();
-        $draw->setStrokeColor($strokeColor);
-        $draw->setStrokeOpacity($strokeOpacity);
-        $draw->setStrokeWidth(1);
-        $draw->setFillOpacity(0);
-        if (isset($digit['x'])) {
-            $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
-        }
-        $sourceImageDebug->drawImage($draw);
     }
     echo '<button onclick="return removeElement(\'digit\')" />Remove a Digit</button>';
     echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
@@ -128,25 +110,17 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
             echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . (isset($gauge[$field]) ? $gauge[$field] : '') . '">';
         }
         echo '</fieldset>';
-        $draw = new ImagickDraw();
-        $draw->setStrokeColor($strokeColor);
-        $draw->setStrokeOpacity($strokeOpacity);
-        $draw->setStrokeWidth(1);
-        $draw->setFillOpacity(0);
-        if (isset($gauge['x'])) {
-            $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-            $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-            $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
-        }
-        $sourceImageDebug->drawImage($draw);
     }
     echo '<button onclick="return removeElement(\'gauge\')" />Remove a Gauge</button>';
     echo '<button onclick="return addElement(\'gauge\')" />Add a Gauge</button>';
     echo '</fieldset>';
-    $sourceImageDebug->writeImage('tmp/input_debug.jpg');
+
     echo '<input type="submit" name="action" value="preview">';
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
+    $watermeterReader = new Reader();
+    $value = $watermeterReader->read(true);
+    $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>
 </body>
