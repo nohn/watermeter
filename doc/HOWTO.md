@@ -49,7 +49,7 @@ Images are stored in /run/shm to not wear the SD card.
 
 ## Serving the final meter image
 
-I server the image from /run/shm using NGINX with disabled access logging to reduce SD card wearing.
+I serve the image from /run/shm using NGINX with disabled access logging to reduce SD card wearing.
 
 * Install nginx via ```sudo apt install ngnix```
 * In ```/etc/nginx/nginx.conf``` change ```access_log /var/log/nginx/access.log;``` to ```access_log /dev/null;```
