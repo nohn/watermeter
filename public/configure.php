@@ -3,9 +3,13 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use nohn\Watermeter\Cache;
 use nohn\Watermeter\Reader;
+use nohn\Watermeter\Config;
 
 $watermeterCache = new Cache();
 $lastValue = $watermeterCache->getValue();
+
+$watermeterConfig = new Config();
+$config = $watermeterConfig->get();
 
 $fields = array('x', 'y', 'width', 'height');
 if (isset($_POST['sourceImage'])) {
@@ -29,8 +33,8 @@ if (isset($_POST['gauge'])) {
     $config['analogGauges'] = $_POST['gauge'];
 }
 if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
-    $newConfig = var_export($config, true);
-    file_put_contents('../src/config/config.php', "<?php\n\$config = " . $newConfig . ";");
+    $watermeterConfig->set($config);
+    $watermeterConfig->store();
     file_put_contents('../src/config/lastValue.txt', $lastValue);
 }
 ?>
@@ -117,7 +121,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
     $watermeterReader = new Reader();
-    $value = $watermeterReader->read(true);
+    $value = $watermeterReader->read(true, $config);
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>

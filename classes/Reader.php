@@ -99,7 +99,10 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function read($fullDebug = false) {
+    public function read($fullDebug = false, $config = false) {
+        if ($config) {
+            $this->config = $config;
+        }
         $value = $this->readDigits($fullDebug) . '.' . $this->readGauges($fullDebug);
         if (
             is_numeric($value) &&
