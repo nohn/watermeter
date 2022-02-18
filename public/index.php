@@ -1,8 +1,6 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require '../src/config/config.php';
 
-use thiagoalessio\TesseractOCR\TesseractOCR;
 use nohn\Watermeter\Cache;
 use nohn\Watermeter\Reader;
 
@@ -23,18 +21,8 @@ if (isset($_GET['debug'])) {
 $now = time();
 
 try {
-
-
     $logGaugeImages = array();
     $value = $watermeterReader->read($fullDebug);
-
-    if ($fullDebug) {
-        echo '<td>';
-        $watermeterReader->writeDebugImage(__DIR__ . '/../public/tmp/input_debug.jpg');
-        echo '<img src="tmp/input_debug.jpg" />';
-        echo '</td>';
-        echo '</tr></table>';
-    }
 
     $returnData = array();
     if ($watermeterReader->hasErrors()) {
@@ -45,14 +33,19 @@ try {
         $returnData['lastUpdated'] = $lastValueTimestamp;
     } else {
         $returnData['value'] = $value;
-        $returnData['status'] = 'error';
+        $returnData['status'] = 'success';
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
         file_put_contents('../src/config/lastValue.txt', $value);
     }
     if ($fullDebug) {
-        echo "hasErrors: ".$watermeterReader->hasErrors()."\n<br>";
+        echo '<td>';
+        $watermeterReader->writeDebugImage(__DIR__ . '/../public/tmp/input_debug.jpg');
+        echo '<img src="tmp/input_debug.jpg" />';
+        echo '</td>';
+        echo '</tr></table>';
+        echo "hasErrors: " . $watermeterReader->hasErrors() . "\n<br>";
         echo "<pre>";
         var_dump($watermeterReader->getErrors());
         echo "</pre>";
