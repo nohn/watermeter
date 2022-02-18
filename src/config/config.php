@@ -6,7 +6,7 @@ $config = array(
     // Maximum volume change to accept between two updates.
     'maxThreshold' => 0.1,
     // Source image. Can either be a path to a file or an URL.
-    'sourceImage' => 'https://raw.githubusercontent.com/nohn/watermeter/main/src/demo/demo.jpg',
+    'sourceImage' => 'https://raw.githubusercontent.com/nohn/watermeter/main/public/demo/demo.jpg',
     // Each digital digit is identified by it's x and y coordinates and it's height and width
     'digitalDigits' => array(
         '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),

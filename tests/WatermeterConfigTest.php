@@ -11,7 +11,7 @@ class WatermeterConfigTest extends TestCase
         $config = $watermeterConfig->get();
         $this->assertEquals(false, $config['logging']);
         $this->assertEquals(0.1, $config['maxThreshold']);
-        $this->assertEquals('https://raw.githubusercontent.com/nohn/watermeter/main/src/demo/demo.jpg', $config['sourceImage']);
+        $this->assertEquals('https://raw.githubusercontent.com/nohn/watermeter/main/public/demo/demo.jpg', $config['sourceImage']);
         $this->assertEquals(array(
             '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),
             '2' => array('x' => 280, 'y' => 373, 'width' => 36, 'height' => 58),
