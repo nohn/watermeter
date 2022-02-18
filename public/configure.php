@@ -1,6 +1,5 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
-require '../src/config/config.php';
 
 use nohn\Watermeter\Cache;
 use nohn\Watermeter\Reader;
@@ -86,11 +85,10 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <legend for="lastValue">Initial Value</legend>
         <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
         <legend for="postprocessing">Digit Postprocessing</legend>
-        <input type="checkbox" name="postprocessing" id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
+        <input type="checkbox" name="postprocessing"
+               id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
     </fieldset>
     <?php
-
-
     echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';
     foreach ($config['digitalDigits'] as $key => $digit) {
         echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
