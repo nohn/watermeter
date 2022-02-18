@@ -12,17 +12,13 @@ The system contains of three components that communicate via HTTP:
 
 ## Taking a photo of your water meter
 
-You can use any camera you like as long as it shoots color images. Night vision cameras do not provide good results, as it's close to impossible to identify the analog gauges with a greyscale image. Therefore I use a standard camera and a white LED for illumination when taking photos. 
-
-The following example is using
+You can use any camera you like as long as it shoots color images. Night vision cameras do not provide good results, as it's close to impossible to identify the analog gauges with a greyscale image. In this example, I use a standard camera and a white LED for illumination when taking photos:
 
 * A Raspberry Pi Zero W running Raspberry OS
 * A cheap Raspberry Pi camera
 * A bright white 3.3V LED connected to GPIO 17
 
-In my experience, the worse the image quality, the easier it is for the OCR to read the digits. To see an example, how bad the quality can be, take a look at the [demo image](../public/demo/demo.jpg). Sometimes when the meter is fogged, the quality is even worse, but the results are still accurate.
-
-From cron, I call watermeter.py minutely. The script is taking care of driving the LED and the camera:
+The script taking care of driving the LED and the camera is run from cron:
 
 ```python
 from gpiozero import LED
@@ -47,9 +43,9 @@ led.off()
 
 Images are stored in /run/shm to not wear the SD card.
 
-## Serving the final meter image
+## Serving the meter image
 
-I serve the image from /run/shm using NGINX with disabled access logging to reduce SD card wearing.
+THe image is served from /run/shm using NGINX with disabled access logging to reduce SD card wearing.
 
 * Install nginx via ```sudo apt install ngnix```
 * In ```/etc/nginx/nginx.conf``` change ```access_log /var/log/nginx/access.log;``` to ```access_log /dev/null;```
