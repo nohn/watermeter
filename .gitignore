@@ -5,3 +5,4 @@ composer.lock
 log/
 .phpunit.cache/
 tmp/
+/public/watermeter.jpg
