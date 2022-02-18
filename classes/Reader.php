@@ -1,4 +1,28 @@
 <?php
+/**
+ * Watermeter
+ *
+ * A tool for reading water meters
+ *
+ * PHP version 8.1
+ *
+ * LICENCE: This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Sebastian Nohn <sebastian@nohn.net>
+ * @copyright 2022 Sebastian Nohn
+ * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
+ */
 
 namespace nohn\Watermeter;
 
@@ -12,11 +36,11 @@ class Reader extends Watermeter
 
     private $errors = array();
 
-    public function readGauges($fullDebug = false)
+    private function readGauges()
     {
         $decimalPlaces = null;
         foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            if ($fullDebug) {
+            if ($this->debug) {
                 $this->drawDebugImageGauge($gauge);
             }
             $rawGaugeImage = clone $this->sourceImage;
@@ -24,9 +48,9 @@ class Reader extends Watermeter
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
-            if ($fullDebug) {
+            if ($this->debug) {
                 echo '<td>';
-                echo $amr->getValue($fullDebug) . '<br>';
+                echo $amr->getValue($this->debug) . '<br>';
                 echo '<img src="tmp/analog_' . $gaugeKey . '.png" /><br />';
                 $debugData = $amr->getDebugData();
                 foreach ($debugData as $significance => $step) {
@@ -41,7 +65,7 @@ class Reader extends Watermeter
         return $decimalPlaces;
     }
 
-    public function readDigits($fullDebug = false)
+    private function readDigits()
     {
         $digitalSourceImage = clone $this->sourceImage;
         $targetImage = new Imagick();
@@ -50,7 +74,7 @@ class Reader extends Watermeter
             $rawDigit = clone $digitalSourceImage;
             $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
             $targetImage->addImage($rawDigit);
-            if ($fullDebug) {
+            if ($this->debug) {
                 $this->drawDebugImageDigit($digit);
             }
         }
@@ -71,7 +95,7 @@ class Reader extends Watermeter
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
-        if ($fullDebug) {
+        if ($this->debug) {
             $numberDigitalImage->writeImage('tmp/digital.jpg');
             echo "Raw OCR: $numberOCR<br>";
             echo "Clean OCR: $numberDigital";
@@ -82,13 +106,13 @@ class Reader extends Watermeter
             $preDecimalPlaces = (int)$numberDigital;
         } else {
             $preDecimalPlaces = (int)$this->lastValue;
-            if ($fullDebug) {
+            if ($this->debug) {
                 echo 'Choosing last value ' . $preDecimalPlaces . '<br>';
             }
             $this->errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
-        if ($fullDebug) {
+        if ($this->debug) {
             echo "Digital: $preDecimalPlaces<br>";
             echo '<table border="1"><tr>';
             echo '<td>';
@@ -99,11 +123,8 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function read($fullDebug = false, $config = false) {
-        if ($config) {
-            $this->config = $config;
-        }
-        $value = $this->readDigits($fullDebug) . '.' . $this->readGauges($fullDebug);
+    public function read() {
+        $value = $this->readDigits() . '.' . $this->readGauges();
         if (
             is_numeric($value) &&
             ($this->lastValue <= $value) &&

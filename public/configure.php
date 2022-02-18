@@ -1,4 +1,29 @@
 <?php
+/**
+ * Watermeter
+ *
+ * A tool for reading water meters
+ *
+ * PHP version 8.1
+ *
+ * LICENCE: This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Sebastian Nohn <sebastian@nohn.net>
+ * @copyright 2022 Sebastian Nohn
+ * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
+ */
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use nohn\Watermeter\Cache;
@@ -15,10 +40,36 @@ $fields = array('x', 'y', 'width', 'height');
 if (isset($_POST['sourceImage'])) {
     $config['sourceImage'] = $_POST['sourceImage'];
 }
+if (isset($_POST['sourceImageRotate'])) {
+    $config['sourceImageRotate'] = $_POST['sourceImageRotate'];
+}
+if (isset($_POST['sourceImageCropStartX'])) {
+    $config['sourceImageCropStartX'] = $_POST['sourceImageCropStartX'];
+}
+if (isset($_POST['sourceImageCropStartY'])) {
+    $config['sourceImageCropStartY'] = $_POST['sourceImageCropStartY'];
+}
+if (isset($_POST['sourceImageCropSizeX'])) {
+    $config['sourceImageCropSizeX'] = $_POST['sourceImageCropSizeX'];
+}
+if (isset($_POST['sourceImageCropSizeY'])) {
+    $config['sourceImageCropSizeY'] = $_POST['sourceImageCropSizeY'];
+}
+if (isset($_POST['sourceImageBrightness']) && $_POST['sourceImageBrightness'] != 'false') {
+    $config['sourceImageBrightness'] = $_POST['sourceImageBrightness'];
+}
+if (isset($_POST['sourceImageContrast']) && $_POST['sourceImageContrast'] != 'false') {
+    $config['sourceImageContrast'] = $_POST['sourceImageContrast'];
+}
+if (isset($_POST['sourceImageEqualize']) && ($_POST['sourceImageEqualize'] == 'on')) {
+    $config['sourceImageEqualize'] = true;
+} else {
+    $config['sourceImageEqualize'] = false;
+}
 if (isset($_POST['maxThreshold'])) {
     $config['maxThreshold'] = $_POST['maxThreshold'];
 }
-if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on') || !isset($config['postprocessing'])) {
+if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
     $config['postprocessing'] = true;
 } else {
     $config['postprocessing'] = false;
@@ -49,7 +100,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
 
         .base legend[for] {
             float: left;
-            width: 7em;
+            width: 15em;
             clear: both;
         }
 
@@ -83,7 +134,24 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     <fieldset class="base">
         <legend>Base Settings</legend>
         <legend for="sourceImage">Source Image</legend>
-        <input type="text" name="sourceImage" id="sourceImage" value="<?php echo $config['sourceImage']; ?>">
+        <input type="text" name="sourceImage" id="sourceImage" value="<?php echo isset($config['sourceImage']) ? $config['sourceImage'] : ''; ?>">
+        <legend for="sourceImageRotate">Source Image Rotate °</legend>
+        <input type="text" name="sourceImageRotate" id="sourceImageRotate" value="<?php echo isset($config['sourceImageRotate']) ? $config['sourceImageRotate'] : ''; ?>">
+        <legend for="sourceImageCropStartX">Source Image Crop Start x</legend>
+        <input type="text" name="sourceImageCropStartX" id="sourceImageCropStartX" value="<?php echo isset($config['sourceImageCropStartX']) ? $config['sourceImageCropStartX'] : ''; ?>">
+        <legend for="sourceImageCropStartY">Source Image Crop Start y</legend>
+        <input type="text" name="sourceImageCropStartY" id="sourceImageCropStartY" value="<?php echo isset($config['sourceImageCropStartY']) ? $config['sourceImageCropStartY'] : '' ?>">
+        <legend for="sourceImageCropSizeX">Source Image Crop Width</legend>
+        <input type="text" name="sourceImageCropSizeX" id="sourceImageCropSizeX" value="<?php echo isset($config['sourceImageCropSizeX']) ? $config['sourceImageCropSizeX'] : ''; ?>">
+        <legend for="sourceImageCropSizeY">Source Image Crop Height</legend>
+        <input type="text" name="sourceImageCropSizeY" id="sourceImageCropSizeY" value="<?php echo isset($config['sourceImageCropSizeY']) ? $config['sourceImageCropSizeY'] : ''; ?>">
+        <legend for="sourceImageBrightness">Source Image Brightness Adjust (%)</legend>
+        <input type="text" name="sourceImageBrightness" id="sourceImageBrightness" value="<?php echo isset($config['sourceImageBrightness']) ? $config['sourceImageBrightness'] : ''; ?>">
+        <legend for="sourceImageContrast">Source Image Contrast Adjust (%)</legend>
+        <input type="text" name="sourceImageContrast" id="sourceImageContrast" value="<?php echo isset($config['sourceImageContrast']) ? $config['sourceImageContrast'] : ''; ?>">
+        <legend for="sourceImageEqualize">Source Image histogram equalization</legend>
+        <input type="checkbox" name="sourceImageEqualize"
+               id="sourceImageEqualize" <?php echo $config['sourceImageEqualize'] == true ? 'checked' : ''; ?>>
         <legend for="maxThreshold">Max. Threshold</legend>
         <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo $config['maxThreshold']; ?>">
         <legend for="lastValue">Initial Value</legend>
@@ -104,7 +172,6 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<button onclick="return removeElement(\'digit\')" />Remove a Digit</button>';
     echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
     echo '</fieldset>';
-
     echo '<fieldset class="coordinates"><legend>Analog Digits</legend>';
     foreach ($config['analogGauges'] as $key => $gauge) {
         echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
@@ -120,8 +187,8 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<input type="submit" name="action" value="preview">';
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
-    $watermeterReader = new Reader();
-    $value = $watermeterReader->read(true, $config);
+    $watermeterReader = new Reader(true, $config);
+    $value = $watermeterReader->read();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>

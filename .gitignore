@@ -2,6 +2,6 @@ composer.phar
 /vendor/
 composer.lock
 /.idea/
-/log/
-/public/tmp/
+log/
 .phpunit.cache/
+tmp/
