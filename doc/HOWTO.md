@@ -21,7 +21,7 @@ The following example is using
 * A bright white 3.3V LED connected to GPIO 17
 * Imagemagick for photo post processing. Install via ```sudo apt install imagemagick```
 
-In my experience, the worse the image quality, the easier it is for the OCR to read the digits. To see an example, how bad the quality can be, take a look at the [demo image](../src/demo/demo.jpg). Sometimes when the meter is fogged, the quality is even worse, but the results are still accurate.
+In my experience, the worse the image quality, the easier it is for the OCR to read the digits. To see an example, how bad the quality can be, take a look at the [demo image](../public/demo/demo.jpg). Sometimes when the meter is fogged, the quality is even worse, but the results are still accurate.
 
 From cron, I call watermeter.sh minutely. The script takes the photo and does some image enhancement using Imagemagick:
 

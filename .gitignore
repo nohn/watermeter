@@ -2,13 +2,6 @@ composer.phar
 /vendor/
 composer.lock
 /.idea/
-/src/error/*.jpg
-/src/debug/*.jpg
-/src/log/*.jpg
-/src/error/*.png
-/src/debug/*.png
-/src/log/*.png
-/src/error/*.txt
-/src/debug/*.txt
-/src/log/*.txt
-
+/log/
+/public/tmp/
+.phpunit.cache/

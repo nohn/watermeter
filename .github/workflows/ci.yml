@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, v* ]
+    branches: [ main, develop, v* ]
     tags: [ v* ]
   pull_request:
 
@@ -15,10 +15,18 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.1
           extensions: imagick
+          coverage: xdebug
+          tools: phpstan
+      - name: Install dependencies
+        run: sudo apt install tesseract-ocr
       - name: Install composer dependencies
         run: composer update --no-ansi --no-interaction --no-progress
+      - name: Run PHPStan
+        run: phpstan analyse src
+      - name: Run unit tests
+        run: vendor/bin/phpunit tests
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -26,7 +34,7 @@ jobs:
       - name: Docker build
         run: docker build . -t nohn/watermeter
       - name: Run Tests
-        run: docker run nohn/watermeter:latest php /usr/src/watermeter/src/index.php | grep 819.7797
+        run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 819.7797
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
