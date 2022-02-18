@@ -40,6 +40,7 @@ if (isset($_GET['debug'])) {
 }
 
 $watermeterReader = new Reader($debug);
+$watermeterReader->writeSourceImage('watermeter.jpg');
 
 $lastPreDecimalPlaces = (int)$lastValue;
 
