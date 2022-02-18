@@ -7,6 +7,9 @@ $config = array(
     'maxThreshold' => 0.1,
     // Source image. Can either be a path to a file or an URL.
     'sourceImage' => 'https://raw.githubusercontent.com/nohn/watermeter/main/public/demo/demo.jpg',
+    // Source Image Brightness & Contrast tuning
+    'sourceImageBrightness' => false,
+    'sourceImageContrast' => false,
     // Each digital digit is identified by it's x and y coordinates and it's height and width
     'digitalDigits' => array(
         '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),
