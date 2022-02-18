@@ -8,21 +8,23 @@ $watermeterCache = new Cache();
 $lastValue = $watermeterCache->getValue();
 $lastValueTimestamp = $watermeterCache->getLastUpdate();
 
-$watermeterReader = new Reader();
+if (isset($_GET['debug'])) {
+    $debug = true;
+} else {
+    $debug = false;
+}
+
+$watermeterReader = new Reader($debug);
 
 $lastPreDecimalPlaces = (int)$lastValue;
 
-if (isset($_GET['debug'])) {
-    $fullDebug = true;
-} else {
-    $fullDebug = false;
-}
+
 
 $now = time();
 
 try {
     $logGaugeImages = array();
-    $value = $watermeterReader->read($fullDebug);
+    $value = $watermeterReader->read();
 
     $returnData = array();
     if ($watermeterReader->hasErrors()) {
@@ -39,7 +41,7 @@ try {
         $returnData['lastUpdated'] = $now;
         file_put_contents('../src/config/lastValue.txt', $value);
     }
-    if ($fullDebug) {
+    if ($debug) {
         echo '<td>';
         $watermeterReader->writeDebugImage(__DIR__ . '/../public/tmp/input_debug.jpg');
         echo '<img src="tmp/input_debug.jpg" />';

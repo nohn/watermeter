@@ -22,14 +22,27 @@ class Watermeter
     protected $lastValue;
     protected $lastValueTimestamp;
 
-    public function __construct()
-    {
-        $config = new Config();
-        $this->config = $config->get();
+    protected $debug;
 
-        $cache = new Cache();
-        $this->lastValue = $cache->getValue();
-        $this->lastValueTimestamp = $cache->getLastUpdate();
+    public function __construct($debug = false, $config = false, $lastValue = false)
+    {
+        if ($debug) {
+            $this->debug = true;
+        }
+        if ($config) {
+            $this->config = $config;
+        } else {
+            $config = new Config();
+            $this->config = $config->get();
+        }
+        if ($lastValue) {
+            $this->lastValue = $lastValue;
+            $this->lastValueTimestamp = time();
+        } else {
+            $cache = new Cache();
+            $this->lastValue = $cache->getValue();
+            $this->lastValueTimestamp = $cache->getLastUpdate();
+        }
 
         $this->sourceImage = new Imagick($this->config['sourceImage']);
 

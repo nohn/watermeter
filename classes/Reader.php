@@ -12,11 +12,11 @@ class Reader extends Watermeter
 
     private $errors = array();
 
-    public function readGauges($fullDebug = false)
+    public function readGauges()
     {
         $decimalPlaces = null;
         foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            if ($fullDebug) {
+            if ($this->debug) {
                 $this->drawDebugImageGauge($gauge);
             }
             $rawGaugeImage = clone $this->sourceImage;
@@ -24,9 +24,9 @@ class Reader extends Watermeter
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
-            if ($fullDebug) {
+            if ($this->debug) {
                 echo '<td>';
-                echo $amr->getValue($fullDebug) . '<br>';
+                echo $amr->getValue($this->debug) . '<br>';
                 echo '<img src="tmp/analog_' . $gaugeKey . '.png" /><br />';
                 $debugData = $amr->getDebugData();
                 foreach ($debugData as $significance => $step) {
@@ -41,7 +41,7 @@ class Reader extends Watermeter
         return $decimalPlaces;
     }
 
-    public function readDigits($fullDebug = false)
+    public function readDigits()
     {
         $digitalSourceImage = clone $this->sourceImage;
         $targetImage = new Imagick();
@@ -50,7 +50,7 @@ class Reader extends Watermeter
             $rawDigit = clone $digitalSourceImage;
             $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
             $targetImage->addImage($rawDigit);
-            if ($fullDebug) {
+            if ($this->debug) {
                 $this->drawDebugImageDigit($digit);
             }
         }
@@ -71,7 +71,7 @@ class Reader extends Watermeter
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
-        if ($fullDebug) {
+        if ($this->debug) {
             $numberDigitalImage->writeImage('tmp/digital.jpg');
             echo "Raw OCR: $numberOCR<br>";
             echo "Clean OCR: $numberDigital";
@@ -82,13 +82,13 @@ class Reader extends Watermeter
             $preDecimalPlaces = (int)$numberDigital;
         } else {
             $preDecimalPlaces = (int)$this->lastValue;
-            if ($fullDebug) {
+            if ($this->debug) {
                 echo 'Choosing last value ' . $preDecimalPlaces . '<br>';
             }
             $this->errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
-        if ($fullDebug) {
+        if ($this->debug) {
             echo "Digital: $preDecimalPlaces<br>";
             echo '<table border="1"><tr>';
             echo '<td>';
@@ -99,11 +99,8 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function read($fullDebug = false, $config = false) {
-        if ($config) {
-            $this->config = $config;
-        }
-        $value = $this->readDigits($fullDebug) . '.' . $this->readGauges($fullDebug);
+    public function read() {
+        $value = $this->readDigits() . '.' . $this->readGauges();
         if (
             is_numeric($value) &&
             ($this->lastValue <= $value) &&

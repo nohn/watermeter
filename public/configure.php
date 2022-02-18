@@ -120,8 +120,8 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<input type="submit" name="action" value="preview">';
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
-    $watermeterReader = new Reader();
-    $value = $watermeterReader->read(true, $config);
+    $watermeterReader = new Reader(true, $config);
+    $value = $watermeterReader->read();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>
