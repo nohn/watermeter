@@ -63,19 +63,18 @@ if (isset($_POST['sourceImageContrast']) && $_POST['sourceImageContrast'] != 'fa
 }
 if (isset($_POST['sourceImageEqualize']) && ($_POST['sourceImageEqualize'] == 'on')) {
     $config['sourceImageEqualize'] = true;
-} else {
-    $config['sourceImageEqualize'] = false;
 }
 if (isset($_POST['maxThreshold'])) {
     $config['maxThreshold'] = $_POST['maxThreshold'];
 }
 if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
     $config['postprocessing'] = true;
-} else {
-    $config['postprocessing'] = false;
 }
 if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
+}
+if (isset($_POST['offsetValue'])) {
+    $config['offsetValue'] = $_POST['offsetValue'];
 }
 if (isset($_POST['digit'])) {
     $config['digitalDigits'] = $_POST['digit'];
@@ -151,14 +150,16 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <input type="text" name="sourceImageContrast" id="sourceImageContrast" value="<?php echo isset($config['sourceImageContrast']) ? $config['sourceImageContrast'] : ''; ?>">
         <legend for="sourceImageEqualize">Source Image histogram equalization</legend>
         <input type="checkbox" name="sourceImageEqualize"
-               id="sourceImageEqualize" <?php echo $config['sourceImageEqualize'] == true ? 'checked' : ''; ?>>
+               id="sourceImageEqualize" <?php echo (isset($config['sourceImageEqualize']) &&  $config['sourceImageEqualize']== true) ? 'checked' : ''; ?>>
         <legend for="maxThreshold">Max. Threshold</legend>
-        <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo $config['maxThreshold']; ?>">
+        <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo isset($config['maxThreshold']) ? $config['maxThreshold'] : ''; ?>">
         <legend for="lastValue">Initial Value</legend>
-        <input type="text" name="lastValue" id="lastValue" value="<?php echo $lastValue ?>">
+        <input type="text" name="lastValue" id="lastValue" value="<?php echo isset($lastValue) ? $lastValue : ''; ?>">
+        <legend for="offsetValue">Offset Value</legend>
+        <input type="text" name="offsetValue" id="offsetValue" value="<?php echo isset($config['offsetValue']) ? $config['offsetValue'] : ''; ?>">
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing"
-               id="postprocessing" <?php echo $config['postprocessing'] == true ? 'checked' : ''; ?>>
+               id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing']== true) ? 'checked' : ''; ?>>
     </fieldset>
     <?php
     echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';
@@ -188,7 +189,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
     $watermeterReader = new Reader(true, $config);
-    $value = $watermeterReader->read();
+    $value = $watermeterReader->getReadout();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>

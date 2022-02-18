@@ -7,6 +7,6 @@ class WatermeterReaderTest extends TestCase
     public function testRead(): void
     {
         $reader = new Reader();
-        $this->assertEquals("819.7797", $reader->read());
+        $this->assertEquals("819.7797", $reader->getReadout());
     }
 }

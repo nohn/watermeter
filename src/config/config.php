@@ -10,6 +10,8 @@ $config = array(
     // Source Image Brightness & Contrast tuning
     'sourceImageBrightness' => false,
     'sourceImageContrast' => false,
+    'sourceImageEqualize' => false,
+    'postprocessing' => true,
     // Each digital digit is identified by it's x and y coordinates and it's height and width
     'digitalDigits' => array(
         '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),

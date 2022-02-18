@@ -48,22 +48,28 @@ $now = time();
 
 try {
     $logGaugeImages = array();
-    $value = $watermeterReader->read();
+    $readout = $watermeterReader->getReadout();
+    $offset = $watermeterReader->getOffset();
+    $value = $watermeterReader->getValue();
 
     $returnData = array();
     if ($watermeterReader->hasErrors()) {
-        $returnData['value'] = $lastValue;
+        $returnData['readout'] = $lastValue;
+        $returnData['offset'] = $offset;
+        $returnData['value'] = $value;
         $returnData['status'] = 'error';
         $returnData['errors'] = $watermeterReader->getErrors();
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $lastValueTimestamp;
     } else {
+        $returnData['readout'] = $readout;
+        $returnData['offset'] = $offset;
         $returnData['value'] = $value;
         $returnData['status'] = 'success';
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
-        file_put_contents('../src/config/lastValue.txt', $value);
+        file_put_contents('../src/config/lastValue.txt', $readout);
     }
     if ($debug) {
         echo '<td>';
@@ -76,7 +82,7 @@ try {
         var_dump($watermeterReader->getErrors());
         echo "</pre>";
         echo "lastValue: $lastValue\n<br>";
-        echo "value: $value\n<br>";
+        echo "value: $readout\n<br>";
     }
     if (isset($_GET['json'])) {
         header("Content-Type: application/json");
