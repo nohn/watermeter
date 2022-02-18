@@ -108,6 +108,11 @@ class Watermeter
         $this->sourceImageDebug = clone $this->sourceImage;
     }
 
+    public function writeSourceImage($path)
+    {
+        $this->sourceImage->writeImage($path);
+    }
+
     public function writeDebugImage($path)
     {
         $this->sourceImageDebug->writeImage($path);
