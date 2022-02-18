@@ -123,7 +123,7 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function read() {
+    public function getReadout() {
         $value = $this->readDigits() . '.' . $this->readGauges();
         if (
             is_numeric($value) &&
@@ -139,7 +139,20 @@ class Reader extends Watermeter
             $this->errors[__LINE__][] = ($value - $this->lastValue);
             $this->hasErrors = true;
         }
+
         return $value;
+    }
+
+    public function getOffset() {
+        if (isset($this->config['offsetValue'])) {
+            return $this->config['offsetValue'];
+        } else {
+            return 0;
+        }
+    }
+
+    public function getValue() {
+        return $this->getReadout()+$this->getOffset();
     }
 
     public function hasErrors() {

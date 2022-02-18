@@ -74,7 +74,7 @@ if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
 }
 if (isset($_POST['offsetValue'])) {
-    $lastValue = $_POST['offsetValue'];
+    $config['offsetValue'] = $_POST['offsetValue'];
 }
 if (isset($_POST['digit'])) {
     $config['digitalDigits'] = $_POST['digit'];
@@ -154,7 +154,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <legend for="maxThreshold">Max. Threshold</legend>
         <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo isset($config['maxThreshold']) ? $config['maxThreshold'] : ''; ?>">
         <legend for="lastValue">Initial Value</legend>
-        <input type="text" name="lastValue" id="lastValue" value="<?php echo isset($config['lastValue']) ? $config['lastValue'] : ''; ?>">
+        <input type="text" name="lastValue" id="lastValue" value="<?php echo isset($lastValue) ? $lastValue : ''; ?>">
         <legend for="offsetValue">Offset Value</legend>
         <input type="text" name="offsetValue" id="offsetValue" value="<?php echo isset($config['offsetValue']) ? $config['offsetValue'] : ''; ?>">
         <legend for="postprocessing">Digit Postprocessing</legend>
@@ -189,7 +189,7 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
     $watermeterReader = new Reader(true, $config);
-    $value = $watermeterReader->read();
+    $value = $watermeterReader->getReadout();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>
