@@ -10,6 +10,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -84,6 +85,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 3189.2776,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -159,6 +161,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 189.2776,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -234,6 +237,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'hasErrors' => true,
                 'expectedErrors' => array(
                     112 => 'Could not interpret . Using last known value 1189'
                 ),
@@ -310,6 +314,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -386,6 +391,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.2668,
                 'expectedValue' => 1189.3858,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -467,6 +473,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9216,
                 'expectedValue' => 1189.9244,
+                'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -541,6 +548,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9216,
                 'expectedValue' => 1189.9216,
+                'hasErrors' => true,
                 'expectedErrors' => array(
                     136 => true,
                     137 => false,
@@ -622,6 +630,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9244,
                 'expectedValue' => 1189.9244,
+                'hasErrors' => true,
                 'expectedErrors' => array(
                     136 => true,
                     137 => true,
@@ -706,6 +715,7 @@ class WatermeterReaderVariantTest extends TestCase
         foreach ($this->variants as $variant_id => $variant) {
             $reader = new Reader(false, $variant['config'], $variant['lastValue']);
             $this->assertEquals($variant['expectedValue'], $reader->getValue(), 'Variant ' . $variant_id);
+            $this->assertEquals($variant['hasErrors'], $reader->hasErrors(), 'Variant ' . $variant_id);
             $this->assertEquals($variant['expectedErrors'], $reader->getErrors(), 'Variant ' . $variant_id);
         }
     }
