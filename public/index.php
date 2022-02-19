@@ -82,7 +82,7 @@ try {
         var_dump($watermeterReader->getErrors());
         echo "</pre>";
         echo "lastValue: $lastValue\n<br>";
-        echo "value: $readout\n<br>";
+        echo "value: $value\n<br>";
     }
     if (isset($_GET['json'])) {
         header("Content-Type: application/json");

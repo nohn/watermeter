@@ -58,7 +58,7 @@ class Reader extends Watermeter
                 }
                 $debugImage = $amr->getDebugImage();
                 $debugImage->setImageFormat('png');
-                $debugImage->writeImage(__DIR__.'/../public/tmp/analog_' . $gaugeKey . '.png');
+                $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gaugeKey . '.png');
                 echo '</td>';
             }
         }
@@ -123,13 +123,15 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function getReadout() {
+    public function getReadout()
+    {
         $value = $this->readDigits() . '.' . $this->readGauges();
         if (
             is_numeric($value) &&
             ($this->lastValue <= $value) &&
             (($value - $this->lastValue) < $this->config['maxThreshold'])
         ) {
+            return $value;
         } else {
             $this->errors[__LINE__] = is_numeric($value);
             $this->errors[__LINE__] = ($this->lastValue <= $value);
@@ -138,12 +140,12 @@ class Reader extends Watermeter
             $this->errors[__LINE__][] = $this->lastValue;
             $this->errors[__LINE__][] = ($value - $this->lastValue);
             $this->hasErrors = true;
+            return $this->lastValue;
         }
-
-        return $value;
     }
 
-    public function getOffset() {
+    public function getOffset()
+    {
         if (isset($this->config['offsetValue'])) {
             return $this->config['offsetValue'];
         } else {
@@ -151,15 +153,18 @@ class Reader extends Watermeter
         }
     }
 
-    public function getValue() {
-        return $this->getReadout()+$this->getOffset();
+    public function getValue()
+    {
+        return $this->getReadout() + $this->getOffset();
     }
 
-    public function hasErrors() {
+    public function hasErrors()
+    {
         return $this->hasErrors;
     }
 
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->errors;
     }
 }
