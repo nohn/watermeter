@@ -34,7 +34,7 @@ jobs:
       - name: Docker build
         run: docker build . -t nohn/watermeter
       - name: Run Tests
-        run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 819.7797
+        run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 1189.2776
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v3
