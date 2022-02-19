@@ -239,7 +239,7 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.2776,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    112 => 'Could not interpret . Using last known value 1189'
+                    'readDigits() : !is_numeric()' => 'Could not interpret "". Using last known value 1189'
                 ),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -550,12 +550,11 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.9216,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    136 => true,
-                    137 => false,
-                    138 => array(0 => true),
-                    139 => array(0 => 1183.9244),
-                    140 => array(0 => 1189.9216),
-                    141 => array(0 => -5.997199999999793),
+                    'getReadout() : !is_numeric()' => true,
+                    'getReadout() : decreasing' => false,
+                    'value' => 1183.9244,
+                    'lastValue' => 1189.9216,
+                    'delta' => -5.997199999999793,
                 ),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -632,12 +631,11 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.9244,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    136 => true,
-                    137 => true,
-                    138 => array(0 => false),
-                    139 => array(0 => 41189.9249),
-                    140 => array(0 => 1189.9244),
-                    141 => array(0 => 40000.000499999995),
+                    'getReadout() : !is_numeric()' => true,
+                    'getReadout() : decreasing' => true,
+                    'value' => 41189.9249,
+                    'lastValue' => 1189.9244,
+                    'delta' => 40000.000499999995,
                 ),
                 'config' => array(
                     'maxThreshold' => '0.2',
@@ -714,7 +712,7 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.9594,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    112 => 'Could not interpret . Using last known value 1189'
+                    'readDigits() : !is_numeric()' => 'Could not interpret "". Using last known value 1189'
                 ),
                 'config' => array(
                     'maxThreshold' => '0.2',

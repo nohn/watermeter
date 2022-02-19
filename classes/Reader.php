@@ -109,7 +109,7 @@ class Reader extends Watermeter
             if ($this->debug) {
                 echo 'Choosing last value ' . $preDecimalPlaces . '<br>';
             }
-            $this->errors[__LINE__] = 'Could not interpret ' . $numberDigital . '. Using last known value ' . (int)$this->lastValue;
+            $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . $numberDigital . '". Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
         if ($this->debug) {
@@ -133,12 +133,11 @@ class Reader extends Watermeter
         ) {
             return $value;
         } else {
-            $this->errors[__LINE__] = is_numeric($value);
-            $this->errors[__LINE__] = ($this->lastValue <= $value);
-            $this->errors[__LINE__][] = ($value - $this->lastValue < 1);
-            $this->errors[__LINE__][] = $value;
-            $this->errors[__LINE__][] = $this->lastValue;
-            $this->errors[__LINE__][] = ($value - $this->lastValue);
+            $this->errors['getReadout() : !is_numeric()'] = is_numeric($value);
+            $this->errors['getReadout() : decreasing'] = ($this->lastValue <= $value);
+            $this->errors['value'] = $value;
+            $this->errors['lastValue'] = $this->lastValue;
+            $this->errors['delta'] = ($value - $this->lastValue);
             $this->hasErrors = true;
             return $this->lastValue;
         }
