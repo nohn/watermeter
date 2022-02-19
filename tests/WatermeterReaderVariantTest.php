@@ -10,6 +10,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/1.jpg',
@@ -83,6 +84,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 3189.2776,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'offsetValue' => 2000,
@@ -157,6 +159,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 189.2776,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'offsetValue' => -1000,
@@ -227,10 +230,13 @@ class WatermeterReaderVariantTest extends TestCase
                     'postprocessing' => false,
                 ),
             ),
-        'regular2' =>
+        'regular2_ocr_failing' =>
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'expectedErrors' => array(
+                    112 => 'Could not interpret . Using last known value 1189'
+                ),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/2.jpg',
@@ -304,6 +310,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.1668,
                 'expectedValue' => 1189.2776,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/2.jpg',
@@ -379,6 +386,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.2668,
                 'expectedValue' => 1189.3858,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/3.jpg',
@@ -459,6 +467,7 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9216,
                 'expectedValue' => 1189.9244,
+                'expectedErrors' => array(),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/4.jpg',
@@ -532,6 +541,14 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9216,
                 'expectedValue' => 1189.9216,
+                'expectedErrors' => array(
+                    136 => true,
+                    137 => false,
+                    138 => array(0 => true),
+                    139 => array(0 => 1183.9244),
+                    140 => array(0 => 1189.9216),
+                    141 => array(0 => -5.997199999999793),
+                ),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/5.jpg',
@@ -605,6 +622,14 @@ class WatermeterReaderVariantTest extends TestCase
             array(
                 'lastValue' => 1189.9244,
                 'expectedValue' => 1189.9244,
+                'expectedErrors' => array(
+                    136 => true,
+                    137 => true,
+                    138 => array(0 => false),
+                    139 => array(0 => 41189.9249),
+                    140 => array(0 => 1189.9244),
+                    141 => array(0 => 40000.000499999995),
+                ),
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/6.jpg',
@@ -681,6 +706,7 @@ class WatermeterReaderVariantTest extends TestCase
         foreach ($this->variants as $variant_id => $variant) {
             $reader = new Reader(false, $variant['config'], $variant['lastValue']);
             $this->assertEquals($variant['expectedValue'], $reader->getValue(), 'Variant ' . $variant_id);
+            $this->assertEquals($variant['expectedErrors'], $reader->getErrors(), 'Variant ' . $variant_id);
         }
     }
 }
