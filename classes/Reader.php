@@ -36,30 +36,34 @@ class Reader extends Watermeter
 
     private $errors = array();
 
+    private function debugGauge($amr, $gauge)
+    {
+        $this->drawDebugImageGauge($gauge);
+        echo '<td>';
+        echo $amr->getValue(true) . '<br>';
+        echo '<img src="tmp/analog_' . $gauge['key'] . '.png" /><br />';
+        $debugData = $amr->getDebugData();
+        foreach ($debugData as $significance => $step) {
+            echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
+        }
+        $debugImage = $amr->getDebugImage();
+        $debugImage->setImageFormat('png');
+        $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gauge['key'] . '.png');
+        echo '</td>';
+    }
+
     private function readGauges()
     {
         $decimalPlaces = null;
         foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            if ($this->debug) {
-                $this->drawDebugImageGauge($gauge);
-            }
+            $gauge['key'] = $gaugeKey;
             $rawGaugeImage = clone $this->sourceImage;
             $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
             if ($this->debug) {
-                echo '<td>';
-                echo $amr->getValue($this->debug) . '<br>';
-                echo '<img src="tmp/analog_' . $gaugeKey . '.png" /><br />';
-                $debugData = $amr->getDebugData();
-                foreach ($debugData as $significance => $step) {
-                    echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
-                }
-                $debugImage = $amr->getDebugImage();
-                $debugImage->setImageFormat('png');
-                $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gaugeKey . '.png');
-                echo '</td>';
+                $this->debugGauge($amr, $gauge);
             }
         }
         return $decimalPlaces;

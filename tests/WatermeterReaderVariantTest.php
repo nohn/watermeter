@@ -1,4 +1,28 @@
 <?php
+/**
+ * Watermeter
+ *
+ * A tool for reading water meters
+ *
+ * PHP version 8.1
+ *
+ * LICENCE: This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Sebastian Nohn <sebastian@nohn.net>
+ * @copyright 2022 Sebastian Nohn
+ * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
+ */
 
 use nohn\Watermeter\Reader;
 use PHPUnit\Framework\TestCase;
@@ -6,6 +30,96 @@ use PHPUnit\Framework\TestCase;
 class WatermeterReaderVariantTest extends TestCase
 {
     private $variants = array(
+        'demo' => array(
+            'lastValue' => 819.7668,
+            'expectedValue' => 819.7797,
+            'hasErrors' => false,
+            'expectedErrors' => array(),
+            'config' => array(
+                'logging' => false,
+                'maxThreshold' => 0.1,
+                'sourceImage' => __DIR__ . '/../public/demo/demo.jpg',
+                'sourceImageBrightness' => false,
+                'sourceImageContrast' => false,
+                'sourceImageEqualize' => false,
+                'postprocessing' => true,
+                'digitalDigits' => array(
+                    '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '2' => array('x' => 280, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '3' => array('x' => 335, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '4' => array('x' => 390, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '5' => array('x' => 443, 'y' => 373, 'width' => 36, 'height' => 58),
+                ),
+                'analogGauges' => array(
+                    '1' => array('x' => 560, 'y' => 468, 'width' => 142, 'height' => 148),
+                    '2' => array('x' => 493, 'y' => 628, 'width' => 142, 'height' => 148),
+                    '3' => array('x' => 331, 'y' => 695, 'width' => 142, 'height' => 148),
+                    '4' => array('x' => 165, 'y' => 626, 'width' => 142, 'height' => 148),
+                ),
+            ),
+        ),
+        'demo_offset_one_off_pass' => array(
+            'lastValue' => 819.6798,
+            'expectedValue' => 819.7797,
+            'hasErrors' => false,
+            'expectedErrors' => array(),
+            'config' => array(
+                'logging' => false,
+                'maxThreshold' => 0.1,
+                'sourceImage' => __DIR__ . '/../public/demo/demo.jpg',
+                'sourceImageBrightness' => false,
+                'sourceImageContrast' => false,
+                'sourceImageEqualize' => false,
+                'postprocessing' => true,
+                'digitalDigits' => array(
+                    '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '2' => array('x' => 280, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '3' => array('x' => 335, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '4' => array('x' => 390, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '5' => array('x' => 443, 'y' => 373, 'width' => 36, 'height' => 58),
+                ),
+                'analogGauges' => array(
+                    '1' => array('x' => 560, 'y' => 468, 'width' => 142, 'height' => 148),
+                    '2' => array('x' => 493, 'y' => 628, 'width' => 142, 'height' => 148),
+                    '3' => array('x' => 331, 'y' => 695, 'width' => 142, 'height' => 148),
+                    '4' => array('x' => 165, 'y' => 626, 'width' => 142, 'height' => 148),
+                ),
+            ),
+        ),
+        'demo_offset_one_off_fail' => array(
+            'lastValue' => 819.6796,
+            'expectedValue' => 819.6796,
+            'hasErrors' => true,
+            'expectedErrors' => array(
+                'getReadout() : !is_numeric()' => true,
+                'getReadout() : decreasing' => true,
+                'value' => 819.7797,
+                'lastValue' => 819.6796,
+                'delta' => 0.10009999999999764,
+            ),
+            'config' => array(
+                'logging' => false,
+                'maxThreshold' => 0.1,
+                'sourceImage' => __DIR__ . '/../public/demo/demo.jpg',
+                'sourceImageBrightness' => false,
+                'sourceImageContrast' => false,
+                'sourceImageEqualize' => false,
+                'postprocessing' => true,
+                'digitalDigits' => array(
+                    '1' => array('x' => 222, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '2' => array('x' => 280, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '3' => array('x' => 335, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '4' => array('x' => 390, 'y' => 373, 'width' => 36, 'height' => 58),
+                    '5' => array('x' => 443, 'y' => 373, 'width' => 36, 'height' => 58),
+                ),
+                'analogGauges' => array(
+                    '1' => array('x' => 560, 'y' => 468, 'width' => 142, 'height' => 148),
+                    '2' => array('x' => 493, 'y' => 628, 'width' => 142, 'height' => 148),
+                    '3' => array('x' => 331, 'y' => 695, 'width' => 142, 'height' => 148),
+                    '4' => array('x' => 165, 'y' => 626, 'width' => 142, 'height' => 148),
+                ),
+            ),
+        ),
         'regular1' =>
             array(
                 'lastValue' => 1189.1668,
