@@ -708,6 +708,83 @@ class WatermeterReaderVariantTest extends TestCase
                     'postprocessing' => false,
                 ),
             ),
+        'regular7_with_ocr_completely_failing' =>
+            array(
+                'lastValue' => 1189.9383,
+                'expectedValue' => 1189.9594,
+                'hasErrors' => true,
+                'expectedErrors' => array(
+                    112 => 'Could not interpret . Using last known value 1189'
+                ),
+                'config' => array(
+                    'maxThreshold' => '0.2',
+                    'sourceImage' => __DIR__ . '/data/variants/7.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 =>
+                                array(
+                                    'x' => '189',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '249',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '304',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '364',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '488',
+                                    'y' => '146',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '419',
+                                    'y' => '314',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '250',
+                                    'y' => '384',
+                                    'width' => '148',
+                                    'height' => '155',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '73',
+                                    'y' => '310',
+                                    'width' => '150',
+                                    'height' => '155',
+                                ),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                ),
+            ),
     );
 
     public function testVariants(): void
