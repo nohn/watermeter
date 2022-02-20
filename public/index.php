@@ -50,7 +50,7 @@ try {
     $logGaugeImages = array();
     $readout = $watermeterReader->getReadout();
     $offset = $watermeterReader->getOffset();
-    $value = $watermeterReader->getValue();
+    $value = $readout+$offset;
 
     $returnData = array();
     if ($watermeterReader->hasErrors()) {

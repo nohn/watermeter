@@ -133,33 +133,43 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     <fieldset class="base">
         <legend>Base Settings</legend>
         <legend for="sourceImage">Source Image</legend>
-        <input type="text" name="sourceImage" id="sourceImage" value="<?php echo isset($config['sourceImage']) ? $config['sourceImage'] : ''; ?>">
+        <input type="text" name="sourceImage" id="sourceImage"
+               value="<?php echo isset($config['sourceImage']) ? $config['sourceImage'] : ''; ?>">
         <legend for="sourceImageRotate">Source Image Rotate °</legend>
-        <input type="text" name="sourceImageRotate" id="sourceImageRotate" value="<?php echo isset($config['sourceImageRotate']) ? $config['sourceImageRotate'] : ''; ?>">
+        <input type="text" name="sourceImageRotate" id="sourceImageRotate"
+               value="<?php echo isset($config['sourceImageRotate']) ? $config['sourceImageRotate'] : ''; ?>">
         <legend for="sourceImageCropStartX">Source Image Crop Start x</legend>
-        <input type="text" name="sourceImageCropStartX" id="sourceImageCropStartX" value="<?php echo isset($config['sourceImageCropStartX']) ? $config['sourceImageCropStartX'] : ''; ?>">
+        <input type="text" name="sourceImageCropStartX" id="sourceImageCropStartX"
+               value="<?php echo isset($config['sourceImageCropStartX']) ? $config['sourceImageCropStartX'] : ''; ?>">
         <legend for="sourceImageCropStartY">Source Image Crop Start y</legend>
-        <input type="text" name="sourceImageCropStartY" id="sourceImageCropStartY" value="<?php echo isset($config['sourceImageCropStartY']) ? $config['sourceImageCropStartY'] : '' ?>">
+        <input type="text" name="sourceImageCropStartY" id="sourceImageCropStartY"
+               value="<?php echo isset($config['sourceImageCropStartY']) ? $config['sourceImageCropStartY'] : '' ?>">
         <legend for="sourceImageCropSizeX">Source Image Crop Width</legend>
-        <input type="text" name="sourceImageCropSizeX" id="sourceImageCropSizeX" value="<?php echo isset($config['sourceImageCropSizeX']) ? $config['sourceImageCropSizeX'] : ''; ?>">
+        <input type="text" name="sourceImageCropSizeX" id="sourceImageCropSizeX"
+               value="<?php echo isset($config['sourceImageCropSizeX']) ? $config['sourceImageCropSizeX'] : ''; ?>">
         <legend for="sourceImageCropSizeY">Source Image Crop Height</legend>
-        <input type="text" name="sourceImageCropSizeY" id="sourceImageCropSizeY" value="<?php echo isset($config['sourceImageCropSizeY']) ? $config['sourceImageCropSizeY'] : ''; ?>">
+        <input type="text" name="sourceImageCropSizeY" id="sourceImageCropSizeY"
+               value="<?php echo isset($config['sourceImageCropSizeY']) ? $config['sourceImageCropSizeY'] : ''; ?>">
         <legend for="sourceImageBrightness">Source Image Brightness Adjust (%)</legend>
-        <input type="text" name="sourceImageBrightness" id="sourceImageBrightness" value="<?php echo isset($config['sourceImageBrightness']) ? $config['sourceImageBrightness'] : ''; ?>">
+        <input type="text" name="sourceImageBrightness" id="sourceImageBrightness"
+               value="<?php echo isset($config['sourceImageBrightness']) ? $config['sourceImageBrightness'] : ''; ?>">
         <legend for="sourceImageContrast">Source Image Contrast Adjust (%)</legend>
-        <input type="text" name="sourceImageContrast" id="sourceImageContrast" value="<?php echo isset($config['sourceImageContrast']) ? $config['sourceImageContrast'] : ''; ?>">
+        <input type="text" name="sourceImageContrast" id="sourceImageContrast"
+               value="<?php echo isset($config['sourceImageContrast']) ? $config['sourceImageContrast'] : ''; ?>">
         <legend for="sourceImageEqualize">Source Image histogram equalization</legend>
         <input type="checkbox" name="sourceImageEqualize"
-               id="sourceImageEqualize" <?php echo (isset($config['sourceImageEqualize']) &&  $config['sourceImageEqualize']== true) ? 'checked' : ''; ?>>
+               id="sourceImageEqualize" <?php echo (isset($config['sourceImageEqualize']) && $config['sourceImageEqualize'] == true) ? 'checked' : ''; ?>>
         <legend for="maxThreshold">Max. Threshold</legend>
-        <input type="text" name="maxThreshold" id="maxThreshold" value="<?php echo isset($config['maxThreshold']) ? $config['maxThreshold'] : ''; ?>">
+        <input type="text" name="maxThreshold" id="maxThreshold"
+               value="<?php echo isset($config['maxThreshold']) ? $config['maxThreshold'] : ''; ?>">
         <legend for="lastValue">Initial Value</legend>
         <input type="text" name="lastValue" id="lastValue" value="<?php echo isset($lastValue) ? $lastValue : ''; ?>">
         <legend for="offsetValue">Offset Value</legend>
-        <input type="text" name="offsetValue" id="offsetValue" value="<?php echo isset($config['offsetValue']) ? $config['offsetValue'] : ''; ?>">
+        <input type="text" name="offsetValue" id="offsetValue"
+               value="<?php echo isset($config['offsetValue']) ? $config['offsetValue'] : ''; ?>">
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing"
-               id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing']== true) ? 'checked' : ''; ?>>
+               id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing'] == true) ? 'checked' : ''; ?>>
     </fieldset>
     <?php
     echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';

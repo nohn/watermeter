@@ -73,7 +73,7 @@ class Watermeter
         if (isset($this->config['sourceImageRotate']) && $this->config['sourceImageRotate']) {
             $sourceImageTmp = clone $this->sourceImage;
             $sourceImageTmp->rotateImage('white', $this->config['sourceImageRotate']);
-            $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0,0 );
+            $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = $sourceImageTmp;
         }
 
@@ -94,7 +94,7 @@ class Watermeter
                 $this->config['sourceImageCropStartX'],
                 $this->config['sourceImageCropStartY']
             );
-            $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0,0 );
+            $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = clone $sourceImageTmp;
         }
 
