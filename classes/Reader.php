@@ -51,8 +51,8 @@ class Reader extends Watermeter
         ) {
             return $value;
         } else {
-            $this->errors['getReadout() : !is_numeric()'] = is_numeric($value);
-            $this->errors['getReadout() : decreasing'] = ($this->lastValue <= $value);
+            $this->errors['getReadout() : is_numeric()'] = is_numeric($value);
+            $this->errors['getReadout() : increasing'] = ($this->lastValue <= $value);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
             $this->errors['delta'] = ($value - $this->lastValue);

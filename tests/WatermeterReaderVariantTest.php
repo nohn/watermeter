@@ -91,8 +91,8 @@ class WatermeterReaderVariantTest extends TestCase
             'expectedValue' => 819.6796,
             'hasErrors' => true,
             'expectedErrors' => array(
-                'getReadout() : !is_numeric()' => true,
-                'getReadout() : decreasing' => true,
+                'getReadout() : is_numeric()' => true,
+                'getReadout() : increasing' => true,
                 'value' => 819.7797,
                 'lastValue' => 819.6796,
                 'delta' => 0.10009999999999764,
@@ -280,6 +280,87 @@ class WatermeterReaderVariantTest extends TestCase
                 'config' => array(
                     'maxThreshold' => '0.2',
                     'offsetValue' => -1000,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 =>
+                                array(
+                                    'x' => '189',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '249',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '304',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '364',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '488',
+                                    'y' => '146',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '419',
+                                    'y' => '314',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '250',
+                                    'y' => '384',
+                                    'width' => '148',
+                                    'height' => '155',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '73',
+                                    'y' => '310',
+                                    'width' => '150',
+                                    'height' => '155',
+                                ),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                ),
+            ),
+        'regular1_decreasing' =>
+            array(
+                'lastValue' => 1189.2777,
+                'expectedValue' => 1189.2777,
+                'hasErrors' => true,
+                'expectedErrors' => array(
+                    'getReadout() : is_numeric()' => true,
+                    'getReadout() : increasing' => false,
+                    'value' => 1189.2776,
+                    'lastValue' => 1189.2777,
+                    'delta' => -0.00010000000020227162
+                ),
+                'config' => array(
+                    'maxThreshold' => '0.2',
                     'sourceImage' => __DIR__ . '/data/variants/1.jpg',
                     'digitalDigits' =>
                         array(
@@ -664,8 +745,8 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.9216,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    'getReadout() : !is_numeric()' => true,
-                    'getReadout() : decreasing' => false,
+                    'getReadout() : is_numeric()' => true,
+                    'getReadout() : increasing' => false,
                     'value' => 1183.9244,
                     'lastValue' => 1189.9216,
                     'delta' => -5.997199999999793,
@@ -745,8 +826,8 @@ class WatermeterReaderVariantTest extends TestCase
                 'expectedValue' => 1189.9244,
                 'hasErrors' => true,
                 'expectedErrors' => array(
-                    'getReadout() : !is_numeric()' => true,
-                    'getReadout() : decreasing' => true,
+                    'getReadout() : is_numeric()' => true,
+                    'getReadout() : increasing' => true,
                     'value' => 41189.9249,
                     'lastValue' => 1189.9244,
                     'delta' => 40000.000499999995,
