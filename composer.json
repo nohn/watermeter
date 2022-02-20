@@ -1,7 +1,7 @@
 {
   "name": "nohn/watermeter",
   "description": "Read water meters and return read value for further processing",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "type": "project",
   "license": "AGPL-3.0-or-later",
   "authors": [
