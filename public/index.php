@@ -69,7 +69,7 @@ try {
         $returnData['errors'] = false;
         $returnData['exception'] = false;
         $returnData['lastUpdated'] = $now;
-        file_put_contents('../src/config/lastValue.txt', $readout);
+        file_put_contents(__DIR__ . '/../src/config/lastValue.txt', $readout);
     }
     if ($debug) {
         echo '<td>';
