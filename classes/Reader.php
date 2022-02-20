@@ -38,7 +38,7 @@ class Reader extends Watermeter
 
     public function getValue()
     {
-        return $this->getReadout() + $this->getOffset();
+        return (float)($this->getReadout() + $this->getOffset());
     }
 
     public function getReadout()
@@ -57,7 +57,7 @@ class Reader extends Watermeter
             $this->errors['lastValue'] = $this->lastValue;
             $this->errors['delta'] = ($value - $this->lastValue);
             $this->hasErrors = true;
-            return $this->lastValue;
+            return (float)$this->lastValue;
         }
     }
 
@@ -155,7 +155,7 @@ class Reader extends Watermeter
     public function getOffset()
     {
         if (isset($this->config['offsetValue'])) {
-            return $this->config['offsetValue'];
+            return (float)$this->config['offsetValue'];
         } else {
             return 0;
         }
