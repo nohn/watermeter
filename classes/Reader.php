@@ -26,8 +26,8 @@
 
 namespace nohn\Watermeter;
 
-use nohn\AnalogMeterReader\AnalogMeter;
 use Imagick;
+use nohn\AnalogMeterReader\AnalogMeter;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class Reader extends Watermeter
@@ -36,37 +36,29 @@ class Reader extends Watermeter
 
     private $errors = array();
 
-    private function debugGauge($amr, $gauge)
+    public function getValue()
     {
-        $this->drawDebugImageGauge($gauge);
-        echo '<td>';
-        echo $amr->getValue(true) . '<br>';
-        echo '<img src="tmp/analog_' . $gauge['key'] . '.png" /><br />';
-        $debugData = $amr->getDebugData();
-        foreach ($debugData as $significance => $step) {
-            echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
-        }
-        $debugImage = $amr->getDebugImage();
-        $debugImage->setImageFormat('png');
-        $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gauge['key'] . '.png');
-        echo '</td>';
+        return $this->getReadout() + $this->getOffset();
     }
 
-    private function readGauges()
+    public function getReadout()
     {
-        $decimalPlaces = null;
-        foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            $gauge['key'] = $gaugeKey;
-            $rawGaugeImage = clone $this->sourceImage;
-            $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
-            $rawGaugeImage->setImagePage(0, 0, 0, 0);
-            $amr = new AnalogMeter($rawGaugeImage, 'r');
-            $decimalPlaces .= $amr->getValue();
-            if ($this->debug) {
-                $this->debugGauge($amr, $gauge);
-            }
+        $value = $this->readDigits() . '.' . $this->readGauges();
+        if (
+            is_numeric($value) &&
+            ($this->lastValue <= $value) &&
+            (($value - $this->lastValue) < $this->config['maxThreshold'])
+        ) {
+            return $value;
+        } else {
+            $this->errors['getReadout() : !is_numeric()'] = is_numeric($value);
+            $this->errors['getReadout() : decreasing'] = ($this->lastValue <= $value);
+            $this->errors['value'] = $value;
+            $this->errors['lastValue'] = $this->lastValue;
+            $this->errors['delta'] = ($value - $this->lastValue);
+            $this->hasErrors = true;
+            return $this->lastValue;
         }
-        return $decimalPlaces;
     }
 
     private function readDigits()
@@ -127,24 +119,37 @@ class Reader extends Watermeter
         return $preDecimalPlaces;
     }
 
-    public function getReadout()
+    private function readGauges()
     {
-        $value = $this->readDigits() . '.' . $this->readGauges();
-        if (
-            is_numeric($value) &&
-            ($this->lastValue <= $value) &&
-            (($value - $this->lastValue) < $this->config['maxThreshold'])
-        ) {
-            return $value;
-        } else {
-            $this->errors['getReadout() : !is_numeric()'] = is_numeric($value);
-            $this->errors['getReadout() : decreasing'] = ($this->lastValue <= $value);
-            $this->errors['value'] = $value;
-            $this->errors['lastValue'] = $this->lastValue;
-            $this->errors['delta'] = ($value - $this->lastValue);
-            $this->hasErrors = true;
-            return $this->lastValue;
+        $decimalPlaces = null;
+        foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
+            $gauge['key'] = $gaugeKey;
+            $rawGaugeImage = clone $this->sourceImage;
+            $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
+            $rawGaugeImage->setImagePage(0, 0, 0, 0);
+            $amr = new AnalogMeter($rawGaugeImage, 'r');
+            $decimalPlaces .= $amr->getValue();
+            if ($this->debug) {
+                $this->debugGauge($amr, $gauge);
+            }
         }
+        return $decimalPlaces;
+    }
+
+    private function debugGauge($amr, $gauge)
+    {
+        $this->drawDebugImageGauge($gauge);
+        echo '<td>';
+        echo $amr->getValue(true) . '<br>';
+        echo '<img src="tmp/analog_' . $gauge['key'] . '.png" /><br />';
+        $debugData = $amr->getDebugData();
+        foreach ($debugData as $significance => $step) {
+            echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
+        }
+        $debugImage = $amr->getDebugImage();
+        $debugImage->setImageFormat('png');
+        $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gauge['key'] . '.png');
+        echo '</td>';
     }
 
     public function getOffset()
@@ -154,11 +159,6 @@ class Reader extends Watermeter
         } else {
             return 0;
         }
-    }
-
-    public function getValue()
-    {
-        return $this->getReadout() + $this->getOffset();
     }
 
     public function hasErrors()

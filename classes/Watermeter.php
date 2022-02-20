@@ -27,8 +27,8 @@
 namespace nohn\Watermeter;
 
 use Imagick;
-use ImagickPixel;
 use ImagickDraw;
+use ImagickPixel;
 use nohn\Watermeter\Debug;
 
 class Watermeter

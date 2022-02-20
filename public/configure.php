@@ -27,8 +27,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use nohn\Watermeter\Cache;
-use nohn\Watermeter\Reader;
 use nohn\Watermeter\Config;
+use nohn\Watermeter\Reader;
 
 $watermeterCache = new Cache();
 $lastValue = $watermeterCache->getValue();
