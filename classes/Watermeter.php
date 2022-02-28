@@ -88,6 +88,16 @@ class Watermeter
             is_numeric($this->config['sourceImageCropSizeY'])
         ) {
             $sourceImageTmp = clone $this->sourceImage;
+
+            if ($sourceImageTmp->getImageWidth() < ($this->config['sourceImageCropStartX'] + $this->config['sourceImageCropSizeX'])) {
+                $this->config['sourceImageCropStartX'] = 0;
+                $this->config['sourceImageCropSizeX'] = 0;
+            }
+            if ($sourceImageTmp->getImageHeight() < ($this->config['sourceImageCropStartY'] + $this->config['sourceImageCropSizeY'])) {
+                $this->config['sourceImageCropStartY'] = 0;
+                $this->config['sourceImageCropSizeY'] = 0;
+            }
+
             $sourceImageTmp->cropImage(
                 $this->config['sourceImageCropSizeX'],
                 $this->config['sourceImageCropSizeY'],
