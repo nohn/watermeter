@@ -2,8 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop, v* ]
-    tags: [ v* ]
+    branches: [ main, v1.2 ]
   pull_request:
 
 jobs:
@@ -52,7 +51,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to Docker Hub (latest)
-        if: github.ref == 'refs/heads/main' && github.repository == 'nohn/watermeter'
+        if: github.ref == 'refs/heads/v1.2' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -63,15 +62,15 @@ jobs:
           cache-to: type=inline
           tags: nohn/watermeter:latest
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Push to Docker Hub (tags)
-        if: github.ref != 'refs/heads/main' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
+      - name: Push to Docker Hub (develop)
+        if: github.ref == 'refs/heads/main' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
           pull: true
           push: true
-          cache-from: type=registry,ref=nohn/watermeter:latest
+          cache-from: type=registry,ref=nohn/watermeter:develop
           cache-to: type=inline
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: nohn/watermeter:develop
           labels: ${{ steps.meta.outputs.labels }}
