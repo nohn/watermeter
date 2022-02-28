@@ -193,12 +193,14 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
     echo '</fieldset>';
     echo '<fieldset class="coordinates"><legend>Post Decimal Digital Digits</legend>';
-    foreach ($config['postDecimalDigits'] as $key => $digit) {
-        echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . '</legend>';
-        foreach ($fields as $field) {
-            echo '<legend for="postDecimalDigit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="postDecimalDigit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
+    if (isset($config['postDecimalDigits'])) {
+        foreach ($config['postDecimalDigits'] as $key => $digit) {
+            echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . '</legend>';
+            foreach ($fields as $field) {
+                echo '<legend for="postDecimalDigit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="postDecimalDigit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
+            }
+            echo '</fieldset>';
         }
-        echo '</fieldset>';
     }
     echo '<button onclick="return removeElement(\'postDecimalDigit\')" />Remove a Digit</button>';
     echo '<button onclick="return addElement(\'postDecimalDigit\')" />Add a Digit</button>';
