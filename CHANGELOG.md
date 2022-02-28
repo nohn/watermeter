@@ -1,4 +1,6 @@
-# 2022-XX-XX v1.2.X
+# 2022-XX-XX v1.2.16
+
+- improve howto - be more specific about docker-compose 
 
 # 2022-02-20 v1.2.15
 
