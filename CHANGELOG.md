@@ -1,5 +1,7 @@
 # 2022-XX-XX v1.2.X
 
+- fix #16 - add support for decimal digits
+
 # 2022-02-20 v1.2.15
 
 - improve testability
