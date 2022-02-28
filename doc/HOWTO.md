@@ -77,9 +77,11 @@ services:
       - "3000:3000"
 ```
 
-1. create the config directory using ```mkdir  -p watermeter/config```
-2. put a default config in there: ```curl https://raw.githubusercontent.com/nohn/watermeter/main/src/config/config.php -o watermeter/config/config.php```.
-3. start watermeter with ```docker-compose pull && docker-compose up -d```.
+1. Create a directory, for example ```watermeter-docker``` in your home
+2. put the ```docker-compose.yaml``` in that directory
+3. in that directory, create the config directory using ```mkdir  -p watermeter/config```
+4. put a default config in there: ```curl https://raw.githubusercontent.com/nohn/watermeter/main/src/config/config.php -o watermeter/config/config.php```.
+5. start watermeter with ```docker-compose pull && docker-compose up -d```.
 
 ### Configuration
 

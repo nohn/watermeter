@@ -1,5 +1,6 @@
 # 2022-XX-XX v1.2.16
 
+- improve howto - be more specific about docker-compose
 - fix #16 - add support for decimal digits
 - add support for image decolorizatio
 
