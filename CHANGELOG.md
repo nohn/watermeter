@@ -1,6 +1,7 @@
-# 2022-XX-XX v1.2.X
+# 2022-XX-XX v1.2.16
 
 - fix #16 - add support for decimal digits
+- add support for image decolorizatio
 
 # 2022-02-20 v1.2.15
 
