@@ -70,6 +70,9 @@ if (isset($_POST['maxThreshold'])) {
 if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
     $config['postprocessing'] = true;
 }
+if (isset($_POST['digitDecolorization']) && ($_POST['digitDecolorization'] == 'on')) {
+    $config['digitDecolorization'] = true;
+}
 if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
 }
@@ -78,6 +81,9 @@ if (isset($_POST['offsetValue'])) {
 }
 if (isset($_POST['digit'])) {
     $config['digitalDigits'] = $_POST['digit'];
+}
+if (isset($_POST['postDecimalDigit'])) {
+    $config['postDecimalDigits'] = $_POST['postDecimalDigit'];
 }
 if (isset($_POST['gauge'])) {
     $config['analogGauges'] = $_POST['gauge'];
@@ -170,9 +176,12 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing"
                id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing'] == true) ? 'checked' : ''; ?>>
+        <legend for="digitDecolorization">Digit Decolorization</legend>
+        <input type="checkbox" name="digitDecolorization"
+               id="digitDecolorization" <?php echo (isset($config['digitDecolorization']) && $config['digitDecolorization'] == true) ? 'checked' : ''; ?>>
     </fieldset>
     <?php
-    echo '<fieldset class="coordinates"><legend>Digital Digits</legend>';
+    echo '<fieldset class="coordinates"><legend>Pre Decimal Digital Digits</legend>';
     foreach ($config['digitalDigits'] as $key => $digit) {
         echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
         foreach ($fields as $field) {
@@ -182,6 +191,17 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
     }
     echo '<button onclick="return removeElement(\'digit\')" />Remove a Digit</button>';
     echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
+    echo '</fieldset>';
+    echo '<fieldset class="coordinates"><legend>Post Decimal Digital Digits</legend>';
+    foreach ($config['postDecimalDigits'] as $key => $digit) {
+        echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . '</legend>';
+        foreach ($fields as $field) {
+            echo '<legend for="postDecimalDigit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="postDecimalDigit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
+        }
+        echo '</fieldset>';
+    }
+    echo '<button onclick="return removeElement(\'postDecimalDigit\')" />Remove a Digit</button>';
+    echo '<button onclick="return addElement(\'postDecimalDigit\')" />Add a Digit</button>';
     echo '</fieldset>';
     echo '<fieldset class="coordinates"><legend>Analog Digits</legend>';
     foreach ($config['analogGauges'] as $key => $gauge) {

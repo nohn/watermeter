@@ -978,6 +978,99 @@ class WatermeterReaderVariantTest extends TestCase
                     'postprocessing' => false,
                 ),
             ),
+        'regular8_post_decimal_colored_digits' =>
+            array(
+                'lastValue' => 206.9227,
+                'expectedValue' => 206.9228,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => '0.002',
+                    'sourceImage' => __DIR__ . '/data/variants/8-decimal-digits.jpg',
+                    'sourceImageRotate' => '1',
+                    'sourceImageCropSizeX' => '750',
+                    'sourceImageCropSizeY' => '550',
+                    'sourceImageCropStartX' => '800',
+                    'sourceImageCropStartY' => '400',
+                    'sourceImageBrightness' => '30',
+                    'sourceImageContrast' => '50',
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'digitDecolorization' => true,
+                    'digitalDigits' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '30',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '95',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '160',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '230',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '300',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '490',
+                                    'y' => '300',
+                                    'width' => '215',
+                                    'height' => '205',
+                                ),
+                        ),
+                    'postDecimalDigits' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '375',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '445',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '520',
+                                    'y' => '85',
+                                    'width' => '40',
+                                    'height' => '80',
+                                ),
+                        ),
+                ),
+            ),
     );
 
     public function testVariants(): void
