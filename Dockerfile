@@ -1,4 +1,4 @@
-FROM php:8.1.9-cli
+FROM php:8.1.10-cli
 RUN apt-get update \
     && apt-get install -y libmagickwand-dev tesseract-ocr \
     && pecl install imagick \
