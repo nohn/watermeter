@@ -1077,7 +1077,7 @@ class WatermeterReaderVariantTest extends TestCase
     {
         foreach ($this->variants as $variant_id => $variant) {
             $reader = new Reader(false, $variant['config'], $variant['lastValue']);
-            $this->assertEquals($variant['expectedValue'], $reader->getValue(), 'Variant ' . $variant_id);
+            $this->assertEqualsWithDelta($variant['expectedValue'], $reader->getValue(), 0.00001, 'Variant ' . $variant_id);
             $this->assertEquals($variant['hasErrors'], $reader->hasErrors(), 'Variant ' . $variant_id);
             $this->assertEquals($variant['expectedErrors'], $reader->getErrors(), 'Variant ' . $variant_id);
         }
