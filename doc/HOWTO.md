@@ -114,6 +114,8 @@ sensor:
     resource: "http://ip.or.hostname.of.watermeter:3000/"
     scan_interval: 60
     unit_of_measurement: 'm³'
+    device_class: water
+    state_class: total_increasing
 ```
 
 And restart Home Assistant.
