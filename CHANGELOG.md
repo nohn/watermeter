@@ -1,3 +1,8 @@
+# 2022-11-02 v1.2.17
+- improve howto: integration with home asssistant energy dashboard
+- update PHP to 8.1.12
+- ensure PHPUnit 9.5.14 compatibility
+
 # 2022-03-01 v1.2.16
 
 - improve howto - be more specific about docker-compose
