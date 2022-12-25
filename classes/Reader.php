@@ -95,6 +95,12 @@ class Reader extends Watermeter
             $numberDigitalImage->enhanceImage();
             $numberDigitalImage->equalizeImage();
         }
+        if (isset($this->config['digitDecolorization']) && $this->config['digitDecolorization']) {
+            $numberDigitalImage->modulateImage(100, 0, 100);
+        }
+        if (isset($this->config['digitalDigitsInversion']) && $this->config['digitalDigitsInversion']) {
+            $numberDigitalImage->negateImage(false);
+        }
         $numberDigitalImage->setImageFormat("png");
         $numberDigitalImage->borderImage('white', 10, 10);
 
