@@ -1073,8 +1073,8 @@ class WatermeterReaderVariantTest extends TestCase
             ),
         'inverted9' =>
             array(
-                'lastValue' => 364595,
-                'expectedValue' => 364596,
+                'lastValue' => 364595.0,
+                'expectedValue' => 364596.0,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
                 'config' => array(
@@ -1141,7 +1141,7 @@ class WatermeterReaderVariantTest extends TestCase
                         array(),
                     'postDecimalDigits' =>
                         array(),
-                        ),
+                ),
             ),
     );
 

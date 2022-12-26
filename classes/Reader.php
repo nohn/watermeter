@@ -43,7 +43,7 @@ class Reader extends Watermeter
 
     public function getReadout()
     {
-        if (isset($this->config['postDecimalDigits'])) {
+        if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
             $value = $this->readDigits() . '.' . $this->readDigits(true) . $this->readGauges();
         } else {
             $value = $this->readDigits() . '.' . $this->readGauges();
@@ -94,9 +94,6 @@ class Reader extends Watermeter
         if (!isset($this->config['postprocessing']) || (isset($this->config['postprocessing']) && $this->config['postprocessing'])) {
             $numberDigitalImage->enhanceImage();
             $numberDigitalImage->equalizeImage();
-        }
-        if (isset($this->config['digitDecolorization']) && $this->config['digitDecolorization']) {
-            $numberDigitalImage->modulateImage(100, 0, 100);
         }
         if (isset($this->config['digitalDigitsInversion']) && $this->config['digitalDigitsInversion']) {
             $numberDigitalImage->negateImage(false);
