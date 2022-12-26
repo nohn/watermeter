@@ -73,6 +73,9 @@ if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
 if (isset($_POST['digitDecolorization']) && ($_POST['digitDecolorization'] == 'on')) {
     $config['digitDecolorization'] = true;
 }
+if (isset($_POST['digitalDigitsInversion']) && ($_POST['digitalDigitsInversion'] == 'on')) {
+    $config['digitalDigitsInversion'] = true;
+}
 if (isset($_POST['lastValue'])) {
     $lastValue = $_POST['lastValue'];
 }
