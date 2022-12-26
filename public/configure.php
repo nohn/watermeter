@@ -179,6 +179,9 @@ if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         <legend for="digitDecolorization">Digit Decolorization</legend>
         <input type="checkbox" name="digitDecolorization"
                id="digitDecolorization" <?php echo (isset($config['digitDecolorization']) && $config['digitDecolorization'] == true) ? 'checked' : ''; ?>>
+        <legend for="digitalDigitsInversion">Digit Inversion</legend>
+        <input type="checkbox" name="digitalDigitsInversion"
+               id="digitalDigitsInversion" <?php echo (isset($config['digitalDigitsInversion']) && $config['digitalDigitsInversion'] == true) ? 'checked' : ''; ?>>
     </fieldset>
     <?php
     echo '<fieldset class="coordinates"><legend>Pre Decimal Digital Digits</legend>';

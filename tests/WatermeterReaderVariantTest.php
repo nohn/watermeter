@@ -1071,6 +1071,77 @@ class WatermeterReaderVariantTest extends TestCase
                         ),
                 ),
             ),
+        'inverted9' =>
+            array(
+                'lastValue' => 364595.0,
+                'expectedValue' => 364596.0,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => '1.0',
+                    'sourceImage' => __DIR__ . '/data/variants/9-inverse.jpg',
+                    'sourceImageRotate' => '1',
+                    'sourceImageCropSizeX' => '700',
+                    'sourceImageCropSizeY' => '300',
+                    'sourceImageCropStartX' => '300',
+                    'sourceImageCropStartY' => '210',
+                    'sourceImageBrightness' => '5',
+                    'sourceImageContrast' => '75',
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'digitDecolorization' => true,
+                    'digitalDigitsInversion' => true,
+                    'digitalDigits' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '210',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '280',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '350',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '415',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '480',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                            6 =>
+                                array(
+                                    'x' => '545',
+                                    'y' => '70',
+                                    'width' => '40',
+                                    'height' => '48',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(),
+                    'postDecimalDigits' =>
+                        array(),
+                ),
+            ),
     );
 
     public function testVariants(): void
