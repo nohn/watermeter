@@ -51,7 +51,7 @@ class Reader extends Watermeter
         if (
             is_numeric($value) &&
             ($this->lastValue <= $value) &&
-            (($value - $this->lastValue) < $this->config['maxThreshold'])
+            (($value - $this->lastValue) <= $this->config['maxThreshold'])
         ) {
             return $value;
         } else {
