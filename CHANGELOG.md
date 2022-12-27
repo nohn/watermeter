@@ -1,4 +1,11 @@
+# 2022-12-27 v1.2.18
+
+- allow to invert digits to improve OCR
+- allow to remove all digits/gauges
+- update PHP to 8.2.0
+
 # 2022-11-02 v1.2.17
+
 - improve howto: integration with home asssistant energy dashboard
 - update PHP to 8.1.12
 - ensure PHPUnit 9.5.14 compatibility

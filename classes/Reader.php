@@ -43,10 +43,13 @@ class Reader extends Watermeter
 
     public function getReadout()
     {
-        if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
+        if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits']) &&
+            isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
             $value = $this->readDigits() . '.' . $this->readDigits(true) . $this->readGauges();
-        } else {
+        } else if (isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
             $value = $this->readDigits() . '.' . $this->readGauges();
+        } else {
+            $value = $this->readDigits();
         }
         if (
             is_numeric($value) &&
