@@ -1142,54 +1142,61 @@ class WatermeterReaderVariantTest extends TestCase
                         array(),
                 ),
             ),
-        array(
-            'logging' => false,
-            'maxThreshold' => '1',
-            'sourceImage' => __DIR__ . '/data/variants/10.png',
-            'sourceImageRotate' => '1',
-            'sourceImageCropSizeX' => '500',
-            'sourceImageCropSizeY' => '65',
-            'sourceImageCropStartX' => '830',
-            'sourceImageCropStartY' => '300',
-            'sourceImageBrightness' => '30',
-            'sourceImageContrast' => '50',
-            'postprocessing' => false,
-            'digitalDigits' =>
+        '10_without_gauges_or_digits' => array(
+            'lastValue' => 1834,
+            'expectedValue' => 1835,
+            'hasErrors' => false,
+            'expectedErrors' => array(),
+            'config' =>
                 array(
-                    2 =>
+                    'logging' => false,
+                    'maxThreshold' => '1',
+                    'sourceImage' => __DIR__ . '/data/variants/10.png',
+                    'sourceImageRotate' => '1',
+                    'sourceImageCropSizeX' => '500',
+                    'sourceImageCropSizeY' => '65',
+                    'sourceImageCropStartX' => '830',
+                    'sourceImageCropStartY' => '300',
+                    'sourceImageBrightness' => '30',
+                    'sourceImageContrast' => '50',
+                    'postprocessing' => false,
+                    'digitalDigits' =>
                         array(
-                            'x' => '80',
-                            'y' => '0',
-                            'width' => '45',
-                            'height' => '65',
+                            2 =>
+                                array(
+                                    'x' => '80',
+                                    'y' => '0',
+                                    'width' => '45',
+                                    'height' => '65',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '145',
+                                    'y' => '0',
+                                    'width' => '45',
+                                    'height' => '65',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '210',
+                                    'y' => '0',
+                                    'width' => '45',
+                                    'height' => '65',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '275',
+                                    'y' => '0',
+                                    'width' => '45',
+                                    'height' => '65',
+                                ),
                         ),
-                    3 =>
-                        array(
-                            'x' => '145',
-                            'y' => '0',
-                            'width' => '45',
-                            'height' => '65',
-                        ),
-                    4 =>
-                        array(
-                            'x' => '210',
-                            'y' => '0',
-                            'width' => '45',
-                            'height' => '65',
-                        ),
-                    5 =>
-                        array(
-                            'x' => '275',
-                            'y' => '0',
-                            'width' => '45',
-                            'height' => '65',
-                        ),
+                    'analogGauges' => NULL,
+                    'sourceImageEqualize' => true,
+                    'digitDecolorization' => true,
+                    'offsetValue' => '',
+                    'postDecimalDigits' => NULL,
                 ),
-            'analogGauges' => NULL,
-            'sourceImageEqualize' => true,
-            'digitDecolorization' => true,
-            'offsetValue' => '',
-            'postDecimalDigits' => NULL,
         ),
     );
 
