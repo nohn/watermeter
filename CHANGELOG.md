@@ -1,3 +1,6 @@
+# 202X-XX-XX v1.2.19
+- don't fail on empty digits
+
 # 2022-12-27 v1.2.18
 
 - allow to invert digits to improve OCR
