@@ -48,6 +48,8 @@ class Reader extends Watermeter
             $value = $this->readDigits() . '.' . $this->readDigits(true) . $this->readGauges();
         } else if (isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
             $value = $this->readDigits() . '.' . $this->readGauges();
+        } else if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
+            $value = $this->readDigits() . '.' . $this->readDigits(true);
         } else {
             $value = $this->readDigits();
         }
@@ -83,10 +85,12 @@ class Reader extends Watermeter
 
         foreach ($digits_to_read as $digit) {
             $rawDigit = clone $digitalSourceImage;
-            $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
-            $targetImage->addImage($rawDigit);
-            if ($this->debug) {
-                $this->drawDebugImageDigit($digit);
+            if (isset($digit['width']) && $digit['width'] > 0 && isset($digit['height']) && $digit['height'] > 0) {
+                $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
+                $targetImage->addImage($rawDigit);
+                if ($this->debug) {
+                    $this->drawDebugImageDigit($digit);
+                }
             }
         }
         $targetImage->resetIterator();
@@ -113,10 +117,10 @@ class Reader extends Watermeter
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
         if ($this->debug) {
-            $numberDigitalImage->writeImage('tmp/'.$debug_image_path.'_digital.jpg');
+            $numberDigitalImage->writeImage('tmp/' . $debug_image_path . '_digital.jpg');
             echo "Raw OCR: $numberOCR<br>";
             echo "Clean OCR: $numberDigital";
-            echo '<img alt="Digital Preview" src="tmp/'.$debug_image_path.'_digital.jpg" /><br>';
+            echo '<img alt="Digital Preview" src="tmp/' . $debug_image_path . '_digital.jpg" /><br>';
         }
 
         if (is_numeric($numberDigital)) {
@@ -134,7 +138,7 @@ class Reader extends Watermeter
             echo '<table border="1"><tr>';
             echo '<td>';
             $digitalSourceImage->writeImage('tmp/input.jpg');
-            $numberDigitalImage->writeImage('tmp/'.$debug_image_path.'_digital.png');
+            $numberDigitalImage->writeImage('tmp/' . $debug_image_path . '_digital.png');
             echo '</td>';
         }
         return $preDecimalPlaces;
@@ -143,15 +147,17 @@ class Reader extends Watermeter
     private function readGauges()
     {
         $decimalPlaces = null;
-        foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            $gauge['key'] = $gaugeKey;
-            $rawGaugeImage = clone $this->sourceImage;
-            $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
-            $rawGaugeImage->setImagePage(0, 0, 0, 0);
-            $amr = new AnalogMeter($rawGaugeImage, 'r');
-            $decimalPlaces .= $amr->getValue();
-            if ($this->debug) {
-                $this->debugGauge($amr, $gauge);
+        if (isset($this->config['analogGauges'])) {
+            foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
+                $gauge['key'] = $gaugeKey;
+                $rawGaugeImage = clone $this->sourceImage;
+                $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
+                $rawGaugeImage->setImagePage(0, 0, 0, 0);
+                $amr = new AnalogMeter($rawGaugeImage, 'r');
+                $decimalPlaces .= $amr->getValue();
+                if ($this->debug) {
+                    $this->debugGauge($amr, $gauge);
+                }
             }
         }
         return $decimalPlaces;
