@@ -45,8 +45,13 @@ class Reader extends Watermeter
     {
         if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits']) &&
             isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
+            echo "<br>d a<br>";
             $value = $this->readDigits() . '.' . $this->readDigits(true) . $this->readGauges();
         } else if (isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
+            echo "<br>a<br>";
+            $value = $this->readDigits() . '.' . $this->readGauges();
+        } else if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
+            echo "<br>d<br>";
             $value = $this->readDigits() . '.' . $this->readGauges();
         } else {
             $value = $this->readDigits();
@@ -83,10 +88,12 @@ class Reader extends Watermeter
 
         foreach ($digits_to_read as $digit) {
             $rawDigit = clone $digitalSourceImage;
-            $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
-            $targetImage->addImage($rawDigit);
-            if ($this->debug) {
-                $this->drawDebugImageDigit($digit);
+            if(isset($digit['width']) && $digit['width'] >0 && isset($digit['height']) && $digit['height'] >0) {
+                $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
+                $targetImage->addImage($rawDigit);
+                if ($this->debug) {
+                    $this->drawDebugImageDigit($digit);
+                }
             }
         }
         $targetImage->resetIterator();
