@@ -37,65 +37,68 @@ $watermeterConfig = new Config();
 $config = $watermeterConfig->get();
 
 $fields = array('x', 'y', 'width', 'height');
-if (isset($_POST['sourceImage'])) {
-    $config['sourceImage'] = $_POST['sourceImage'];
+if (isset($_POST) && !empty($_POST)) {
+    if (isset($_POST['sourceImage'])) {
+        $config['sourceImage'] = $_POST['sourceImage'];
+    }
+    if (isset($_POST['sourceImageRotate'])) {
+        $config['sourceImageRotate'] = $_POST['sourceImageRotate'];
+    }
+    if (isset($_POST['sourceImageCropStartX'])) {
+        $config['sourceImageCropStartX'] = $_POST['sourceImageCropStartX'];
+    }
+    if (isset($_POST['sourceImageCropStartY'])) {
+        $config['sourceImageCropStartY'] = $_POST['sourceImageCropStartY'];
+    }
+    if (isset($_POST['sourceImageCropSizeX'])) {
+        $config['sourceImageCropSizeX'] = $_POST['sourceImageCropSizeX'];
+    }
+    if (isset($_POST['sourceImageCropSizeY'])) {
+        $config['sourceImageCropSizeY'] = $_POST['sourceImageCropSizeY'];
+    }
+    if (isset($_POST['sourceImageBrightness']) && $_POST['sourceImageBrightness'] != 'false') {
+        $config['sourceImageBrightness'] = $_POST['sourceImageBrightness'];
+    }
+    if (isset($_POST['sourceImageContrast']) && $_POST['sourceImageContrast'] != 'false') {
+        $config['sourceImageContrast'] = $_POST['sourceImageContrast'];
+    }
+    if (isset($_POST['sourceImageEqualize']) && ($_POST['sourceImageEqualize'] == 'on')) {
+        $config['sourceImageEqualize'] = true;
+    }
+    if (isset($_POST['maxThreshold'])) {
+        $config['maxThreshold'] = $_POST['maxThreshold'];
+    }
+    if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
+        $config['postprocessing'] = true;
+    }
+    if (isset($_POST['digitDecolorization']) && ($_POST['digitDecolorization'] == 'on')) {
+        $config['digitDecolorization'] = true;
+    }
+    if (isset($_POST['digitalDigitsInversion']) && ($_POST['digitalDigitsInversion'] == 'on')) {
+        $config['digitalDigitsInversion'] = true;
+    }
+    if (isset($_POST['lastValue'])) {
+        $lastValue = $_POST['lastValue'];
+    }
+    if (isset($_POST['offsetValue'])) {
+        $config['offsetValue'] = $_POST['offsetValue'];
+    }
+    if (isset($_POST['digit'])) {
+        $config['digitalDigits'] = $_POST['digit'];
+    }
+    if (!isset($_POST['postDecimalDigit']) || !empty($_POST['postDecimalDigit'])) {
+        $config['postDecimalDigits'] = $_POST['postDecimalDigit'];
+    }
+    if (!isset($_POST['gauge']) || !empty($_POST['gauge'])) {
+        $config['analogGauges'] = $_POST['gauge'];
+    }
+    if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
+        $watermeterConfig->set($config);
+        $watermeterConfig->store();
+        file_put_contents('../src/config/lastValue.txt', $lastValue);
+    }
 }
-if (isset($_POST['sourceImageRotate'])) {
-    $config['sourceImageRotate'] = $_POST['sourceImageRotate'];
-}
-if (isset($_POST['sourceImageCropStartX'])) {
-    $config['sourceImageCropStartX'] = $_POST['sourceImageCropStartX'];
-}
-if (isset($_POST['sourceImageCropStartY'])) {
-    $config['sourceImageCropStartY'] = $_POST['sourceImageCropStartY'];
-}
-if (isset($_POST['sourceImageCropSizeX'])) {
-    $config['sourceImageCropSizeX'] = $_POST['sourceImageCropSizeX'];
-}
-if (isset($_POST['sourceImageCropSizeY'])) {
-    $config['sourceImageCropSizeY'] = $_POST['sourceImageCropSizeY'];
-}
-if (isset($_POST['sourceImageBrightness']) && $_POST['sourceImageBrightness'] != 'false') {
-    $config['sourceImageBrightness'] = $_POST['sourceImageBrightness'];
-}
-if (isset($_POST['sourceImageContrast']) && $_POST['sourceImageContrast'] != 'false') {
-    $config['sourceImageContrast'] = $_POST['sourceImageContrast'];
-}
-if (isset($_POST['sourceImageEqualize']) && ($_POST['sourceImageEqualize'] == 'on')) {
-    $config['sourceImageEqualize'] = true;
-}
-if (isset($_POST['maxThreshold'])) {
-    $config['maxThreshold'] = $_POST['maxThreshold'];
-}
-if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
-    $config['postprocessing'] = true;
-}
-if (isset($_POST['digitDecolorization']) && ($_POST['digitDecolorization'] == 'on')) {
-    $config['digitDecolorization'] = true;
-}
-if (isset($_POST['digitalDigitsInversion']) && ($_POST['digitalDigitsInversion'] == 'on')) {
-    $config['digitalDigitsInversion'] = true;
-}
-if (isset($_POST['lastValue'])) {
-    $lastValue = $_POST['lastValue'];
-}
-if (isset($_POST['offsetValue'])) {
-    $config['offsetValue'] = $_POST['offsetValue'];
-}
-if (isset($_POST['digit'])) {
-    $config['digitalDigits'] = $_POST['digit'];
-}
-if (isset($_POST['postDecimalDigit'])) {
-    $config['postDecimalDigits'] = $_POST['postDecimalDigit'];
-}
-if (isset($_POST['gauge'])) {
-    $config['analogGauges'] = $_POST['gauge'];
-}
-if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
-    $watermeterConfig->set($config);
-    $watermeterConfig->store();
-    file_put_contents('../src/config/lastValue.txt', $lastValue);
-}
+
 ?>
 <html>
 <head>
