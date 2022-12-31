@@ -86,11 +86,15 @@ if (isset($_POST) && !empty($_POST)) {
     if (isset($_POST['digit'])) {
         $config['digitalDigits'] = $_POST['digit'];
     }
-    if (!isset($_POST['postDecimalDigit']) || !empty($_POST['postDecimalDigit'])) {
+    if (isset($_POST['postDecimalDigit'])) {
         $config['postDecimalDigits'] = $_POST['postDecimalDigit'];
+    } else {
+        $config['postDecimalDigits'] = array();
     }
-    if (!isset($_POST['gauge']) || !empty($_POST['gauge'])) {
+    if (isset($_POST['gauge'])) {
         $config['analogGauges'] = $_POST['gauge'];
+    } else {
+        $config['analogGauges'] = array();
     }
     if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
         $watermeterConfig->set($config);

@@ -45,13 +45,10 @@ class Reader extends Watermeter
     {
         if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits']) &&
             isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
-            echo "<br>d a<br>";
             $value = $this->readDigits() . '.' . $this->readDigits(true) . $this->readGauges();
         } else if (isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
-            echo "<br>a<br>";
             $value = $this->readDigits() . '.' . $this->readGauges();
         } else if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
-            echo "<br>d<br>";
             $value = $this->readDigits() . '.' . $this->readGauges();
         } else {
             $value = $this->readDigits();
