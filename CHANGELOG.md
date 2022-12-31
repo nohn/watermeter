@@ -1,5 +1,6 @@
-# 202X-XX-XX v1.2.19
+# 202X-12-31 v1.2.19
 - don't fail on empty digits
+- allow to remove all digits/gauges
 
 # 2022-12-27 v1.2.18
 
