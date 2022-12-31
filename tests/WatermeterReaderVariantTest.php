@@ -1162,28 +1162,28 @@ class WatermeterReaderVariantTest extends TestCase
                     'postprocessing' => false,
                     'digitalDigits' =>
                         array(
-                            2 =>
+                            1 =>
                                 array(
                                     'x' => '80',
                                     'y' => '0',
                                     'width' => '45',
                                     'height' => '65',
                                 ),
-                            3 =>
+                            2 =>
                                 array(
                                     'x' => '145',
                                     'y' => '0',
                                     'width' => '45',
                                     'height' => '65',
                                 ),
-                            4 =>
+                            3 =>
                                 array(
                                     'x' => '210',
                                     'y' => '0',
                                     'width' => '45',
                                     'height' => '65',
                                 ),
-                            5 =>
+                            4 =>
                                 array(
                                     'x' => '275',
                                     'y' => '0',

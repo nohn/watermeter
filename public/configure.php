@@ -96,10 +96,13 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         $config['analogGauges'] = array();
     }
-    if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
-        $watermeterConfig->set($config);
-        $watermeterConfig->store();
-        file_put_contents('../src/config/lastValue.txt', $lastValue);
+    if (isset($_POST['action'])) {
+        $configDump = var_export($config, true);
+        if ($_POST['action'] == 'save') {
+            $watermeterConfig->set($config);
+            $watermeterConfig->store();
+            file_put_contents('../src/config/lastValue.txt', $lastValue);
+        }
     }
 }
 
@@ -238,5 +241,8 @@ if (isset($_POST) && !empty($_POST)) {
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
     echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
     ?>
+    <?php if(isset($configDump)): ?>
+        <div style="clear: both;"><pre><?php echo $configDump; ?></pre></div>
+    <?php endif; ?>
 </body>
 </html>
