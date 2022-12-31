@@ -49,7 +49,7 @@ class Reader extends Watermeter
         } else if (isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
             $value = $this->readDigits() . '.' . $this->readGauges();
         } else if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits'])) {
-            $value = $this->readDigits() . '.' . $this->readGauges();
+            $value = $this->readDigits() . '.' . $this->readDigits(true);
         } else {
             $value = $this->readDigits();
         }
