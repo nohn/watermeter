@@ -1,4 +1,4 @@
-# 202X-12-31 v1.2.19
+# 2022-12-31 v1.2.19
 - don't fail on empty digits
 - allow to remove all digits/gauges
 
