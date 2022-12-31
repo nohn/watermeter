@@ -32,7 +32,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: Docker build
         run: docker build . -t nohn/watermeter
-      - name: Run Tests
+      - name: Run Smoke Test
         run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 1189.3858
       - name: Docker meta
         id: meta
