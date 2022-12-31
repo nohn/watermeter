@@ -36,7 +36,7 @@ jobs:
         run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 1189.3858
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: |
             nohn/watermeter
