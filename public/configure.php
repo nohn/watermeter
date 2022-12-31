@@ -86,10 +86,10 @@ if (isset($_POST) && !empty($_POST)) {
     if (isset($_POST['digit'])) {
         $config['digitalDigits'] = $_POST['digit'];
     }
-    if (isset($_POST['postDecimalDigit'])) {
+    if (!isset($_POST['postDecimalDigit']) || !empty($_POST['postDecimalDigit'])) {
         $config['postDecimalDigits'] = $_POST['postDecimalDigit'];
     }
-    if (isset($_POST['gauge'])) {
+    if (!isset($_POST['gauge']) || !empty($_POST['gauge'])) {
         $config['analogGauges'] = $_POST['gauge'];
     }
     if (isset($_POST['action']) && ($_POST['action'] == 'save')) {
@@ -202,7 +202,7 @@ if (isset($_POST) && !empty($_POST)) {
     echo '<button onclick="return addElement(\'digit\')" />Add a Digit</button>';
     echo '</fieldset>';
     echo '<fieldset class="coordinates"><legend>Post Decimal Digital Digits</legend>';
-    if (isset($config['postDecimalDigits']) && !empty($config['postDecimalDigits'])) {
+    if (isset($config['postDecimalDigits'])) {
         foreach ($config['postDecimalDigits'] as $key => $digit) {
             echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . '</legend>';
             foreach ($fields as $field) {
@@ -215,14 +215,12 @@ if (isset($_POST) && !empty($_POST)) {
     echo '<button onclick="return addElement(\'postDecimalDigit\')" />Add a Digit</button>';
     echo '</fieldset>';
     echo '<fieldset class="coordinates"><legend>Analog Digits</legend>';
-    if (isset($config['analogGauges']) && !empty($config['analogGauges'])) {
-        foreach ($config['analogGauges'] as $key => $gauge) {
-            echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
-            foreach ($fields as $field) {
-                echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . (isset($gauge[$field]) ? $gauge[$field] : '') . '">';
-            }
-            echo '</fieldset>';
+    foreach ($config['analogGauges'] as $key => $gauge) {
+        echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
+        foreach ($fields as $field) {
+            echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . (isset($gauge[$field]) ? $gauge[$field] : '') . '">';
         }
+        echo '</fieldset>';
     }
     echo '<button onclick="return removeElement(\'gauge\')" />Remove a Gauge</button>';
     echo '<button onclick="return addElement(\'gauge\')" />Add a Gauge</button>';
