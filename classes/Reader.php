@@ -77,10 +77,10 @@ class Reader extends Watermeter
 
         if ($post_decimal == false) {
             $digits_to_read = $this->config['digitalDigits'];
-            $debug_image_path = 'pre_decimal';
+            $cachePrefix = '';
         } else {
             $digits_to_read = $this->config['postDecimalDigits'];
-            $debug_image_path = 'post_decimal';
+            $cachePrefix = 'post_decimal';
         }
 
         foreach ($digits_to_read as $digit) {
@@ -117,31 +117,32 @@ class Reader extends Watermeter
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
         if ($this->debug) {
-            $numberDigitalImage->writeImage('tmp/'.$debug_image_path.'_digital.jpg');
+            $numberDigitalImage->writeImage('tmp/'.$cachePrefix.'_digital.jpg');
             echo "Raw OCR: $numberOCR<br>";
             echo "Clean OCR: $numberDigital";
-            echo '<img alt="Digital Preview" src="tmp/'.$debug_image_path.'_digital.jpg" /><br>';
+            echo '<img alt="Digital Preview" src="tmp/'.$cachePrefix.'_digital.jpg" /><br>';
         }
 
         if (is_numeric($numberDigital)) {
-            $preDecimalPlaces = (int)$numberDigital;
+            $numberRead = (int)$numberDigital;
         } else {
-            $preDecimalPlaces = (int)$this->lastValue;
+            # FIXXME
+            $numberRead = (int)$this->lastValue;
             if ($this->debug) {
-                echo 'Choosing last value ' . $preDecimalPlaces . '<br>';
+                echo 'Choosing last value ' . $numberRead . '<br>';
             }
             $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . $numberDigital . '". Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
         if ($this->debug) {
-            echo "Digital: $preDecimalPlaces<br>";
+            echo "Digital: $numberRead<br>";
             echo '<table border="1"><tr>';
             echo '<td>';
             $digitalSourceImage->writeImage('tmp/input.jpg');
-            $numberDigitalImage->writeImage('tmp/'.$debug_image_path.'_digital.png');
+            $numberDigitalImage->writeImage('tmp/'.$cachePrefix.'_digital.png');
             echo '</td>';
         }
-        return $preDecimalPlaces;
+        return $numberRead;
     }
 
     private function readGauges()
