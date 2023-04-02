@@ -1,5 +1,6 @@
 FROM php:8.2.4-cli
 RUN apt-get update \
+    && apt-get dist-upgrade \
     && apt-get install -y libmagickwand-dev tesseract-ocr \
     && pecl install imagick \
     && docker-php-ext-enable imagick
