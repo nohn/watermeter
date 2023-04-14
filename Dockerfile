@@ -1,4 +1,4 @@
-FROM php:8.2.4-cli
+FROM php:8.2.5-cli
 RUN apt-get update \
     && apt-get dist-upgrade \
     && apt-get install -y libmagickwand-dev tesseract-ocr \
