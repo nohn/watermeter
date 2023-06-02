@@ -18,8 +18,6 @@ jobs:
           extensions: imagick
           coverage: xdebug
           tools: phpstan
-      - name: Update Packages
-        run: sudo apt-get dist-upgrade
       - name: Install dependencies
         run: sudo apt-get install tesseract-ocr
       - name: Install composer dependencies
