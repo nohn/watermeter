@@ -1,5 +1,5 @@
 # 2024-02-08 v1.2.22
-- update PHP to 8.2.15
+- update PHP to 8.3.2
 
 # 2024-02-08 v1.2.21
 - don't fail configuration if OCR fails (#113)	
