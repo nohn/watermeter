@@ -1,3 +1,6 @@
+# 2024-02-08 v1.2.21
+- don't fail configuration if OCR fails (#113)	
+
 # 2023-02-19 v1.2.20
 - update PHP to 8.2.3
 
