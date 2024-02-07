@@ -54,7 +54,7 @@ You can contribute to this project by:
 
 ## You like this?
 
-Consider a [gift](https://www.amazon.de/hz/wishlist/genericItemsPage/3HYH6NR8ZI0WI).
+Consider a [gift](https://www.amazon.de/hz/wishlist/ls/3HYH6NR8ZI0WI?ref_=wl_share).
 
 ## License
 
