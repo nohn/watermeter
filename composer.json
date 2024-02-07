@@ -16,10 +16,10 @@
     "nohn/analogmeterreader": "^1.2",
     "php": ">=7.4",
     "ext-imagick": "^3.4.4",
-    "ext-json": ">=7.4"
+    "ext-json": ">=8.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^10.0"
   },
   "support": {
     "issues": "https://github.com/nohn/watermeter/issues"
