@@ -29,6 +29,7 @@ namespace nohn\Watermeter;
 use Imagick;
 use nohn\AnalogMeterReader\AnalogMeter;
 use thiagoalessio\TesseractOCR\TesseractOCR;
+use thiagoalessio\TesseractOCR\TesseractOcrException;
 
 class Reader extends Watermeter
 {
@@ -85,7 +86,7 @@ class Reader extends Watermeter
 
         foreach ($digits_to_read as $digit) {
             $rawDigit = clone $digitalSourceImage;
-            if(isset($digit['width']) && $digit['width'] >0 && isset($digit['height']) && $digit['height'] >0) {
+            if (isset($digit['width']) && $digit['width'] > 0 && isset($digit['height']) && $digit['height'] > 0) {
                 $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
                 $targetImage->addImage($rawDigit);
                 if ($this->debug) {
@@ -107,20 +108,24 @@ class Reader extends Watermeter
         }
         $numberDigitalImage->setImageFormat("png");
         $numberDigitalImage->borderImage('white', 10, 10);
-
-        $ocr = new TesseractOCR();
-        $ocr->imageData($numberDigitalImage, sizeof($numberDigitalImage));
-        $ocr->allowlist(range('0', '9'));
-        $numberOCR = $ocr->run();
+        try {
+            $ocr = new TesseractOCR();
+            $ocr->imageData($numberDigitalImage, sizeof($numberDigitalImage));
+            $ocr->allowlist(range('0', '9'));
+            $numberOCR = $ocr->run();
+        } catch (TesseractOcrException $e) {
+            $numberOCR = 0;
+            $this->errors[] = $e->getMessage();
+        }
         $numberDigital = preg_replace('/\s+/', '', $numberOCR);
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
         if ($this->debug) {
-            $numberDigitalImage->writeImage('tmp/'.$cachePrefix.'_digital.jpg');
+            $numberDigitalImage->writeImage('tmp/' . $cachePrefix . '_digital.jpg');
             echo "Raw OCR: $numberOCR<br>";
             echo "Clean OCR: $numberDigital";
-            echo '<img alt="Digital Preview" src="tmp/'.$cachePrefix.'_digital.jpg" /><br>';
+            echo '<img alt="Digital Preview" src="tmp/' . $cachePrefix . '_digital.jpg" /><br>';
         }
 
         if (is_numeric($numberDigital)) {
@@ -139,7 +144,7 @@ class Reader extends Watermeter
             echo '<table border="1"><tr>';
             echo '<td>';
             $digitalSourceImage->writeImage('tmp/input.jpg');
-            $numberDigitalImage->writeImage('tmp/'.$cachePrefix.'_digital.png');
+            $numberDigitalImage->writeImage('tmp/' . $cachePrefix . '_digital.png');
             echo '</td>';
         }
         return $numberRead;
