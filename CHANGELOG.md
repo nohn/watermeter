@@ -1,14 +1,11 @@
 # 2024-06-39 v1.3.0
 - drop support for legacy ARM platforms
 
-# 2024-06-30 v1.2.23
-- update PHP to 8.3.8
-
 # 2024-02-08 v1.2.22
 - update PHP to 8.2.15
 
 # 2024-02-08 v1.2.21
-- don't fail configuration if OCR fails (#113)
+- don't fail configuration if OCR fails (#113)	
 
 # 2023-02-19 v1.2.20
 - update PHP to 8.2.3
