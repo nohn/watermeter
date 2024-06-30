@@ -1,3 +1,6 @@
+# 2024-06-39 v1.3.0
+- drop support for legacy ARM platforms
+
 # 2024-06-30 v1.2.23
 - update PHP to 8.3.8
 
