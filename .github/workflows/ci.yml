@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, v1.2 ]
+    branches: [ main, v1.3 ]
   pull_request:
 
 jobs:
@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to Docker Hub (latest)
-        if: github.ref == 'refs/heads/v1.2' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/v1.3' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
           context: .
