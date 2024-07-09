@@ -19,7 +19,7 @@
     "ext-json": ">=8.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.0"
+    "phpunit/phpunit": "^11.2"
   },
   "support": {
     "issues": "https://github.com/nohn/watermeter/issues"
