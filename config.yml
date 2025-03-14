@@ -1,6 +1,6 @@
 name: "watermeter"
 description: "Reads analog water meters and provides a web service that returns the read value as decimal. "
-version: "1"
+version: "1.0"
 slug: "watermeter"
 init: false
 arch:
