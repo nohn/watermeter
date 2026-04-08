@@ -137,4 +137,26 @@ class WatermeterConfigTest extends TestCase
             '4' => array('x' => 166, 'y' => 629, 'width' => 148, 'height' => 149),
         ), $newConfig['analogGauges']);
     }
+
+    public function testConfigStore(): void
+    {
+        $configFile = __DIR__ . '/../src/config/config.php';
+        $backupFile = $configFile . '.bak.test';
+        copy($configFile, $backupFile);
+
+        try {
+            $watermeterConfig = new Config();
+            $config = $watermeterConfig->get();
+            $config['logging'] = 'stored_value';
+            $watermeterConfig->set($config);
+            $watermeterConfig->store();
+
+            // Read it back with a new instance
+            $watermeterConfigNew = new Config();
+            $storedConfig = $watermeterConfigNew->get();
+            $this->assertEquals('stored_value', $storedConfig['logging']);
+        } finally {
+            rename($backupFile, $configFile);
+        }
+    }
 }
