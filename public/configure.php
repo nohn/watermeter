@@ -109,24 +109,218 @@ if (isset($_POST) && !empty($_POST)) {
 ?>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Watermeter - Configure</title>
     <style type="text/css">
-        .base input {
-            float: left;
-            width: 20em;
+        :root {
+            --bg: #f6f7fb;
+            --text: #111827;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --primary: #2563eb;
+            --primary-600: #1d4ed8;
+            --ring: rgba(37, 99, 235, 0.25);
+            --danger: #ef4444;
         }
 
-        .base legend[for] {
-            float: left;
-            width: 15em;
-            clear: both;
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
         }
 
-        .coordinates input,
+        /* Layout */
+        body {
+            padding: 24px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        #config {
+            float: none !important; /* override inline float */
+            max-width: 600px;
+            flex: 1 1 500px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .preview {
+            flex: 1 1 400px;
+            position: sticky;
+            top: 24px;
+        }
+
+        /* Fieldsets as cards */
+        fieldset {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 16px 8px 16px;
+            background: var(--card);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        fieldset legend {
+            font-weight: 600;
+            color: var(--text);
+            padding: 0 4px;
+        }
+
+        /* Label-like legends placed before inputs */
+        .base legend[for],
         .coordinates legend[for] {
-            float: left;
-            width: 3em;
-            text-align: right;
+            display: block;
+            float: none;
+            width: auto;
+            margin: 12px 0 6px 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Inputs */
+        .base input,
+        .coordinates input,
+        input[type="text"] {
+            float: none;
+            width: 100%;
+            box-sizing: border-box;
+            height: 40px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--ring);
+        }
+
+        /* Checkboxes */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        /* Keep checkbox legends on same row for readability */
+        #sourceImageEqualize,
+        #postprocessing,
+        #digitDecolorization,
+        #digitalDigitsInversion {
+            margin-right: 8px;
+        }
+
+        /* Buttons */
+        button,
+        input[type="submit"] {
+            appearance: none;
+            border: 1px solid var(--primary);
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background .15s ease, border-color .15s ease, transform .02s ease;
+            margin: 6px 8px 6px 0;
+        }
+        button:hover,
+        input[type="submit"]:hover {
+            background: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+        button:active,
+        input[type="submit"]:active { transform: translateY(1px); }
+
+        /* Debug/preview image */
+        img[src*="tmp/input_debug.jpg"] {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+
+        /* Config dump */
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 16px;
+            border-radius: 12px;
+            overflow: auto;
+            border: 1px solid #1f2937;
+        }
+
+        /* Compact layout for digit and gauge items */
+        .coordinates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .coordinates > legend {
+            width: 100%;
+            flex: 0 0 100%;
+        }
+        .coordinates > fieldset {
+            flex: 0 1 180px;
+            margin-top: 0;
+            padding: 10px 10px 8px 10px;
+            border-radius: 10px;
+        }
+        .coordinates > button {
+            flex: 0 0 auto;
+            align-self: flex-end;
+            margin-bottom: 8px;
+        }
+        .coordinates > fieldset > legend {
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .coordinates > fieldset legend[for] {
+            margin: 8px 0 4px 0;
+            font-size: 0.78rem;
+            color: var(--muted);
+            display: block;
+        }
+        .coordinates > fieldset legend[for] + input {
+            height: 32px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: block;
+            width: 100%;
+        }
+        @media (max-width: 520px) {
+            .coordinates > fieldset {
+                flex: 1 1 140px;
+            }
+        }
+
+        /* Make long pages easier to scan */
+        .base {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 16px;
+        }
+        .base legend[for] + input { /* pair label and input in grid flow */
+            margin-bottom: 8px;
+        }
+        @media (max-width: 900px) {
+            .base { grid-template-columns: 1fr; }
         }
     </style>
     <script type="text/javascript">
@@ -148,6 +342,7 @@ if (isset($_POST) && !empty($_POST)) {
     </script>
 </head>
 <body>
+<div class="container">
 <form method="post" id="config" style="float: left;">
     <fieldset class="base">
         <legend>Base Settings</legend>
@@ -236,10 +431,13 @@ if (isset($_POST) && !empty($_POST)) {
     echo '<input type="submit" name="action" value="preview">';
     echo '<input type="submit" name="action" value="save">';
     echo '</form>';
+    echo '<div class="preview">';
     $watermeterReader = new Reader(true, $config);
     $value = $watermeterReader->getReadout();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
-    echo '<img src="tmp/input_debug.jpg" style="float: left;"/>';
+    echo '<img src="tmp/input_debug.jpg" />';
+    echo '</div>';
+    echo '</div>';
     ?>
     <?php if(isset($configDump)): ?>
         <div style="clear: both;"><pre><?php echo $configDump; ?></pre></div>
