@@ -114,7 +114,7 @@ class Reader extends Watermeter
             $ocr->allowlist(range('0', '9'));
             $numberOCR = $ocr->run();
         } catch (TesseractOcrException $e) {
-            $numberOCR = 0;
+            $numberOCR = '';
             $this->errors[] = $e->getMessage();
         }
         $numberDigital = preg_replace('/\s+/', '', $numberOCR);
