@@ -261,9 +261,53 @@ if (isset($_POST) && !empty($_POST)) {
             border: 1px solid #1f2937;
         }
 
-        /* Small helper spacing for nested coordinate groups */
+        /* Compact layout for digit and gauge items */
+        .coordinates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .coordinates > legend {
+            width: 100%;
+            flex: 0 0 100%;
+        }
         .coordinates > fieldset {
-            margin-top: 12px;
+            flex: 0 1 180px;
+            margin-top: 0;
+            padding: 10px 10px 8px 10px;
+            border-radius: 10px;
+        }
+        .coordinates > button {
+            flex: 0 0 auto;
+            align-self: flex-end;
+            margin-bottom: 8px;
+        }
+        .coordinates > fieldset > legend {
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+        .coordinates > fieldset legend[for] {
+            margin: 8px 0 4px 0;
+            font-size: 0.78rem;
+            color: var(--muted);
+            display: block;
+        }
+        .coordinates > fieldset legend[for] + input {
+            height: 32px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: block;
+            width: 100%;
+        }
+        @media (max-width: 520px) {
+            .coordinates > fieldset {
+                flex: 1 1 140px;
+            }
         }
 
         /* Make long pages easier to scan */
