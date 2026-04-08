@@ -31,10 +31,19 @@ class WatermeterCacheTest extends TestCase
 {
     public function testCacheRead(): void
     {
-        $watermeter = new Cache();
-        $this->assertEquals("1189.2345", $watermeter->getValue());
-        $this->assertIsNumeric($watermeter->getLastUpdate());
-        $this->assertGreaterThan(0, $watermeter->getLastUpdate());
+        $cacheFile = __DIR__ . '/../src/config/lastValue.txt';
+        $backupFile = $cacheFile . '.bak.test';
+        copy($cacheFile, $backupFile);
+        
+        try {
+            file_put_contents($cacheFile, "1189.2345");
+            $watermeter = new Cache();
+            $this->assertEquals("1189.2345", $watermeter->getValue());
+            $this->assertIsNumeric($watermeter->getLastUpdate());
+            $this->assertGreaterThan(0, $watermeter->getLastUpdate());
+        } finally {
+            rename($backupFile, $cacheFile);
+        }
     }
 
     public function testCacheUpdate(): void
