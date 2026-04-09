@@ -17,10 +17,12 @@ RUN composer install --no-ansi --no-interaction --no-progress
 COPY . .
 
 FROM build AS test
+# Install xdebug
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 # Run Static Analysis
-RUN vendor/bin/phpstan analyse --no-progress --memory-limit=512M src classes
+RUN vendor/bin/phpstan analyse --no-progress src classes
 # Run Unit Tests
-RUN vendor/bin/phpunit tests
+RUN XDEBUG_MODE=coverage vendor/bin/phpunit tests
 
 FROM base AS final
 WORKDIR /usr/src/watermeter

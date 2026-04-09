@@ -4,7 +4,7 @@
  *
  * A tool for reading water meters
  *
- * PHP version 8.1
+ * PHP Version 8.3
  *
  * LICENCE: This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Sebastian Nohn <sebastian@nohn.net>
- * @copyright 2022 Sebastian Nohn
+ * @copyright 2026 Sebastian Nohn
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  */
 
@@ -33,16 +33,17 @@ use thiagoalessio\TesseractOCR\TesseractOcrException;
 
 class Reader extends Watermeter
 {
-    private $hasErrors = false;
+    private bool $hasErrors = false;
 
-    private $errors = array();
+    /** @var array<string, mixed> */
+    private array $errors = array();
 
-    public function getValue()
+    public function getValue(): float
     {
         return (float)($this->getReadout() + $this->getOffset());
     }
 
-    public function getReadout()
+    public function getReadout(): float
     {
         if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits']) &&
             isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
@@ -56,38 +57,51 @@ class Reader extends Watermeter
         }
         if (
             is_numeric($value) &&
-            ($this->lastValue <= $value) &&
-            (($value - $this->lastValue) <= $this->config['maxThreshold'])
+            ($this->lastValue <= (float)$value) &&
+            (((float)$value - $this->lastValue) <= $this->config['maxThreshold'])
         ) {
-            return $value;
+            return (float)$value;
         } else {
             $this->errors['getReadout() : is_numeric()'] = is_numeric($value);
-            $this->errors['getReadout() : increasing'] = ($this->lastValue <= $value);
+            $this->errors['getReadout() : increasing'] = ($this->lastValue <= (float)$value);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
-            $this->errors['delta'] = ($value - $this->lastValue);
+            $this->errors['delta'] = ((float)$value - $this->lastValue);
             $this->hasErrors = true;
-            return (float)$this->lastValue;
+            return $this->lastValue;
         }
     }
 
-    private function readDigits($post_decimal = false)
+    /**
+     * @param bool $post_decimal
+     */
+    private function readDigits($post_decimal = false): int
     {
         $digitalSourceImage = clone $this->sourceImage;
         $targetImage = new Imagick();
 
+        $digits_to_read = array();
         if ($post_decimal == false) {
-            $digits_to_read = $this->config['digitalDigits'];
+            if (isset($this->config['digitalDigits']) && is_array($this->config['digitalDigits'])) {
+                $digits_to_read = $this->config['digitalDigits'];
+            }
             $cachePrefix = '';
         } else {
-            $digits_to_read = $this->config['postDecimalDigits'];
+            if (isset($this->config['postDecimalDigits']) && is_array($this->config['postDecimalDigits'])) {
+                $digits_to_read = $this->config['postDecimalDigits'];
+            }
             $cachePrefix = 'post_decimal';
         }
 
+        /** @var array<string, mixed> $digit */
         foreach ($digits_to_read as $digit) {
             $rawDigit = clone $digitalSourceImage;
-            if (isset($digit['width']) && $digit['width'] > 0 && isset($digit['height']) && $digit['height'] > 0) {
-                $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
+            $width = $digit['width'] ?? 0;
+            $height = $digit['height'] ?? 0;
+            $x = $digit['x'] ?? 0;
+            $y = $digit['y'] ?? 0;
+            if (is_numeric($width) && (int)$width > 0 && is_numeric($height) && (int)$height > 0 && is_numeric($x) && is_numeric($y)) {
+                $rawDigit->cropImage((int)$width, (int)$height, (int)$x, (int)$y);
                 $targetImage->addImage($rawDigit);
                 if ($this->debug) {
                     $this->drawDebugImageDigit($digit);
@@ -99,7 +113,7 @@ class Reader extends Watermeter
         if (isset($this->config['digitDecolorization']) && $this->config['digitDecolorization']) {
             $numberDigitalImage->modulateImage(100, 0, 100);
         }
-        if (!isset($this->config['postprocessing']) || (isset($this->config['postprocessing']) && $this->config['postprocessing'])) {
+        if (!isset($this->config['postprocessing']) || $this->config['postprocessing']) {
             $numberDigitalImage->enhanceImage();
             $numberDigitalImage->equalizeImage();
         }
@@ -110,14 +124,17 @@ class Reader extends Watermeter
         $numberDigitalImage->borderImage('white', 10, 10);
         try {
             $ocr = new TesseractOCR();
-            $ocr->imageData($numberDigitalImage, sizeof($numberDigitalImage));
+            $ocr->imageData($numberDigitalImage, count($numberDigitalImage));
             $ocr->allowlist(range('0', '9'));
             $numberOCR = $ocr->run();
+            if (!is_string($numberOCR)) {
+                $numberOCR = '';
+            }
         } catch (TesseractOcrException $e) {
             $numberOCR = '';
-            $this->errors[] = $e->getMessage();
+            $this->errors['TesseractOcrException'] = $e->getMessage();
         }
-        $numberDigital = preg_replace('/\s+/', '', $numberOCR);
+        $numberDigital = (string)preg_replace('/\s+/', '', $numberOCR);
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
@@ -136,7 +153,7 @@ class Reader extends Watermeter
             if ($this->debug) {
                 echo 'Choosing last value ' . $numberRead . '<br>';
             }
-            $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . $numberDigital . '". Using last known value ' . (int)$this->lastValue;
+            $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . (string)$numberDigital . '". Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
         if ($this->debug) {
@@ -150,13 +167,24 @@ class Reader extends Watermeter
         return $numberRead;
     }
 
-    private function readGauges()
+    private function readGauges(): string
     {
-        $decimalPlaces = null;
-        foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            $gauge['key'] = $gaugeKey;
+        $decimalPlaces = '';
+        $analogGauges = array();
+        if (isset($this->config['analogGauges']) && is_array($this->config['analogGauges'])) {
+            $analogGauges = $this->config['analogGauges'];
+        }
+        /** @var array<string, mixed> $gauge */
+        foreach ($analogGauges as $gaugeKey => $gauge) {
+            $gauge['key'] = (string)$gaugeKey;
             $rawGaugeImage = clone $this->sourceImage;
-            $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
+            $width = $gauge['width'] ?? 0;
+            $height = $gauge['height'] ?? 0;
+            $x = $gauge['x'] ?? 0;
+            $y = $gauge['y'] ?? 0;
+            if (is_numeric($width) && is_numeric($height) && is_numeric($x) && is_numeric($y)) {
+                $rawGaugeImage->cropImage((int)$width, (int)$height, (int)$x, (int)$y);
+            }
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
@@ -167,37 +195,61 @@ class Reader extends Watermeter
         return $decimalPlaces;
     }
 
-    private function debugGauge($amr, $gauge)
+    /**
+     * @param AnalogMeter $amr
+     * @param array<string, mixed> $gauge
+     */
+    private function debugGauge($amr, $gauge): void
     {
         $this->drawDebugImageGauge($gauge);
         echo '<td>';
         echo $amr->getValue(true) . '<br>';
-        echo '<img src="tmp/analog_' . $gauge['key'] . '.png" /><br />';
+        $gaugeKey = $gauge['key'] ?? '';
+        if (is_scalar($gaugeKey) && (string)$gaugeKey !== '') {
+            echo '<img src="tmp/analog_' . (string)$gaugeKey . '.png" /><br />';
+        }
         $debugData = $amr->getDebugData();
         foreach ($debugData as $significance => $step) {
-            echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
+            if (!is_array($step)) {
+                echo 'Not an array: ';
+                var_dump($step);
+                continue;
+            }
+            $xStep = $step['xStep'] ?? 0;
+            $yStep = $step['yStep'] ?? 0;
+            $number = $step['number'] ?? 0;
+            if (is_numeric($xStep) && is_numeric($yStep) && is_numeric($number)) {
+                echo round((float)$significance, 4) . ': ' . $xStep . 'x' . $yStep . ' => ' . $number . '<br>';
+            }
         }
         $debugImage = $amr->getDebugImage();
         $debugImage->setImageFormat('png');
-        $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gauge['key'] . '.png');
+        $gaugeKey = $gauge['key'] ?? '';
+        if (is_scalar($gaugeKey) && (string)$gaugeKey !== '') {
+            $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . (string)$gaugeKey . '.png');
+        }
         echo '</td>';
     }
 
-    public function getOffset()
+    public function getOffset(): float
     {
-        if (isset($this->config['offsetValue'])) {
-            return (float)$this->config['offsetValue'];
+        $offsetValue = $this->config['offsetValue'] ?? 0;
+        if (is_numeric($offsetValue)) {
+            return (float)$offsetValue;
         } else {
             return 0;
         }
     }
 
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return $this->hasErrors;
     }
 
-    public function getErrors()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getErrors(): array
     {
         return $this->errors;
     }

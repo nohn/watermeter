@@ -4,6 +4,8 @@ composer.lock
 /.idea/
 log/
 .phpunit.cache/
+/build/
 tmp/
 /public/watermeter.jpg
 config.php.*
+*.swp

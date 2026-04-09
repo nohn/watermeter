@@ -4,7 +4,7 @@
  *
  * A tool for reading water meters
  *
- * PHP version 8.1
+ * PHP Version 8.3
  *
  * LICENCE: This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Sebastian Nohn <sebastian@nohn.net>
- * @copyright 2022 Sebastian Nohn
+ * @copyright 2026 Sebastian Nohn
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  */
 
@@ -28,25 +28,33 @@ namespace nohn\Watermeter;
 
 class Config
 {
-    private $config = array();
+    /** @var array<string, mixed> */
+    private array $config = array();
 
     public function __construct()
     {
         require __DIR__ . '/../src/config/config.php';
+        /** @var array<string, mixed> $config */
         $this->config = $config;
     }
 
-    public function get()
+    /**
+     * @return array<string, mixed>
+     */
+    public function get(): array
     {
         return $this->config;
     }
 
-    public function set($config)
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function set(array $config): void
     {
         $this->config = $config;
     }
 
-    public function store()
+    public function store(): bool
     {
         $newConfig = var_export($this->config, true);
         file_put_contents(__DIR__ . '/../src/config/config.php', "<?php\n\$config = " . $newConfig . ";");

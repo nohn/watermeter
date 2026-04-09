@@ -4,7 +4,7 @@
  *
  * A tool for reading water meters
  *
- * PHP version 8.1
+ * PHP Version 8.3
  *
  * LICENCE: This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Sebastian Nohn <sebastian@nohn.net>
- * @copyright 2022 Sebastian Nohn
+ * @copyright 2026 Sebastian Nohn
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  */
 
@@ -33,21 +33,27 @@ use nohn\Watermeter\Debug;
 
 class Watermeter
 {
-    protected $config;
+    /** @var array<string, mixed> */
+    protected array $config = array();
 
-    protected $sourceImage;
+    protected Imagick $sourceImage;
 
-    protected $strokeColor;
+    protected ImagickPixel $strokeColor;
 
-    protected $strokeOpacity = 0.7;
+    protected float $strokeOpacity = 0.7;
 
-    protected $sourceImageDebug;
+    protected Imagick $sourceImageDebug;
 
-    protected $lastValue;
-    protected $lastValueTimestamp;
+    protected float $lastValue = 0;
+    protected int $lastValueTimestamp;
 
-    protected $debug;
+    protected bool $debug = false;
 
+    /**
+     * @param bool $debug
+     * @param array<string, mixed>|false $config
+     * @param float|false $lastValue
+     */
     public function __construct($debug = false, $config = false, $lastValue = false)
     {
         if ($debug) {
@@ -70,9 +76,9 @@ class Watermeter
 
         $this->sourceImage = new Imagick($this->config['sourceImage']);
 
-        if (isset($this->config['sourceImageRotate']) && $this->config['sourceImageRotate']) {
+        if (isset($this->config['sourceImageRotate']) && is_numeric($this->config['sourceImageRotate']) && (float)$this->config['sourceImageRotate'] != 0.0) {
             $sourceImageTmp = clone $this->sourceImage;
-            $sourceImageTmp->rotateImage('white', $this->config['sourceImageRotate']);
+            $sourceImageTmp->rotateImage('white', (float)$this->config['sourceImageRotate']);
             $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = $sourceImageTmp;
         }
@@ -99,21 +105,25 @@ class Watermeter
             }
 
             $sourceImageTmp->cropImage(
-                $this->config['sourceImageCropSizeX'],
-                $this->config['sourceImageCropSizeY'],
-                $this->config['sourceImageCropStartX'],
-                $this->config['sourceImageCropStartY']
+                (int)$this->config['sourceImageCropSizeX'],
+                (int)$this->config['sourceImageCropSizeY'],
+                (int)$this->config['sourceImageCropStartX'],
+                (int)$this->config['sourceImageCropStartY']
             );
             $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = clone $sourceImageTmp;
         }
 
         if (
-            (isset($this->config['sourceImageBrightness']) && $this->config['sourceImageBrightness'] !== false) ||
-            (isset($this->config['sourceImageContrast']) && $this->config['sourceImageContrast'] !== false)
+            (isset($this->config['sourceImageBrightness']) && is_numeric($this->config['sourceImageBrightness'])) ||
+            (isset($this->config['sourceImageContrast']) && is_numeric($this->config['sourceImageContrast']))
         ) {
             $sourceImageTmp = clone $this->sourceImage;
-            $sourceImageTmp->brightnessContrastImage((float)$this->config['sourceImageBrightness'], (float)$this->config['sourceImageContrast']);
+            $brightness = $this->config['sourceImageBrightness'] ?? 0;
+            $contrast = $this->config['sourceImageContrast'] ?? 0;
+            if (is_numeric($brightness) && is_numeric($contrast)) {
+                $sourceImageTmp->brightnessContrastImage((float)$brightness, (float)$contrast);
+            }
             $this->sourceImage = clone $sourceImageTmp;
         }
 
@@ -127,37 +137,55 @@ class Watermeter
         $this->sourceImageDebug = clone $this->sourceImage;
     }
 
-    public function writeSourceImage($path)
+    public function writeSourceImage(string $path): void
     {
         $this->sourceImage->writeImage($path);
     }
 
-    public function writeDebugImage($path)
+    public function writeDebugImage(string $path): void
     {
         $this->sourceImageDebug->writeImage($path);
     }
 
-    public function drawDebugImageGauge($gauge)
+    /**
+     * @param array<string, mixed> $gauge
+     */
+    public function drawDebugImageGauge(array $gauge): void
     {
         $draw = new ImagickDraw();
         $draw->setStrokeColor($this->strokeColor);
         $draw->setStrokeOpacity($this->strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
+        $x = $gauge['x'] ?? 0;
+        $y = $gauge['y'] ?? 0;
+        $width = $gauge['width'] ?? 0;
+        $height = $gauge['height'] ?? 0;
+        if (is_numeric($x) && is_numeric($y) && is_numeric($width) && is_numeric($height)) {
+            $draw->rectangle((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+            $draw->line((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+            $draw->line((float)$x, (float)$y + (float)$height, (float)$x + (float)$width, (float)$y);
+        }
         $this->sourceImageDebug->drawImage($draw);
     }
 
-    public function drawDebugImageDigit($digit)
+    /**
+     * @param array<string, mixed> $digit
+     */
+    public function drawDebugImageDigit(array $digit): void
     {
         $draw = new ImagickDraw();
         $draw->setStrokeColor($this->strokeColor);
         $draw->setStrokeOpacity($this->strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
+        $x = $digit['x'] ?? 0;
+        $y = $digit['y'] ?? 0;
+        $width = $digit['width'] ?? 0;
+        $height = $digit['height'] ?? 0;
+        if (is_numeric($x) && is_numeric($y) && is_numeric($width) && is_numeric($height)) {
+            $draw->rectangle((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+        }
         $this->sourceImageDebug->drawImage($draw);
     }
 }
