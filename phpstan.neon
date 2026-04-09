@@ -1,4 +1,5 @@
 parameters:
     level: 6
     parallel:
-        maximumNumberOfProcesses: 1
+        maximumNumberOfProcesses: 0
+        processTimeout: 300.0

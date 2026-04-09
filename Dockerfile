@@ -11,17 +11,15 @@ COPY composer.json ./
 RUN composer install --no-ansi --no-interaction --no-progress
 COPY . .
 
+FROM build AS test
 # Run Static Analysis
-RUN vendor/bin/phpstan analyse src classes
+RUN vendor/bin/phpstan analyse --no-progress --memory-limit=512M src classes
 # Run Unit Tests
 RUN vendor/bin/phpunit tests
 
 FROM base AS final
 WORKDIR /usr/src/watermeter
 
-# Ensure that the build stage (tests and PHPStan) has been executed successfully
-# by copying a file from it. This creates a dependency so Docker won't skip it.
-COPY --from=build /usr/src/watermeter/composer.json /usr/src/watermeter/composer.json
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json ./
 
