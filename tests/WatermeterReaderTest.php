@@ -33,10 +33,19 @@ class WatermeterReaderTest extends TestCase
      * @covers \nohn\Watermeter\Reader::readDigits
      * @covers \nohn\Watermeter\Reader::readGauges
      * @covers \nohn\Watermeter\Reader::getReadout
+     * @covers \nohn\Watermeter\Reader::getValue
+     * @covers \nohn\Watermeter\Reader::getOffset
+     * @covers \nohn\Watermeter\Reader::getErrors
+     * @covers \nohn\Watermeter\Reader::hasErrors
+     * @covers \nohn\Watermeter\Reader::debugGauge
      */
     public function testReadout(): void
     {
         $reader = new Reader();
         $this->assertEquals("1189.3858", $reader->getReadout());
+        $this->assertEquals(1189.3858, $reader->getValue());
+        $this->assertEquals(0, $reader->getOffset());
+        $this->assertEquals(array(), $reader->getErrors());
+        $this->assertFalse($reader->hasErrors());
     }
 }

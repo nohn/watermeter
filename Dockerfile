@@ -7,6 +7,11 @@ RUN apt-get update \
 FROM base AS build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /usr/src/watermeter
+
+# Create necessary directories and set permissions
+RUN mkdir -p log/debug log/error tmp \
+    && chmod -R 777 log tmp
+
 COPY composer.json ./
 RUN composer install --no-ansi --no-interaction --no-progress
 COPY . .
