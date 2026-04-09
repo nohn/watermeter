@@ -1,3 +1,7 @@
+# 2026-04-10 v1.3.2
+- improve test coverage
+- improve code style
+
 # 2026-04-09 v1.3.1
 - update PHP to 8.5.4
 - update PHPUnit to 11.3
