@@ -12,7 +12,7 @@ RUN composer install --no-ansi --no-interaction --no-progress
 COPY . .
 
 # Run Static Analysis
-RUN vendor/bin/phpstan analyse --memory-limit=512M src classes
+RUN vendor/bin/phpstan analyse --no-progress --memory-limit=512M src classes
 # Run Unit Tests
 RUN vendor/bin/phpunit tests
 
