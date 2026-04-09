@@ -76,9 +76,9 @@ class Watermeter
 
         $this->sourceImage = new Imagick($this->config['sourceImage']);
 
-        if (isset($this->config['sourceImageRotate']) && $this->config['sourceImageRotate']) {
+        if (isset($this->config['sourceImageRotate']) && is_numeric($this->config['sourceImageRotate']) && (float)$this->config['sourceImageRotate'] != 0.0) {
             $sourceImageTmp = clone $this->sourceImage;
-            $sourceImageTmp->rotateImage('white', $this->config['sourceImageRotate']);
+            $sourceImageTmp->rotateImage('white', (float)$this->config['sourceImageRotate']);
             $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = $sourceImageTmp;
         }
@@ -115,11 +115,15 @@ class Watermeter
         }
 
         if (
-            (isset($this->config['sourceImageBrightness']) && $this->config['sourceImageBrightness'] !== false) ||
-            (isset($this->config['sourceImageContrast']) && $this->config['sourceImageContrast'] !== false)
+            (isset($this->config['sourceImageBrightness']) && is_numeric($this->config['sourceImageBrightness'])) ||
+            (isset($this->config['sourceImageContrast']) && is_numeric($this->config['sourceImageContrast']))
         ) {
             $sourceImageTmp = clone $this->sourceImage;
-            $sourceImageTmp->brightnessContrastImage((float)$this->config['sourceImageBrightness'], (float)$this->config['sourceImageContrast']);
+            $brightness = $this->config['sourceImageBrightness'] ?? 0;
+            $contrast = $this->config['sourceImageContrast'] ?? 0;
+            if (is_numeric($brightness) && is_numeric($contrast)) {
+                $sourceImageTmp->brightnessContrastImage((float)$brightness, (float)$contrast);
+            }
             $this->sourceImage = clone $sourceImageTmp;
         }
 
@@ -153,9 +157,15 @@ class Watermeter
         $draw->setStrokeOpacity($this->strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'], $gauge['x'] + $gauge['width'], $gauge['y'] + $gauge['height']);
-        $draw->line($gauge['x'], $gauge['y'] + $gauge['height'], $gauge['x'] + $gauge['width'], $gauge['y']);
+        $x = $gauge['x'] ?? 0;
+        $y = $gauge['y'] ?? 0;
+        $width = $gauge['width'] ?? 0;
+        $height = $gauge['height'] ?? 0;
+        if (is_numeric($x) && is_numeric($y) && is_numeric($width) && is_numeric($height)) {
+            $draw->rectangle((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+            $draw->line((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+            $draw->line((float)$x, (float)$y + (float)$height, (float)$x + (float)$width, (float)$y);
+        }
         $this->sourceImageDebug->drawImage($draw);
     }
 
@@ -169,7 +179,13 @@ class Watermeter
         $draw->setStrokeOpacity($this->strokeOpacity);
         $draw->setStrokeWidth(1);
         $draw->setFillOpacity(0);
-        $draw->rectangle($digit['x'], $digit['y'], $digit['x'] + $digit['width'], $digit['y'] + $digit['height']);
+        $x = $digit['x'] ?? 0;
+        $y = $digit['y'] ?? 0;
+        $width = $digit['width'] ?? 0;
+        $height = $digit['height'] ?? 0;
+        if (is_numeric($x) && is_numeric($y) && is_numeric($width) && is_numeric($height)) {
+            $draw->rectangle((float)$x, (float)$y, (float)$x + (float)$width, (float)$y + (float)$height);
+        }
         $this->sourceImageDebug->drawImage($draw);
     }
 }

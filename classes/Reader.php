@@ -80,18 +80,28 @@ class Reader extends Watermeter
         $digitalSourceImage = clone $this->sourceImage;
         $targetImage = new Imagick();
 
+        $digits_to_read = array();
         if ($post_decimal == false) {
-            $digits_to_read = $this->config['digitalDigits'];
+            if (isset($this->config['digitalDigits']) && is_array($this->config['digitalDigits'])) {
+                $digits_to_read = $this->config['digitalDigits'];
+            }
             $cachePrefix = '';
         } else {
-            $digits_to_read = $this->config['postDecimalDigits'];
+            if (isset($this->config['postDecimalDigits']) && is_array($this->config['postDecimalDigits'])) {
+                $digits_to_read = $this->config['postDecimalDigits'];
+            }
             $cachePrefix = 'post_decimal';
         }
 
+        /** @var array<string, mixed> $digit */
         foreach ($digits_to_read as $digit) {
             $rawDigit = clone $digitalSourceImage;
-            if (isset($digit['width']) && $digit['width'] > 0 && isset($digit['height']) && $digit['height'] > 0) {
-                $rawDigit->cropImage($digit['width'], $digit['height'], $digit['x'], $digit['y']);
+            $width = $digit['width'] ?? 0;
+            $height = $digit['height'] ?? 0;
+            $x = $digit['x'] ?? 0;
+            $y = $digit['y'] ?? 0;
+            if (is_numeric($width) && (int)$width > 0 && is_numeric($height) && (int)$height > 0 && is_numeric($x) && is_numeric($y)) {
+                $rawDigit->cropImage((int)$width, (int)$height, (int)$x, (int)$y);
                 $targetImage->addImage($rawDigit);
                 if ($this->debug) {
                     $this->drawDebugImageDigit($digit);
@@ -154,13 +164,24 @@ class Reader extends Watermeter
         return $numberRead;
     }
 
-    private function readGauges(): ?string
+    private function readGauges(): string
     {
-        $decimalPlaces = null;
-        foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
-            $gauge['key'] = $gaugeKey;
+        $decimalPlaces = '';
+        $analogGauges = array();
+        if (isset($this->config['analogGauges']) && is_array($this->config['analogGauges'])) {
+            $analogGauges = $this->config['analogGauges'];
+        }
+        /** @var array<string, mixed> $gauge */
+        foreach ($analogGauges as $gaugeKey => $gauge) {
+            $gauge['key'] = (string)$gaugeKey;
             $rawGaugeImage = clone $this->sourceImage;
-            $rawGaugeImage->cropImage($gauge['width'], $gauge['height'], $gauge['x'], $gauge['y']);
+            $width = $gauge['width'] ?? 0;
+            $height = $gauge['height'] ?? 0;
+            $x = $gauge['x'] ?? 0;
+            $y = $gauge['y'] ?? 0;
+            if (is_numeric($width) && is_numeric($height) && is_numeric($x) && is_numeric($y)) {
+                $rawGaugeImage->cropImage((int)$width, (int)$height, (int)$x, (int)$y);
+            }
             $rawGaugeImage->setImagePage(0, 0, 0, 0);
             $amr = new AnalogMeter($rawGaugeImage, 'r');
             $decimalPlaces .= $amr->getValue();
@@ -180,21 +201,28 @@ class Reader extends Watermeter
         $this->drawDebugImageGauge($gauge);
         echo '<td>';
         echo $amr->getValue(true) . '<br>';
-        echo '<img src="tmp/analog_' . $gauge['key'] . '.png" /><br />';
+        $gaugeKey = $gauge['key'] ?? '';
+        if (is_scalar($gaugeKey) && (string)$gaugeKey !== '') {
+            echo '<img src="tmp/analog_' . (string)$gaugeKey . '.png" /><br />';
+        }
         $debugData = $amr->getDebugData();
         foreach ($debugData as $significance => $step) {
             echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
         }
         $debugImage = $amr->getDebugImage();
         $debugImage->setImageFormat('png');
-        $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . $gauge['key'] . '.png');
+        $gaugeKey = $gauge['key'] ?? '';
+        if (is_scalar($gaugeKey) && (string)$gaugeKey !== '') {
+            $debugImage->writeImage(__DIR__ . '/../public/tmp/analog_' . (string)$gaugeKey . '.png');
+        }
         echo '</td>';
     }
 
     public function getOffset(): float
     {
-        if (isset($this->config['offsetValue'])) {
-            return (float)$this->config['offsetValue'];
+        $offsetValue = $this->config['offsetValue'] ?? 0;
+        if (is_numeric($offsetValue)) {
+            return (float)$offsetValue;
         } else {
             return 0;
         }
