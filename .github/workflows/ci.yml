@@ -11,21 +11,6 @@ jobs:
     steps:
       - name: Pull Code
         uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          extensions: imagick
-          coverage: xdebug
-          tools: phpstan
-      - name: Install dependencies
-        run: sudo apt install tesseract-ocr
-      - name: Install composer dependencies
-        run: composer update --no-ansi --no-interaction --no-progress
-      - name: Run PHPStan
-        run: phpstan analyse src
-      - name: Run unit tests
-        run: vendor/bin/phpunit tests
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx

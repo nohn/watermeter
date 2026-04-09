@@ -12,7 +12,7 @@ This is only a quick introduction to setting up and configuring watermeter. A mo
 
 ### Installation
 
-#### Using Docker Compose (recommended)
+#### Using Docker Compose and Docker Hub (recommended)
 
 ```yaml
 version: "3.5"
@@ -25,6 +25,14 @@ services:
     restart: always
     ports:
       - "3000:3000"
+```
+
+#### Building locally
+
+If you want to build the Docker image locally, you can use the following command:
+
+```bash
+docker build . -t nohn/watermeter
 ```
 
 ### Configuration
@@ -58,4 +66,4 @@ Consider a [gift](https://www.amazon.de/hz/wishlist/ls/3HYH6NR8ZI0WI?ref_=wl_sha
 
 ## License
 
-analogmeterreader is released under the [GNU Affero General Public License](LICENSE).
+watermeter is released under the [GNU Affero General Public License](LICENSE).
