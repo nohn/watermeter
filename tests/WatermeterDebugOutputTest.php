@@ -16,8 +16,13 @@ class WatermeterDebugOutputTest extends TestCase
         $reader = new Reader(false);
         
         ob_start();
-        $reader->getReadout();
-        $output = ob_get_clean();
+        try {
+            $reader->getReadout();
+            $output = ob_get_clean();
+        } catch (\Exception $e) {
+            ob_end_clean();
+            throw $e;
+        }
         
         $this->assertEmpty($output, "Expected no debug output when debug is disabled, but got: " . $output);
     }
@@ -30,12 +35,22 @@ class WatermeterDebugOutputTest extends TestCase
      */
     public function testDebugOutputWhenEnabled(): void
     {
+        // Ensure tmp directory exists as Reader writes to it when debug is true
+        if (!is_dir('tmp')) {
+            mkdir('tmp', 0777, true);
+        }
+
         // When debug is true, there should be some output from getReadout()
         $reader = new Reader(true);
         
         ob_start();
-        $reader->getReadout();
-        $output = ob_get_clean();
+        try {
+            $reader->getReadout();
+            $output = ob_get_clean();
+        } catch (\Exception $e) {
+            ob_end_clean();
+            throw $e;
+        }
         
         $this->assertNotEmpty($output, "Expected debug output when debug is enabled, but got nothing.");
     }
