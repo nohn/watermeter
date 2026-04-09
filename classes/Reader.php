@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author    Sebastian Nohn <sebastian@nohn.net>
- * @copyright 2022 Sebastian Nohn
+ * @copyright 2026 Sebastian Nohn
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  */
 
@@ -121,7 +121,7 @@ class Reader extends Watermeter
             $numberOCR = '';
             $this->errors['TesseractOcrException'] = $e->getMessage();
         }
-        $numberDigital = preg_replace('/\s+/', '', $numberOCR);
+        $numberDigital = (string)preg_replace('/\s+/', '', $numberOCR);
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
         $numberDigital = strtr($numberDigital, 'oOiIlzZsSBg', '00111225589');
         // $numberDigital = '00815';
