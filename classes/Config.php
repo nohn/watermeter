@@ -33,6 +33,7 @@ class Config
     public function __construct()
     {
         require __DIR__ . '/../src/config/config.php';
+        /** @var array $config */
         $this->config = $config;
     }
 
