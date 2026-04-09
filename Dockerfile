@@ -13,7 +13,7 @@ COPY . .
 
 FROM build AS test
 # Run Static Analysis
-RUN vendor/bin/phpstan analyse --no-progress --memory-limit=512M src classes
+RUN vendor/bin/phpstan analyse --no-progress src classes
 # Run Unit Tests
 RUN vendor/bin/phpunit tests
 
