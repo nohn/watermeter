@@ -7,7 +7,7 @@ RUN apt-get update \
 FROM base AS build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /usr/src/watermeter
-COPY composer.json composer.lock ./
+COPY composer.json ./
 RUN composer install --no-ansi --no-interaction --no-progress
 COPY . .
 
@@ -23,7 +23,7 @@ WORKDIR /usr/src/watermeter
 # by copying a file from it. This creates a dependency so Docker won't skip it.
 COPY --from=build /usr/src/watermeter/composer.json /usr/src/watermeter/composer.json
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-COPY composer.json composer.lock ./
+COPY composer.json ./
 
 # Do not install dev dependencies on final build
 RUN composer install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-progress
