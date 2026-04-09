@@ -114,12 +114,12 @@ class Reader extends Watermeter
         $numberDigitalImage->borderImage('white', 10, 10);
         try {
             $ocr = new TesseractOCR();
-            $ocr->imageData($numberDigitalImage, sizeof($numberDigitalImage));
+            $ocr->imageData($numberDigitalImage, count($numberDigitalImage));
             $ocr->allowlist(range('0', '9'));
-            $numberOCR = $ocr->run();
+            $numberOCR = (string)$ocr->run();
         } catch (TesseractOcrException $e) {
             $numberOCR = '';
-            $this->errors[] = $e->getMessage();
+            $this->errors['TesseractOcrException'] = $e->getMessage();
         }
         $numberDigital = preg_replace('/\s+/', '', $numberOCR);
         // There is TesseractOCR::digits(), but sometimes this will not convert a letter do a similar looking digit but completely ignore it. So we replace o with 0, I with 1 etc.
@@ -140,7 +140,7 @@ class Reader extends Watermeter
             if ($this->debug) {
                 echo 'Choosing last value ' . $numberRead . '<br>';
             }
-            $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . $numberDigital . '". Using last known value ' . (int)$this->lastValue;
+            $this->errors['readDigits() : !is_numeric()'] = 'Could not interpret "' . (string)$numberDigital . '". Using last known value ' . (int)$this->lastValue;
             $this->hasErrors = true;
         }
         if ($this->debug) {

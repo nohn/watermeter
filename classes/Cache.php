@@ -35,8 +35,14 @@ class Cache
     {
         $cacheFile = __DIR__ . '/../src/config/lastValue.txt';
         if (file_exists($cacheFile)) {
-            $this->value = (float)trim(file_get_contents($cacheFile));
-            $this->last_update = filemtime($cacheFile);
+            $content = file_get_contents($cacheFile);
+            if ($content !== false) {
+                $this->value = (float)trim($content);
+            }
+            $mtime = filemtime($cacheFile);
+            if ($mtime !== false) {
+                $this->last_update = $mtime;
+            }
         }
     }
 

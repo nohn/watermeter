@@ -105,10 +105,10 @@ class Watermeter
             }
 
             $sourceImageTmp->cropImage(
-                $this->config['sourceImageCropSizeX'],
-                $this->config['sourceImageCropSizeY'],
-                $this->config['sourceImageCropStartX'],
-                $this->config['sourceImageCropStartY']
+                (int)$this->config['sourceImageCropSizeX'],
+                (int)$this->config['sourceImageCropSizeY'],
+                (int)$this->config['sourceImageCropStartX'],
+                (int)$this->config['sourceImageCropStartY']
             );
             $sourceImageTmp->setImagePage($sourceImageTmp->getImageWidth(), $sourceImageTmp->getImageHeight(), 0, 0);
             $this->sourceImage = clone $sourceImageTmp;
