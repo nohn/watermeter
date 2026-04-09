@@ -4,7 +4,7 @@
  *
  * A tool for reading water meters
  *
- * PHP Version 8.5
+ * PHP Version 8.3
  *
  * LICENCE: This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
