@@ -126,7 +126,10 @@ class Reader extends Watermeter
             $ocr = new TesseractOCR();
             $ocr->imageData($numberDigitalImage, count($numberDigitalImage));
             $ocr->allowlist(range('0', '9'));
-            $numberOCR = (string)$ocr->run();
+            $numberOCR = $ocr->run();
+            if (!is_string($numberOCR)) {
+                $numberOCR = '';
+            }
         } catch (TesseractOcrException $e) {
             $numberOCR = '';
             $this->errors['TesseractOcrException'] = $e->getMessage();
@@ -207,7 +210,17 @@ class Reader extends Watermeter
         }
         $debugData = $amr->getDebugData();
         foreach ($debugData as $significance => $step) {
-            echo round($significance, 4) . ': ' . $step['xStep'] . 'x' . $step['yStep'] . ' => ' . $step['number'] . '<br>';
+            if (!is_array($step)) {
+                echo 'Not an array: ';
+                var_dump($step);
+                continue;
+            }
+            $xStep = $step['xStep'] ?? 0;
+            $yStep = $step['yStep'] ?? 0;
+            $number = $step['number'] ?? 0;
+            if (is_numeric($xStep) && is_numeric($yStep) && is_numeric($number)) {
+                echo round((float)$significance, 4) . ': ' . $xStep . 'x' . $yStep . ' => ' . $number . '<br>';
+            }
         }
         $debugImage = $amr->getDebugImage();
         $debugImage->setImageFormat('png');
