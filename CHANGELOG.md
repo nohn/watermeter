@@ -1,3 +1,10 @@
+# 2026-04-09 v1.3.1
+- update PHP to 8.5.4
+- update PHPUnit to 11.3
+- Self contained Docker image build / do not rely on Github CI for building images
+- Improve tests
+- Doll up config UI
+
 # 2024-06-39 v1.3.0
 - drop support for legacy ARM platforms
 
