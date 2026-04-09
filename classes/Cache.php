@@ -28,24 +28,24 @@ namespace nohn\Watermeter;
 
 class Cache
 {
-    private $value = 0;
-    private $last_update = 0;
+    private float $value = 0;
+    private int $last_update = 0;
 
     public function __construct()
     {
         $cacheFile = __DIR__ . '/../src/config/lastValue.txt';
         if (file_exists($cacheFile)) {
-            $this->value = trim(file_get_contents($cacheFile));
+            $this->value = (float)trim(file_get_contents($cacheFile));
             $this->last_update = filemtime($cacheFile);
         }
     }
 
-    public function getValue()
+    public function getValue(): float
     {
         return $this->value;
     }
 
-    public function getLastUpdate()
+    public function getLastUpdate(): int
     {
         return $this->last_update;
     }

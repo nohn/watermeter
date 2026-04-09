@@ -33,16 +33,17 @@ use thiagoalessio\TesseractOCR\TesseractOcrException;
 
 class Reader extends Watermeter
 {
-    private $hasErrors = false;
+    private bool $hasErrors = false;
 
-    private $errors = array();
+    /** @var array<string, mixed> */
+    private array $errors = array();
 
-    public function getValue()
+    public function getValue(): float
     {
         return (float)($this->getReadout() + $this->getOffset());
     }
 
-    public function getReadout()
+    public function getReadout(): float
     {
         if (isset($this->config['postDecimalDigits']) && !empty($this->config['postDecimalDigits']) &&
             isset($this->config['analogGauges']) && !empty($this->config['analogGauges'])) {
@@ -56,22 +57,25 @@ class Reader extends Watermeter
         }
         if (
             is_numeric($value) &&
-            ($this->lastValue <= $value) &&
-            (($value - $this->lastValue) <= $this->config['maxThreshold'])
+            ($this->lastValue <= (float)$value) &&
+            (((float)$value - $this->lastValue) <= $this->config['maxThreshold'])
         ) {
-            return $value;
+            return (float)$value;
         } else {
             $this->errors['getReadout() : is_numeric()'] = is_numeric($value);
-            $this->errors['getReadout() : increasing'] = ($this->lastValue <= $value);
+            $this->errors['getReadout() : increasing'] = ($this->lastValue <= (float)$value);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
-            $this->errors['delta'] = ($value - $this->lastValue);
+            $this->errors['delta'] = ((float)$value - $this->lastValue);
             $this->hasErrors = true;
-            return (float)$this->lastValue;
+            return $this->lastValue;
         }
     }
 
-    private function readDigits($post_decimal = false)
+    /**
+     * @param bool $post_decimal
+     */
+    private function readDigits($post_decimal = false): int
     {
         $digitalSourceImage = clone $this->sourceImage;
         $targetImage = new Imagick();
@@ -99,7 +103,7 @@ class Reader extends Watermeter
         if (isset($this->config['digitDecolorization']) && $this->config['digitDecolorization']) {
             $numberDigitalImage->modulateImage(100, 0, 100);
         }
-        if (!isset($this->config['postprocessing']) || (isset($this->config['postprocessing']) && $this->config['postprocessing'])) {
+        if (!isset($this->config['postprocessing']) || $this->config['postprocessing']) {
             $numberDigitalImage->enhanceImage();
             $numberDigitalImage->equalizeImage();
         }
@@ -150,7 +154,7 @@ class Reader extends Watermeter
         return $numberRead;
     }
 
-    private function readGauges()
+    private function readGauges(): ?string
     {
         $decimalPlaces = null;
         foreach ($this->config['analogGauges'] as $gaugeKey => $gauge) {
@@ -167,7 +171,11 @@ class Reader extends Watermeter
         return $decimalPlaces;
     }
 
-    private function debugGauge($amr, $gauge)
+    /**
+     * @param AnalogMeter $amr
+     * @param array<string, mixed> $gauge
+     */
+    private function debugGauge($amr, $gauge): void
     {
         $this->drawDebugImageGauge($gauge);
         echo '<td>';
@@ -183,7 +191,7 @@ class Reader extends Watermeter
         echo '</td>';
     }
 
-    public function getOffset()
+    public function getOffset(): float
     {
         if (isset($this->config['offsetValue'])) {
             return (float)$this->config['offsetValue'];
@@ -192,12 +200,15 @@ class Reader extends Watermeter
         }
     }
 
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return $this->hasErrors;
     }
 
-    public function getErrors()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getErrors(): array
     {
         return $this->errors;
     }

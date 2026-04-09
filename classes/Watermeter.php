@@ -33,21 +33,27 @@ use nohn\Watermeter\Debug;
 
 class Watermeter
 {
-    protected $config;
+    /** @var array<string, mixed> */
+    protected array $config = array();
 
-    protected $sourceImage;
+    protected Imagick $sourceImage;
 
-    protected $strokeColor;
+    protected ImagickPixel $strokeColor;
 
-    protected $strokeOpacity = 0.7;
+    protected float $strokeOpacity = 0.7;
 
-    protected $sourceImageDebug;
+    protected Imagick $sourceImageDebug;
 
-    protected $lastValue;
-    protected $lastValueTimestamp;
+    protected float $lastValue = 0;
+    protected int $lastValueTimestamp;
 
-    protected $debug;
+    protected bool $debug = false;
 
+    /**
+     * @param bool $debug
+     * @param array<string, mixed>|false $config
+     * @param float|false $lastValue
+     */
     public function __construct($debug = false, $config = false, $lastValue = false)
     {
         if ($debug) {
@@ -127,17 +133,20 @@ class Watermeter
         $this->sourceImageDebug = clone $this->sourceImage;
     }
 
-    public function writeSourceImage($path)
+    public function writeSourceImage(string $path): void
     {
         $this->sourceImage->writeImage($path);
     }
 
-    public function writeDebugImage($path)
+    public function writeDebugImage(string $path): void
     {
         $this->sourceImageDebug->writeImage($path);
     }
 
-    public function drawDebugImageGauge($gauge)
+    /**
+     * @param array<string, mixed> $gauge
+     */
+    public function drawDebugImageGauge(array $gauge): void
     {
         $draw = new ImagickDraw();
         $draw->setStrokeColor($this->strokeColor);
@@ -150,7 +159,10 @@ class Watermeter
         $this->sourceImageDebug->drawImage($draw);
     }
 
-    public function drawDebugImageDigit($digit)
+    /**
+     * @param array<string, mixed> $digit
+     */
+    public function drawDebugImageDigit(array $digit): void
     {
         $draw = new ImagickDraw();
         $draw->setStrokeColor($this->strokeColor);

@@ -28,26 +28,33 @@ namespace nohn\Watermeter;
 
 class Config
 {
-    private $config = array();
+    /** @var array<string, mixed> */
+    private array $config = array();
 
     public function __construct()
     {
         require __DIR__ . '/../src/config/config.php';
-        /** @var array $config */
+        /** @var array<string, mixed> $config */
         $this->config = $config;
     }
 
-    public function get()
+    /**
+     * @return array<string, mixed>
+     */
+    public function get(): array
     {
         return $this->config;
     }
 
-    public function set($config)
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function set(array $config): void
     {
         $this->config = $config;
     }
 
-    public function store()
+    public function store(): bool
     {
         $newConfig = var_export($this->config, true);
         file_put_contents(__DIR__ . '/../src/config/config.php', "<?php\n\$config = " . $newConfig . ";");
