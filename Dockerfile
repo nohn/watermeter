@@ -28,11 +28,13 @@ COPY composer.json composer.lock ./
 # Do not install dev dependencies on final build
 RUN composer install --no-dev --optimize-autoloader --no-ansi --no-interaction --no-progress
 
+# Create necessary directories and set permissions
+RUN mkdir -p log/debug log/error tmp \
+    && chmod -R 777 log tmp
+
 COPY classes/ ./classes/
 COPY public/ ./public/
 COPY src/ ./src/
-COPY log/ ./log/
-COPY tmp/ ./tmp/
 COPY LICENSE README.md ./
 
 WORKDIR /usr/src/watermeter/public
