@@ -1,6 +1,6 @@
 FROM ubuntu:latest AS base
 RUN apt-get update \
-    && apt-get install -y libmagickwand-dev tesseract-ocr unzip php-cli php-imagick
+    && apt-get install -y libmagickwand-dev tesseract-ocr unzip php-cli php-imagick php-xml
 
 FROM base AS build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
