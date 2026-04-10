@@ -64,18 +64,31 @@ if (isset($_POST) && !empty($_POST)) {
     }
     if (isset($_POST['sourceImageEqualize']) && ($_POST['sourceImageEqualize'] == 'on')) {
         $config['sourceImageEqualize'] = true;
+    } else {
+        $config['sourceImageEqualize'] = false;
     }
     if (isset($_POST['maxThreshold'])) {
         $config['maxThreshold'] = $_POST['maxThreshold'];
     }
     if (isset($_POST['postprocessing']) && ($_POST['postprocessing'] == 'on')) {
         $config['postprocessing'] = true;
+    } else {
+        $config['postprocessing'] = false;
+    }
+    if (isset($_POST['allowDecreasing']) && ($_POST['allowDecreasing'] == 'on')) {
+        $config['allowDecreasing'] = true;
+    } else {
+        $config['allowDecreasing'] = false;
     }
     if (isset($_POST['digitDecolorization']) && ($_POST['digitDecolorization'] == 'on')) {
         $config['digitDecolorization'] = true;
+    } else {
+        $config['digitDecolorization'] = false;
     }
     if (isset($_POST['digitalDigitsInversion']) && ($_POST['digitalDigitsInversion'] == 'on')) {
         $config['digitalDigitsInversion'] = true;
+    } else {
+        $config['digitalDigitsInversion'] = false;
     }
     if (isset($_POST['lastValue'])) {
         $lastValue = $_POST['lastValue'];
@@ -215,6 +228,7 @@ if (isset($_POST) && !empty($_POST)) {
         /* Keep checkbox legends on same row for readability */
         #sourceImageEqualize,
         #postprocessing,
+        #allowDecreasing,
         #digitDecolorization,
         #digitalDigitsInversion {
             margin-right: 8px;
@@ -384,6 +398,9 @@ if (isset($_POST) && !empty($_POST)) {
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing"
                id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing'] == true) ? 'checked' : ''; ?>>
+        <legend for="allowDecreasing">Allow Decreasing Values</legend>
+        <input type="checkbox" name="allowDecreasing"
+               id="allowDecreasing" <?php echo (isset($config['allowDecreasing']) && $config['allowDecreasing'] == true) ? 'checked' : ''; ?>>
         <legend for="digitDecolorization">Digit Decolorization</legend>
         <input type="checkbox" name="digitDecolorization"
                id="digitDecolorization" <?php echo (isset($config['digitDecolorization']) && $config['digitDecolorization'] == true) ? 'checked' : ''; ?>>
