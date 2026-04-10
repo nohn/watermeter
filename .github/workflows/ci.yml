@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, v1.3, feature/update-arm-architectures]
+    branches: [ main, v1.3]
   pull_request:
 
 jobs:
