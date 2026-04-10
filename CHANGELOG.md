@@ -1,5 +1,6 @@
 # 2026-MM-DD v1.4.1
 - buildx on pull requests, improving developer experience
+- allow decreasing values (optional)
 
 # 2026-04-10 v1.4.0
 - update dependencies

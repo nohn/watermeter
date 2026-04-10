@@ -5,6 +5,8 @@ $config = array(
     'logging' => false,
     // Maximum volume change to accept between two updates.
     'maxThreshold' => 0.2,
+    // Allow decreasing numbers?
+    'allowDecreasing' => false,
     // Source image. Can either be a path to a file or an URL.
     'sourceImage' => 'https://raw.githubusercontent.com/nohn/watermeter/main/tests/data/variants/3.jpg',
     // Source Image Brightness & Contrast tuning
