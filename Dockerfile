@@ -1,8 +1,6 @@
-FROM php:8.5.4-cli AS base
+FROM ubuntu:latest AS base
 RUN apt-get update \
-    && apt-get install -y libmagickwand-dev tesseract-ocr unzip \
-    && pecl install imagick \
-    && docker-php-ext-enable imagick
+    && apt-get install -y libmagickwand-dev tesseract-ocr unzip php-cli php-imagick php-xml php-mbstring
 
 FROM base AS build
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -18,7 +16,10 @@ COPY . .
 
 FROM build AS test
 # Install xdebug
-RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN apt install -y php-xdebug
+# Copy current source again to ensure it's not cached from build stage if it was already existing
+COPY classes/ ./classes/
+COPY tests/ ./tests/
 # Run Static Analysis
 RUN vendor/bin/phpstan analyse --no-progress src classes
 # Run Unit Tests

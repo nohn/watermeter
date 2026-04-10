@@ -26,15 +26,17 @@
 
 use nohn\Watermeter\Reader;
 use PHPUnit\Framework\TestCase;
+use function PHPUnit\Framework\assertEmpty;
 
 class WatermeterReaderVariantTest extends TestCase
 {
     private $variants = array(
         'demo' => array(
             'lastValue' => 819.7668,
+            'expectedReadout' => 819.7797,
             'expectedValue' => 819.7797,
             'hasErrors' => false,
-            'expectedErrors' => array(),
+            'expectedErrors' => false,
             'config' => array(
                 'logging' => false,
                 'maxThreshold' => 0.1,
@@ -60,6 +62,7 @@ class WatermeterReaderVariantTest extends TestCase
         ),
         'demo_offset_one_off_pass' => array(
             'lastValue' => 819.6798,
+            'expectedReadout' => 819.7797,
             'expectedValue' => 819.7797,
             'hasErrors' => false,
             'expectedErrors' => array(),
@@ -88,6 +91,7 @@ class WatermeterReaderVariantTest extends TestCase
         ),
         'demo_offset_one_off_fail' => array(
             'lastValue' => 819.6796,
+            'expectedReadout' => 819.6796,
             'expectedValue' => 819.6796,
             'hasErrors' => true,
             'expectedErrors' => array(
@@ -123,6 +127,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular1' =>
             array(
                 'lastValue' => 1189.1668,
+                'expectedReadout' => 1189.2776,
                 'expectedValue' => 1189.2776,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -198,6 +203,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular1_with_offset' =>
             array(
                 'lastValue' => 1189.1668,
+                'expectedReadout' => 1189.2776,
                 'expectedValue' => 3189.2776,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -274,6 +280,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular1_with_negative_offset' =>
             array(
                 'lastValue' => 1189.1668,
+                'expectedReadout' => 1189.2776,
                 'expectedValue' => 189.2776,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -350,6 +357,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular1_decreasing' =>
             array(
                 'lastValue' => 1189.2777,
+                'expectedReadout' => 1189.2777,
                 'expectedValue' => 1189.2777,
                 'hasErrors' => true,
                 'expectedErrors' => array(
@@ -431,6 +439,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular2_ocr_failing' =>
             array(
                 'lastValue' => 1189.1668,
+                'expectedReadout' => 1189.2776,
                 'expectedValue' => 1189.2776,
                 'hasErrors' => true,
                 'expectedErrors' => array(
@@ -508,6 +517,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular2_with_brightness_contrast' =>
             array(
                 'lastValue' => 1189.1668,
+                'expectedReadout' => 1189.2776,
                 'expectedValue' => 1189.2776,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -585,6 +595,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular3_with_full_image_processing' =>
             array(
                 'lastValue' => 1189.2668,
+                'expectedReadout' => 1189.3858,
                 'expectedValue' => 1189.3858,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -667,6 +678,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular4_with_ocr_passing' =>
             array(
                 'lastValue' => 1189.9216,
+                'expectedReadout' => 1189.9244,
                 'expectedValue' => 1189.9244,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -742,6 +754,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular5_with_ocr_failing_smaller' =>
             array(
                 'lastValue' => 1189.9216,
+                'expectedReadout' => 1189.9216,
                 'expectedValue' => 1189.9216,
                 'hasErrors' => true,
                 'expectedErrors' => array(
@@ -823,6 +836,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular6_with_ocr_failing_larger' =>
             array(
                 'lastValue' => 1189.9244,
+                'expectedReadout' => 1189.9244,
                 'expectedValue' => 1189.9244,
                 'hasErrors' => true,
                 'expectedErrors' => array(
@@ -904,6 +918,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular7_with_ocr_completely_failing' =>
             array(
                 'lastValue' => 1189.9383,
+                'expectedReadout' => 1189.9594,
                 'expectedValue' => 1189.9594,
                 'hasErrors' => true,
                 'expectedErrors' => array(
@@ -981,6 +996,7 @@ class WatermeterReaderVariantTest extends TestCase
         'regular8_post_decimal_colored_digits' =>
             array(
                 'lastValue' => 206.9227,
+                'expectedReadout' => 206.9228,
                 'expectedValue' => 206.9228,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -1074,6 +1090,7 @@ class WatermeterReaderVariantTest extends TestCase
         'inverted9' =>
             array(
                 'lastValue' => 364595.0,
+                'expectedReadout' => 364596.0,
                 'expectedValue' => 364596.0,
                 'hasErrors' => false,
                 'expectedErrors' => array(),
@@ -1144,6 +1161,7 @@ class WatermeterReaderVariantTest extends TestCase
             ),
         '10_without_gauges_or_digits' => array(
             'lastValue' => 1834,
+            'expectedReadout' => 1835,
             'expectedValue' => 1835,
             'hasErrors' => false,
             'expectedErrors' => array(),
@@ -1198,18 +1216,74 @@ class WatermeterReaderVariantTest extends TestCase
                     'postDecimalDigits' => NULL,
                 ),
         ),
+        'gh-issue-133' => array(
+            'lastValue' => 239,
+            'expectedReadout' => 240,
+            'expectedValue' => 240,
+            'hasErrors' => false,
+            'expectedErrors' => array(),
+            'config' => array(
+                'logging' => false,
+                'maxThreshold' => '1.0',
+                'sourceImage' => __DIR__ . '/data/variants/11-gh-issue-133.png',
+                'sourceImageRotate' => '0',
+                'sourceImageCropSizeX' => '0',
+                'sourceImageCropSizeY' => '0',
+                'sourceImageCropStartX' => '0',
+                'sourceImageCropStartY' => '0',
+                'sourceImageBrightness' => '0',
+                'sourceImageContrast' => '0',
+                'postprocessing' => false,
+                'digitalDigits' => array(
+                    1 =>
+                        array (
+                            'x' => '280',
+                            'y' => '188',
+                            'width' => '20',
+                            'height' => '45',
+                        ),
+                    2 =>
+                        array (
+                            'x' => '300',
+                            'y' => '188',
+                            'width' => '20',
+                            'height' => '45',
+                        ),
+                    3 =>
+                        array (
+                            'x' => '330',
+                            'y' => '188',
+                            'width' => '20',
+                            'height' => '45',
+                        ),
+                ),
+                'analogGauges' => array(),
+                'offsetValue' => '',
+                'postDecimalDigits' => array(),
+                'sourceImageEqualize' => false,
+                'digitDecolorization' => false,
+                'digitalDigitsInversion' => true,
+            ),
+        ),
     );
 
     public function testVariants(): void
     {
         foreach ($this->variants as $variant_id => $variant) {
             $reader = new Reader(false, $variant['config'], $variant['lastValue']);
+            $readout = $reader->getReadout();
             $actualValue = $reader->getValue();
-            # $actualErrors = $reader->getErrors();
+            $actualErrors = $reader->getErrors();
             $actualHasErrors = $reader->hasErrors();
+            $this->assertEqualsWithDelta($variant['expectedReadout'], $readout, 0.00001, 'Readout mismatch for variant ' . $variant_id);
             $this->assertEqualsWithDelta($variant['expectedValue'], $actualValue, 0.00001, 'Value mismatch for variant ' . $variant_id);
             $this->assertEquals($variant['hasErrors'], $actualHasErrors, 'Error flag mismatch for variant ' . $variant_id);
-            # $this->assertEquals($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
+            if (!$actualHasErrors) {
+                assertEmpty($actualErrors, 'Errors should be empty for variant ' . $variant_id);
+            }
+#            } else {
+#                $this->assertContains($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
+#            }
         }
     }
 }
