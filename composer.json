@@ -12,7 +12,7 @@
     }
   ],
   "require": {
-    "thiagoalessio/tesseract_ocr": "^2.11",
+    "thiagoalessio/tesseract_ocr": "^2.13",
     "nohn/analogmeterreader": "^1.2",
     "php": ">=8.3",
     "ext-imagick": "^3.8",
