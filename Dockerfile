@@ -19,6 +19,9 @@ COPY . .
 FROM build AS test
 # Install xdebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
+# Copy current source again to ensure it's not cached from build stage if it was already existing
+COPY classes/ ./classes/
+COPY tests/ ./tests/
 # Run Static Analysis
 RUN vendor/bin/phpstan analyse --no-progress src classes
 # Run Unit Tests
