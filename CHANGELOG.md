@@ -1,3 +1,6 @@
+# 2026-MM-DD v1.3.x
+- update dependencies
+
 # 2026-04-10 v1.3.2
 - improve test coverage
 - improve code style
