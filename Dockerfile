@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS base
+FROM ubuntu:24.04 AS base
 RUN apt-get update \
     && apt-get install -y libmagickwand-dev tesseract-ocr unzip php-cli php-imagick php-xml php-mbstring
 
