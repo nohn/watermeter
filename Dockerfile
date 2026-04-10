@@ -16,7 +16,7 @@ COPY . .
 
 FROM build AS test
 # Install xdebug
-RUN apt install php-xdebug
+RUN apt install -y php-xdebug
 # Copy current source again to ensure it's not cached from build stage if it was already existing
 COPY classes/ ./classes/
 COPY tests/ ./tests/
