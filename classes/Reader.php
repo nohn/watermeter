@@ -38,6 +38,8 @@ class Reader extends Watermeter
     /** @var array<string, mixed> */
     private array $errors = array();
 
+    private float $threshold_tolerance = 0.0000000001;
+
     public function getValue(): float
     {
         return (float)($this->getReadout() + $this->getOffset());
@@ -58,7 +60,7 @@ class Reader extends Watermeter
         if (
             is_numeric($value) &&
             (($this->config['allowDecreasing'] ?? false) || ($this->lastValue <= (float)$value)) &&
-            ((float)$value - $this->lastValue) <= $this->config['maxThreshold']
+            abs((float)$value - $this->lastValue) <= ($this->config['maxThreshold'] + $this->threshold_tolerance)
         ) {
             return (float)$value;
         } else {
@@ -66,6 +68,7 @@ class Reader extends Watermeter
             $this->errors['getReadout() : increasing'] = ($this->lastValue <= (float)$value);
             $this->errors['getReadout() : decreasing'] = ($this->lastValue >= (float)$value);
             $this->errors['getReadout() : allowDecreasing'] = ($this->config['allowDecreasing'] ?? false);
+            $this->errors['getReadout() : threshold'] = abs((float)$value - $this->lastValue) <= ($this->config['maxThreshold'] + $this->threshold_tolerance);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
             $this->errors['delta'] = ((float)$value - $this->lastValue);
