@@ -1,3 +1,6 @@
+# 2026-MM-DD v1.4.1
+- buildx on pull requests, improving developer experience
+
 # 2026-04-10 v1.4.0
 - update dependencies
 - drop support for arm v6, add support for arm v8 & v9
