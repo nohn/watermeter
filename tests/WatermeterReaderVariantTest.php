@@ -27,6 +27,7 @@
 use nohn\Watermeter\Reader;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEmpty;
+use function PHPUnit\Framework\assertNotEmpty;
 
 class WatermeterReaderVariantTest extends TestCase
 {
@@ -1265,6 +1266,355 @@ class WatermeterReaderVariantTest extends TestCase
                 'digitalDigitsInversion' => true,
             ),
         ),
+        'regular1_decreasing_rejected' =>
+            array(
+                'lastValue' => 1190.2776,
+                'expectedReadout' => 1190.2776,
+                'expectedValue' => 1190.2776,
+                'hasErrors' => true,
+                'expectedErrors' => array(
+                    array('getReadout() : allowDecreasing' => false)
+                ),
+                'config' => array(
+                    'maxThreshold' => 10,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 =>
+                                array(
+                                    'x' => '189',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '249',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '304',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '364',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '488',
+                                    'y' => '146',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '419',
+                                    'y' => '314',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '250',
+                                    'y' => '384',
+                                    'width' => '148',
+                                    'height' => '155',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '73',
+                                    'y' => '310',
+                                    'width' => '150',
+                                    'height' => '155',
+                                ),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => false,
+                ),
+            ),
+        'regular1_decreasing_allowed' =>
+            array(
+                'lastValue' => 1190.2776,
+                'expectedReadout' => 1189.2776,
+                'expectedValue' => 1189.2776,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 10,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 =>
+                                array(
+                                    'x' => '189',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '249',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '304',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '364',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '488',
+                                    'y' => '146',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '419',
+                                    'y' => '314',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '250',
+                                    'y' => '384',
+                                    'width' => '148',
+                                    'height' => '155',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '73',
+                                    'y' => '310',
+                                    'width' => '150',
+                                    'height' => '155',
+                                ),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => true,
+                ),
+            ),
+        'regular1_increasing_allowed_with_decreasing_flag' =>
+            array(
+                'lastValue' => 1000.0,
+                'expectedReadout' => 1189.2776,
+                'expectedValue' => 1189.2776,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 1000,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 =>
+                                array(
+                                    'x' => '189',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '249',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '304',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                            5 =>
+                                array(
+                                    'x' => '364',
+                                    'y' => '47',
+                                    'width' => '36',
+                                    'height' => '58',
+                                ),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 =>
+                                array(
+                                    'x' => '488',
+                                    'y' => '146',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            2 =>
+                                array(
+                                    'x' => '419',
+                                    'y' => '314',
+                                    'width' => '148',
+                                    'height' => '150',
+                                ),
+                            3 =>
+                                array(
+                                    'x' => '250',
+                                    'y' => '384',
+                                    'width' => '148',
+                                    'height' => '155',
+                                ),
+                            4 =>
+                                array(
+                                    'x' => '73',
+                                    'y' => '310',
+                                    'width' => '150',
+                                    'height' => '155',
+                                ),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => true,
+                ),
+            ),
+        'threshold_increase_within' =>
+            array(
+                'lastValue' => 1189.0776,
+                'expectedReadout' => 1189.2776,
+                'expectedValue' => 1189.2776,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 0.2,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 => array('x' => '189', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            3 => array('x' => '249', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            4 => array('x' => '304', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            5 => array('x' => '364', 'y' => '47', 'width' => '36', 'height' => '58'),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 => array('x' => '488', 'y' => '146', 'width' => '148', 'height' => '150'),
+                            2 => array('x' => '419', 'y' => '314', 'width' => '148', 'height' => '150'),
+                            3 => array('x' => '250', 'y' => '384', 'width' => '148', 'height' => '155'),
+                            4 => array('x' => '73', 'y' => '310', 'width' => '150', 'height' => '155'),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => false,
+                ),
+            ),
+        'threshold_increase_above' =>
+            array(
+                'lastValue' => 1189.0676,
+                'expectedReadout' => 1189.0676,
+                'expectedValue' => 1189.0676,
+                'hasErrors' => true,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 0.2,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 => array('x' => '189', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            3 => array('x' => '249', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            4 => array('x' => '304', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            5 => array('x' => '364', 'y' => '47', 'width' => '36', 'height' => '58'),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 => array('x' => '488', 'y' => '146', 'width' => '148', 'height' => '150'),
+                            2 => array('x' => '419', 'y' => '314', 'width' => '148', 'height' => '150'),
+                            3 => array('x' => '250', 'y' => '384', 'width' => '148', 'height' => '155'),
+                            4 => array('x' => '73', 'y' => '310', 'width' => '150', 'height' => '155'),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => false,
+                ),
+            ),
+        'threshold_decrease_within' =>
+            array(
+                'lastValue' => 1189.4776,
+                'expectedReadout' => 1189.2776,
+                'expectedValue' => 1189.2776,
+                'hasErrors' => false,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 0.2,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 => array('x' => '189', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            3 => array('x' => '249', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            4 => array('x' => '304', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            5 => array('x' => '364', 'y' => '47', 'width' => '36', 'height' => '58'),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 => array('x' => '488', 'y' => '146', 'width' => '148', 'height' => '150'),
+                            2 => array('x' => '419', 'y' => '314', 'width' => '148', 'height' => '150'),
+                            3 => array('x' => '250', 'y' => '384', 'width' => '148', 'height' => '155'),
+                            4 => array('x' => '73', 'y' => '310', 'width' => '150', 'height' => '155'),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => true,
+                ),
+            ),
+        'threshold_decrease_above' =>
+            array(
+                'lastValue' => 1189.4876,
+                'expectedReadout' => 1189.4876,
+                'expectedValue' => 1189.4876,
+                'hasErrors' => true,
+                'expectedErrors' => array(),
+                'config' => array(
+                    'maxThreshold' => 0.2,
+                    'sourceImage' => __DIR__ . '/data/variants/1.jpg',
+                    'digitalDigits' =>
+                        array(
+                            2 => array('x' => '189', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            3 => array('x' => '249', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            4 => array('x' => '304', 'y' => '47', 'width' => '36', 'height' => '58'),
+                            5 => array('x' => '364', 'y' => '47', 'width' => '36', 'height' => '58'),
+                        ),
+                    'analogGauges' =>
+                        array(
+                            1 => array('x' => '488', 'y' => '146', 'width' => '148', 'height' => '150'),
+                            2 => array('x' => '419', 'y' => '314', 'width' => '148', 'height' => '150'),
+                            3 => array('x' => '250', 'y' => '384', 'width' => '148', 'height' => '155'),
+                            4 => array('x' => '73', 'y' => '310', 'width' => '150', 'height' => '155'),
+                        ),
+                    'logging' => false,
+                    'postprocessing' => false,
+                    'allowDecreasing' => true,
+                ),
+            ),
     );
 
     public function testVariants(): void
@@ -1280,10 +1630,10 @@ class WatermeterReaderVariantTest extends TestCase
             $this->assertEquals($variant['hasErrors'], $actualHasErrors, 'Error flag mismatch for variant ' . $variant_id);
             if (!$actualHasErrors) {
                 assertEmpty($actualErrors, 'Errors should be empty for variant ' . $variant_id);
+            } else {
+                assertNotEmpty($actualErrors, 'Errors should not be empty for variant ' . $variant_id);
+                # $this->assertContains($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
             }
-#            } else {
-#                $this->assertContains($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
-#            }
         }
     }
 }
