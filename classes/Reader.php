@@ -57,13 +57,15 @@ class Reader extends Watermeter
         }
         if (
             is_numeric($value) &&
-            ($this->lastValue <= (float)$value) &&
-            (((float)$value - $this->lastValue) <= $this->config['maxThreshold'])
+            (($this->config['allowDecreasing'] ?? false) || ($this->lastValue <= (float)$value)) &&
+            ((float)$value - $this->lastValue) <= $this->config['maxThreshold']
         ) {
             return (float)$value;
         } else {
             $this->errors['getReadout() : is_numeric()'] = is_numeric($value);
             $this->errors['getReadout() : increasing'] = ($this->lastValue <= (float)$value);
+            $this->errors['getReadout() : decreasing'] = ($this->lastValue >= (float)$value);
+            $this->errors['getReadout() : allowDecreasing'] = ($this->config['allowDecreasing'] ?? false);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
             $this->errors['delta'] = ((float)$value - $this->lastValue);
