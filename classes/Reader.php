@@ -57,10 +57,15 @@ class Reader extends Watermeter
         } else {
             $value = $this->readDigits();
         }
+        $maxThreshold = $this->config['maxThreshold'] ?? 0.1;
+        if (!is_numeric($maxThreshold)) {
+            $maxThreshold = 0.1;
+        }
+        $maxThreshold = (float)$maxThreshold;
         if (
             is_numeric($value) &&
             (($this->config['allowDecreasing'] ?? false) || ($this->lastValue <= (float)$value)) &&
-            abs((float)$value - $this->lastValue) <= ($this->config['maxThreshold'] + $this->threshold_tolerance)
+            abs((float)$value - $this->lastValue) <= ($maxThreshold + $this->threshold_tolerance)
         ) {
             return (float)$value;
         } else {
@@ -68,7 +73,7 @@ class Reader extends Watermeter
             $this->errors['getReadout() : increasing'] = ($this->lastValue <= (float)$value);
             $this->errors['getReadout() : decreasing'] = ($this->lastValue >= (float)$value);
             $this->errors['getReadout() : allowDecreasing'] = ($this->config['allowDecreasing'] ?? false);
-            $this->errors['getReadout() : threshold'] = abs((float)$value - $this->lastValue) <= ($this->config['maxThreshold'] + $this->threshold_tolerance);
+            $this->errors['getReadout() : threshold'] = abs((float)$value - $this->lastValue) <= ($maxThreshold + $this->threshold_tolerance);
             $this->errors['value'] = $value;
             $this->errors['lastValue'] = $this->lastValue;
             $this->errors['delta'] = ((float)$value - $this->lastValue);
