@@ -27,6 +27,10 @@ services:
       - "3000:3000"
 ```
 
+#### As Home Assistant App (Addon)
+
+This can also be installed as [Home Assistant Addon](https://github.com/nohn/watermeter).
+
 #### Building locally
 
 If you want to build the Docker image locally, you can use the following command:

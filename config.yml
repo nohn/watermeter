@@ -1,0 +1,14 @@
+name: "watermeter"
+description: "Reads analog water (+ electricity, gas, ...) meters and provides a web service that returns the read value as decimal. "
+version: "1.4.1"
+slug: "watermeter"
+init: false
+arch:
+  - amd64
+  - aarch64
+  - armv7
+  - armv8
+  - armv9
+
+ports:
+  3000/tcp: 3000
