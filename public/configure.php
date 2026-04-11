@@ -398,15 +398,15 @@ if (isset($_POST) && !empty($_POST)) {
         <legend for="postprocessing">Digit Postprocessing</legend>
         <input type="checkbox" name="postprocessing"
                id="postprocessing" <?php echo (isset($config['postprocessing']) && $config['postprocessing'] == true) ? 'checked' : ''; ?>>
-        <legend for="allowDecreasing">Allow Decreasing Values</legend>
-        <input type="checkbox" name="allowDecreasing"
-               id="allowDecreasing" <?php echo (isset($config['allowDecreasing']) && $config['allowDecreasing'] == true) ? 'checked' : ''; ?>>
         <legend for="digitDecolorization">Digit Decolorization</legend>
         <input type="checkbox" name="digitDecolorization"
                id="digitDecolorization" <?php echo (isset($config['digitDecolorization']) && $config['digitDecolorization'] == true) ? 'checked' : ''; ?>>
         <legend for="digitalDigitsInversion">Digit Inversion</legend>
         <input type="checkbox" name="digitalDigitsInversion"
                id="digitalDigitsInversion" <?php echo (isset($config['digitalDigitsInversion']) && $config['digitalDigitsInversion'] == true) ? 'checked' : ''; ?>>
+        <legend for="allowDecreasing">Allow Decreasing Values</legend>
+        <input type="checkbox" name="allowDecreasing"
+               id="allowDecreasing" <?php echo (isset($config['allowDecreasing']) && $config['allowDecreasing'] == true) ? 'checked' : ''; ?>>
     </fieldset>
     <?php
     echo '<fieldset class="coordinates"><legend>Pre Decimal Digital Digits</legend>';
