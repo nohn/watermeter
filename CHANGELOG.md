@@ -1,4 +1,4 @@
-# 2026-MM-DD v1.4.1
+# 2026-04-11 v1.4.1
 - buildx on pull requests, improving developer experience
 - allow decreasing values (optional)
 - allow installation as Home Assistant App (JoelHer)
