@@ -136,6 +136,21 @@ if (isset($_POST) && !empty($_POST)) {
             --primary-600: #1d4ed8;
             --ring: rgba(37, 99, 235, 0.25);
             --danger: #ef4444;
+            --input-bg: #ffffff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --text: #f8fafc;
+                --muted: #94a3b8;
+                --card: #1e293b;
+                --border: #334155;
+                --primary: #3b82f6;
+                --primary-600: #2563eb;
+                --ring: rgba(59, 130, 246, 0.4);
+                --input-bg: #1e293b;
+            }
         }
 
         html, body {
@@ -207,7 +222,7 @@ if (isset($_POST) && !empty($_POST)) {
             padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: 10px;
-            background: #fff;
+            background: var(--input-bg);
             color: var(--text);
             outline: none;
             transition: border-color .15s ease, box-shadow .15s ease;
@@ -278,12 +293,12 @@ if (isset($_POST) && !empty($_POST)) {
 
         /* Config dump */
         pre {
-            background: #0f172a;
-            color: #e5e7eb;
+            background: #1e293b;
+            color: var(--text);
             padding: 16px;
             border-radius: 12px;
             overflow: auto;
-            border: 1px solid #1f2937;
+            border: 1px solid var(--border);
         }
 
         /* Compact layout for digit and gauge items */
