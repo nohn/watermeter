@@ -1,5 +1,5 @@
 # 2026-MM-DD v1.4.2
-- ....
+- Interactive configuration of coordinates for digits and gauges
 
 # 2026-04-11 v1.4.1
 - buildx on pull requests, improving developer experience

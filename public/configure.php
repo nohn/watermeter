@@ -257,7 +257,18 @@ if (isset($_POST) && !empty($_POST)) {
         input[type="submit"]:active { transform: translateY(1px); }
 
         /* Debug/preview image */
+        .preview {
+            position: relative;
+            display: inline-block;
+        }
+        #selection-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+        }
         img[src*="tmp/input_debug.jpg"] {
+            display: block;
             max-width: 100%;
             height: auto;
             border-radius: 12px;
@@ -338,6 +349,11 @@ if (isset($_POST) && !empty($_POST)) {
         }
     </style>
     <script type="text/javascript">
+        var selection = {x: 0, y: 0, w: 0, h: 0};
+        var activeTarget = null;
+        var isDrawing = false;
+        var startX, startY;
+
         function removeElement(prefix) {
             allElements = document.querySelectorAll("fieldset[id^=" + prefix + "]");
             return document.getElementById(prefix + "_" + allElements.length).remove();
@@ -353,6 +369,71 @@ if (isset($_POST) && !empty($_POST)) {
             form.appendChild(input);
             form.submit();
         }
+
+        function startSelection(targetPrefix) {
+            activeTarget = targetPrefix;
+            var canvas = document.getElementById('selection-canvas');
+            var img = document.getElementById('preview-image');
+            if (!canvas || !img) return;
+
+            // Align canvas exactly with the image's content area (inside borders)
+            canvas.width = img.clientWidth;
+            canvas.height = img.clientHeight;
+            canvas.style.left = (img.offsetLeft + img.clientLeft) + 'px';
+            canvas.style.top = (img.offsetTop + img.clientTop) + 'px';
+            canvas.style.display = 'block';
+        }
+
+        window.onload = function() {
+            var canvas = document.getElementById('selection-canvas');
+            if (!canvas) return;
+            var ctx = canvas.getContext('2d');
+            var img = document.getElementById('preview-image');
+
+            canvas.onmousedown = function(e) {
+                var rect = canvas.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+                isDrawing = true;
+            };
+
+            canvas.onmousemove = function(e) {
+                if (!isDrawing) return;
+                var rect = canvas.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                var w = x - startX;
+                var h = y - startY;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'red';
+                ctx.strokeRect(startX, startY, w, h);
+            };
+
+            canvas.onmouseup = function(e) {
+                if (!isDrawing) return;
+                isDrawing = false;
+                var rect = canvas.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                
+                var scaleX = img.naturalWidth / img.clientWidth;
+                var scaleY = img.naturalHeight / img.clientHeight;
+
+                var realX = Math.round(Math.min(startX, x) * scaleX);
+                var realY = Math.round(Math.min(startY, y) * scaleY);
+                var realW = Math.round(Math.abs(x - startX) * scaleX);
+                var realH = Math.round(Math.abs(y - startY) * scaleY);
+
+                if (activeTarget) {
+                    document.getElementsByName(activeTarget + '[x]')[0].value = realX;
+                    document.getElementsByName(activeTarget + '[y]')[0].value = realY;
+                    document.getElementsByName(activeTarget + '[width]')[0].value = realW;
+                    document.getElementsByName(activeTarget + '[height]')[0].value = realH;
+                }
+                canvas.style.display = 'none';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            };
+        };
     </script>
 </head>
 <body>
@@ -411,7 +492,7 @@ if (isset($_POST) && !empty($_POST)) {
     <?php
     echo '<fieldset class="coordinates"><legend>Pre Decimal Digital Digits</legend>';
     foreach ($config['digitalDigits'] as $key => $digit) {
-        echo '<fieldset id="digit_' . $key . '"><legend>' . $key . '</legend>';
+        echo '<fieldset id="digit_' . $key . '"><legend>' . $key . ' <button type="button" onclick="startSelection(\'digit[' . $key . ']\')">Select</button></legend>';
         foreach ($fields as $field) {
             echo '<legend for="digit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="digit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
         }
@@ -423,7 +504,7 @@ if (isset($_POST) && !empty($_POST)) {
     echo '<fieldset class="coordinates"><legend>Post Decimal Digital Digits</legend>';
     if (isset($config['postDecimalDigits'])) {
         foreach ($config['postDecimalDigits'] as $key => $digit) {
-            echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . '</legend>';
+            echo '<fieldset id="postDecimalDigit_' . $key . '"><legend>' . $key . ' <button type="button" onclick="startSelection(\'postDecimalDigit[' . $key . ']\')">Select</button></legend>';
             foreach ($fields as $field) {
                 echo '<legend for="postDecimalDigit[' . $key . '][' . $field . ']">' . $field . '</legend><input name="postDecimalDigit[' . $key . '][' . $field . ']" id="digit[' . $key . '][' . $field . ']" type="text" value="' . (isset($digit[$field]) ? $digit[$field] : '') . '">';
             }
@@ -435,7 +516,7 @@ if (isset($_POST) && !empty($_POST)) {
     echo '</fieldset>';
     echo '<fieldset class="coordinates"><legend>Analog Digits</legend>';
     foreach ($config['analogGauges'] as $key => $gauge) {
-        echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . '</legend>';
+        echo '<fieldset id="gauge_' . $key . '"><legend>' . $key . ' <button type="button" onclick="startSelection(\'gauge[' . $key . ']\')">Select</button></legend>';
         foreach ($fields as $field) {
             echo '<legend for="gauge[' . $key . '][' . $field . ']">' . $field . '</legend><input name="gauge[' . $key . '][' . $field . ']" id="gauge[' . $key . '][' . $field . ']" type="text" value="' . (isset($gauge[$field]) ? $gauge[$field] : '') . '">';
         }
@@ -452,7 +533,8 @@ if (isset($_POST) && !empty($_POST)) {
     $watermeterReader = new Reader(true, $config);
     $value = $watermeterReader->getReadout();
     $watermeterReader->writeDebugImage('tmp/input_debug.jpg');
-    echo '<img src="tmp/input_debug.jpg" />';
+    echo '<img src="tmp/input_debug.jpg" id="preview-image" />';
+    echo '<canvas id="selection-canvas" style="display:none"></canvas>';
     echo '</div>';
     echo '</div>';
     ?>
