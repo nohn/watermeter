@@ -1,5 +1,6 @@
 # 2026-MM-DD v1.4.2
 - Interactive configuration of coordinates for digits and gauges
+- Auto detected dark / light mode preferences using prefers-color-scheme and add a dark mode theme
 
 # 2026-04-11 v1.4.1
 - buildx on pull requests, improving developer experience
