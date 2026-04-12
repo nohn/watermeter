@@ -1,4 +1,4 @@
-# 2026-MM-DD v1.4.2
+# 2026-04-12 v1.4.2
 - Interactive configuration of coordinates for digits and gauges
 - Auto detected dark / light mode preferences using prefers-color-scheme and add a dark mode theme
 
