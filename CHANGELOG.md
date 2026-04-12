@@ -1,5 +1,5 @@
 # 2026-MM-DD v1.4.3
-- fix contracst in light mode config preview
+- fix contrast in light mode config preview
 
 # 2026-04-12 v1.4.2
 - Interactive configuration of coordinates for digits and gauges
