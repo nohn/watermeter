@@ -12,7 +12,10 @@ RUN mkdir -p log/debug log/error tmp \
 
 COPY composer.json ./
 RUN composer install --no-ansi --no-interaction --no-progress
-COPY . .
+COPY classes/ ./classes/
+COPY public/ ./public/
+COPY src/ ./src/
+COPY LICENSE README.md ./
 
 FROM build AS test
 # Install xdebug
@@ -37,11 +40,14 @@ RUN composer install --no-dev --optimize-autoloader --no-ansi --no-interaction -
 # Create necessary directories and set permissions
 RUN mkdir -p log/debug log/error tmp \
     && chmod -R 777 log tmp
-
+# Copy current source again to ensure it's not cached from build stage if it was already existing
 COPY classes/ ./classes/
 COPY public/ ./public/
 COPY src/ ./src/
 COPY LICENSE README.md ./
+
+# Run Smoke Test
+RUN php /usr/src/watermeter/public/index.php | grep 1189.3858
 
 WORKDIR /usr/src/watermeter/public
 CMD [ "php", "-S", "0.0.0.0:3000" ]
