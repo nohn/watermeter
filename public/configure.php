@@ -293,7 +293,6 @@ if (isset($_POST) && !empty($_POST)) {
 
         /* Config dump */
         pre {
-            background: #1e293b;
             color: var(--text);
             padding: 16px;
             border-radius: 12px;
