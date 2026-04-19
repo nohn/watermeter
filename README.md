@@ -6,6 +6,8 @@ Turns ![Watermeter](doc/watermeter.jpg) into ```820.5745``` so it can become ![G
 
 [![CI](https://github.com/nohn/watermeter/workflows/CI/badge.svg)](https://github.com/nohn/watermeter/actions/workflows/ci.yml?query=branch%3Amain) [![Docker Hub Pulls](https://img.shields.io/docker/pulls/nohn/watermeter?label=docker%20hub%20pulls)](https://hub.docker.com/r/nohn/watermeter/tags?page=1&ordering=last_updated)
 
+Please note, that this is not able to read 7-segment-displays. If you are using Home Assistant and want to read 7-segment-displays, you may want to take a look at the [native 7 segments integration](https://www.home-assistant.io/integrations/seven_segments/).
+
 ## Getting Started
 
 This is only a quick introduction to setting up and configuring watermeter. A more extensive documentation can be found in [the howto](doc/HOWTO.md).
