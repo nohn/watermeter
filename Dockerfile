@@ -11,7 +11,7 @@ RUN mkdir -p log/debug log/error tmp \
     && chmod -R 777 log tmp
 
 COPY composer.json ./
-RUN composer install --no-ansi --no-interaction --no-progress
+RUN composer install --no-ansi --no-interaction --no-progress --no-cache
 COPY classes/ ./classes/
 COPY public/ ./public/
 COPY src/ ./src/
