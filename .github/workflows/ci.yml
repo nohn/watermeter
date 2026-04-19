@@ -54,6 +54,7 @@ jobs:
           cache-to: type=inline
           tags: nohn/watermeter:latest
           labels: ${{ steps.meta.outputs.labels }}
+          no-cache: true
       - name: Push to Docker Hub (develop)
         if: github.ref == 'refs/heads/main' && github.repository == 'nohn/watermeter' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v7
@@ -66,3 +67,4 @@ jobs:
           cache-to: type=inline
           tags: nohn/watermeter:develop
           labels: ${{ steps.meta.outputs.labels }}
+          no-cache: true
