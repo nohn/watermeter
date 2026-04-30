@@ -1,9 +1,8 @@
 FROM ubuntu:24.04 AS base
 RUN apt-get update \
-    && apt-get install -y tesseract-ocr unzip php-cli php-imagick php-xml php-mbstring
+    && apt-get install -y tesseract-ocr unzip php-cli php-imagick php-xml php-mbstring composer
 
 FROM base AS build
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /usr/src/watermeter
 
 # Create necessary directories and set permissions
