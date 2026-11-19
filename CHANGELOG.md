@@ -1,6 +1,7 @@
-# 2026-MM-DD v1.4.3
+# 2026-11.19 v1.4.3
 - fix contrast in light mode config preview
 - bump nohn/analogmeterreader to ^1.3
+- bump php version
 
 # 2026-04-12 v1.4.2
 - Interactive configuration of coordinates for digits and gauges
