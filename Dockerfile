@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS base
+FROM debian:trixie AS base
 RUN apt-get update \
     && apt-get install -y tesseract-ocr unzip php-cli php-imagick php-xml php-mbstring composer
 
