@@ -70,6 +70,17 @@ You can contribute to this project by:
 * Opening an [Issue](https://github.com/nohn/watermeter/issues) if you found a bug or wish to propose a new feature
 * Placing a [Pull Request](https://github.com/nohn/watermeter/pulls) with bugfixes, new features etc.
 
+### Contributing meter images and configurations
+
+Real users' meter images and configuration snippets are especially welcome. Adding them as regression tests helps to keep future updates compatible with individual setups.
+
+To contribute an example in a pull request:
+
+1. Fork the repository and create a branch. Add an image of your meter to [tests/data/variants/](tests/data/variants/) with a descriptive, unique filename.
+2. Add a named entry to the `$variants` array in [tests/WatermeterReaderVariantTest.php](tests/WatermeterReaderVariantTest.php), following an existing entry. Include your configuration snippet (especially digit and gauge coordinates and image processing settings), and set `sourceImage` to the new local image, for example `__DIR__ . '/data/variants/my-meter.jpg'`.
+3. Set `lastValue`, `expectedReadout`, `expectedValue`, `hasErrors`, and `expectedErrors` as in the existing examples. Include the correct reading visible in the image and account for any offset or threshold settings.
+4. Run the tests as described below, then commit your image and test entry, push your branch, and open a [pull request](https://github.com/nohn/watermeter/pulls) describing your meter and expected reading.
+
 ### Running tests locally in Podman (recommended)
 
 OCR fine tuning depends on the specific tesseract version. It is therefore recommended to run the tests in a container with the same tesseract version as the one used in production:

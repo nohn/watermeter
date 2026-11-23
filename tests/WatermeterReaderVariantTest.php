@@ -25,13 +25,14 @@
  */
 
 use nohn\Watermeter\Reader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertNotEmpty;
 
 class WatermeterReaderVariantTest extends TestCase
 {
-    private $variants = array(
+    private static $variants = array(
         'demo' => array(
             'lastValue' => 819.7668,
             'expectedReadout' => 819.7797,
@@ -1617,23 +1618,29 @@ class WatermeterReaderVariantTest extends TestCase
             ),
     );
 
-    public function testVariants(): void
+    public static function variants(): iterable
     {
-        foreach ($this->variants as $variant_id => $variant) {
-            $reader = new Reader(false, $variant['config'], $variant['lastValue']);
-            $readout = $reader->getReadout();
-            $actualValue = $reader->getValue();
-            $actualErrors = $reader->getErrors();
-            $actualHasErrors = $reader->hasErrors();
-            $this->assertEqualsWithDelta($variant['expectedReadout'], $readout, 0.00001, 'Readout mismatch for variant ' . $variant_id);
-            $this->assertEqualsWithDelta($variant['expectedValue'], $actualValue, 0.00001, 'Value mismatch for variant ' . $variant_id);
-            $this->assertEquals($variant['hasErrors'], $actualHasErrors, 'Error flag mismatch for variant ' . $variant_id);
-            if (!$actualHasErrors) {
-                assertEmpty($actualErrors, 'Errors should be empty for variant ' . $variant_id);
-            } else {
-                assertNotEmpty($actualErrors, 'Errors should not be empty for variant ' . $variant_id);
-                # $this->assertContains($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
-            }
+        foreach (self::$variants as $variant_id => $variant) {
+            yield $variant_id => array($variant_id, $variant);
+        }
+    }
+
+    #[DataProvider('variants')]
+    public function testVariants(string $variant_id, array $variant): void
+    {
+        $reader = new Reader(false, $variant['config'], $variant['lastValue']);
+        $readout = $reader->getReadout();
+        $actualValue = $reader->getValue();
+        $actualErrors = $reader->getErrors();
+        $actualHasErrors = $reader->hasErrors();
+        $this->assertEqualsWithDelta($variant['expectedReadout'], $readout, 0.00001, 'Readout mismatch for variant ' . $variant_id);
+        $this->assertEqualsWithDelta($variant['expectedValue'], $actualValue, 0.00001, 'Value mismatch for variant ' . $variant_id);
+        $this->assertEquals($variant['hasErrors'], $actualHasErrors, 'Error flag mismatch for variant ' . $variant_id);
+        if (!$actualHasErrors) {
+            assertEmpty($actualErrors, 'Errors should be empty for variant ' . $variant_id);
+        } else {
+            assertNotEmpty($actualErrors, 'Errors should not be empty for variant ' . $variant_id);
+            # $this->assertContains($variant['expectedErrors'], $actualErrors, 'Errors mismatch for variant ' . $variant_id);
         }
     }
 }

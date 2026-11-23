@@ -1,4 +1,8 @@
-# 2026-11.19 v1.4.3
+# 2026-XX-XX v1.4.x
+- migrate build to podman
+- migrate tests to DataProvider
+
+# 2026-11-19 v1.4.3
 - fix contrast in light mode config preview
 - bump nohn/analogmeterreader to ^1.3
 - bump php version
