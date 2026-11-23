@@ -133,8 +133,10 @@ class Reader extends Watermeter
         $numberDigitalImage->setImageFormat("png");
         $numberDigitalImage->borderImage('white', 10, 10);
         try {
+            $imageData = $numberDigitalImage->getImageBlob();
             $ocr = new TesseractOCR();
-            $ocr->imageData($numberDigitalImage, count($numberDigitalImage));
+            $ocr->executable('tesseract');
+            $ocr->imageData($imageData, strlen($imageData));
             $ocr->allowlist(range('0', '9'));
             $numberOCR = $ocr->run();
             if (!is_string($numberOCR)) {
