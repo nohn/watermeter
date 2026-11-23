@@ -22,8 +22,10 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v8,linux/arm/v9
           push: false
+      - name: Run Docker tests
+        run: docker build . --target test
       - name: Docker build
-        run: docker build . --target test -t nohn/watermeter
+        run: docker build . -t nohn/watermeter
       - name: Run Smoke Test
         run: docker run nohn/watermeter:latest php /usr/src/watermeter/public/index.php | grep 1189.3858
       - name: Docker meta

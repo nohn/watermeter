@@ -14,7 +14,7 @@ This is only a quick introduction to setting up and configuring watermeter. A mo
 
 ### Installation
 
-#### Using Docker Compose and Docker Hub (recommended)
+#### Using Podman Compose and Docker Hub (recommended)
 
 ```yaml
 version: "3.5"
@@ -29,16 +29,18 @@ services:
       - "3000:3000"
 ```
 
+Save this configuration as `compose.yml` and start it with `podman-compose up -d`.
+
 #### As Home Assistant App (Addon)
 
 This can also be installed as [Home Assistant Addon](https://github.com/nohn/watermeter).
 
 #### Building locally
 
-If you want to build the Docker image locally, you can use the following command:
+If you want to build the Container image locally, you can use the following command:
 
 ```bash
-docker build . -t nohn/watermeter
+podman build . -t nohn/watermeter
 ```
 
 ### Configuration
@@ -61,14 +63,36 @@ or see debug information at
 
 ## How to contribute
 
+### Contributing
+
 You can contribute to this project by:
 
 * Opening an [Issue](https://github.com/nohn/watermeter/issues) if you found a bug or wish to propose a new feature
 * Placing a [Pull Request](https://github.com/nohn/watermeter/pulls) with bugfixes, new features etc.
 
-## You like this?
+### Running tests locally in Podman (recommended)
 
-Consider a [gift](https://www.amazon.de/hz/wishlist/ls/3HYH6NR8ZI0WI?ref_=wl_share).
+OCR fine tuning depends on the specific tesseract version. It is therefore recommended to run the tests in a container with the same tesseract version as the one used in production:
+
+```
+podman build . --target dev --no-cache
+```
+
+### Running tests locally
+
+The reader tests require the Tesseract executable and English language data, in addition to the Composer dependencies. The PHP Tesseract package is a wrapper and does not install the executable. On Debian or Ubuntu, install them with:
+
+```bash
+sudo apt-get install tesseract-ocr tesseract-ocr-eng
+```
+
+Confirm `tesseract --version` works in the same environment as PHP, then run `vendor/bin/phpunit tests`. If Tesseract is missing from `PATH`, the reader reports an OCR error and falls back to the integer part of the last known reading for the digital digits.
+
+To execute tests run
+
+```bash
+vendor/bin/phpunit 
+```
 
 ## License
 
